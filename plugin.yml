@@ -1,0 +1,60 @@
+name: Pansentials
+version: ${pom.version}
+
+description: Pandora replacement for Essentials
+
+main: au.com.addstar.pansentials.MasterPlugin
+
+permissions:
+  pansentials.command:
+    default: op
+  pansentials.fly:
+    default: op
+  pansentials.fly.other:
+    default: op
+  pansentials.fly.join:
+    default: false
+  pansentials.fly.changeworld:
+    default: false
+  
+  pansentials.hat:
+    default: op
+    
+  pansentials.workbench:
+    default: op
+    
+  pansentials.heal:
+    default: op
+  pansentials.heal.other:
+    default: op
+  pansentials.feed:
+    default: op
+  pansentials.feed.other:
+    default: op
+    
+  pansentials.lwho:
+    default: true
+    
+commands:
+  pansentials:
+    usage: /<command>
+    permission: pansentials.command
+  fly:
+    usage: /<command> [player]
+    permission: pansentials.fly
+  hat:
+    usage: /<command>
+    permission: pansentials.hat
+  workbench:
+    usage: /<command>
+    permission: pansentials.workbench
+    aliases: [wb]
+  feed:
+    usage: /<command> [player]
+    permission: pansentials.feed
+  heal:
+    usage: /<command> [player]
+    permission: pansentials.heal
+  lwho:
+    usage: /<command>
+    permission: pansentials.lwho
