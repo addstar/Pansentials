@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
 
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
@@ -47,6 +48,9 @@ public class HealModule implements Module, CommandExecutor{
 					Player ply = (Player) sender;
 					ply.setHealth(20d);
 					ply.sendMessage(Utilities.format(config, "heal.self"));
+					for(PotionEffect eff : ply.getActivePotionEffects()){
+						ply.removePotionEffect(eff.getType());
+					}
 				}
 			}
 			else{
@@ -55,6 +59,9 @@ public class HealModule implements Module, CommandExecutor{
 					if(players.size() > 0){
 						players.get(0).setHealth(20d);
 						players.get(0).sendMessage(Utilities.format(config, "heal.self"));
+						for(PotionEffect eff : players.get(0).getActivePotionEffects()){
+							players.get(0).removePotionEffect(eff.getType());
+						}
 						sender.sendMessage(Utilities.format(config, "heal.other", "%player%:" + players.get(0).getName()));
 					}
 					else{
