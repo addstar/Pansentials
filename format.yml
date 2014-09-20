@@ -1,18 +1,18 @@
 fly:
-  selfEnable: "&6Set fly mode &benabled&6!"
-  selfDisable: "&6Set fly mode &bdisabled&6!"
+  selfEnable: "&6Set fly mode &cenabled&6!"
+  selfDisable: "&6Set fly mode &cdisabled&6!"
   other:
-    execEnable: "&6Set fly mode &benabled &6for %player%"
-    execDisable: "&6Set fly mode &bdisabled &6for %player%"
+    execEnable: "&6Set fly mode &cenabled &6for %player%"
+    execDisable: "&6Set fly mode &cdisabled &6for %player%"
 hat: "&6Enjoy your new hat!"
 heal:
   self: "&6You have been fully healed!"
   other: "&6You fully healed %player%"
-  noPlayer: "&bNo player found by the name %name%"
+  noPlayer: "&cNo player found by the name %name%"
 feed:
   self: "&6You have been fully fed!"
   other: "&6You fully fed %player%"
-  noPlayer: "&bNo player found by the name %name%"
+  noPlayer: "&cNo player found by the name %name%"
   
-noPermission: "&bYou do not have permission to execute this command!"
+noPermission: "&cYou do not have permission to execute this command!"
       
