@@ -93,7 +93,7 @@ public class HealModule implements Module, CommandExecutor{
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 }
