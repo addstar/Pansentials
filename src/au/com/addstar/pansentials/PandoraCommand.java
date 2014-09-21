@@ -113,6 +113,10 @@ public class PandoraCommand implements CommandExecutor, TabCompleter
 					sender.sendMessage(ChatColor.RED + "Unable to enable " + args[1] + ". See console for details.");
 			}
 		}
+		else if(args.length == 1 && args[0].equalsIgnoreCase("reloadformat")){
+			mPlugin.reloadFormat();
+			sender.sendMessage(ChatColor.GREEN + "Format has been reloaded.");
+		}
 		return true;
 	}
 	
@@ -133,13 +137,15 @@ public class PandoraCommand implements CommandExecutor, TabCompleter
 		if(args.length == 1)
 		{
 			if(args[0].isEmpty())
-				return Arrays.asList("enable", "disable", "reload");
+				return Arrays.asList("enable", "disable", "reload", "reloadformat");
 			if("enable".startsWith(args[0].toLowerCase()))
 				return Arrays.asList("enable");
 			if("disable".startsWith(args[0].toLowerCase()))
 				return Arrays.asList("disable");
 			if("reload".startsWith(args[0].toLowerCase()))
-				return Arrays.asList("reload");
+				return Arrays.asList("reload", "reloadformat");
+			if("reloadformat".startsWith(args[0].toLowerCase()))
+				return Arrays.asList("reloadformat");
 		}
 		else if(args.length == 2 && args[0].equalsIgnoreCase("reload"))
 			return matchModules(args[1]);

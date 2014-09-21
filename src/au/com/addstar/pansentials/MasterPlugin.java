@@ -349,7 +349,7 @@ public class MasterPlugin extends JavaPlugin
 		}
 	}
 	
-	private void reloadFormat(){
+	public void reloadFormat(){
 		File f = new File(getDataFolder() + "/format.yml");
 		if(!f.exists()){
 			saveResource("format.yml", false);
