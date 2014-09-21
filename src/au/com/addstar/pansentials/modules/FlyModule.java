@@ -3,6 +3,7 @@ package au.com.addstar.pansentials.modules;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -76,17 +77,21 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 	
 	@EventHandler
 	private void onJoin(PlayerJoinEvent event){
-		if(event.getPlayer().hasPermission("pansentials.fly.join"))
-			event.getPlayer().setAllowFlight(true);
-		else
-			event.getPlayer().setAllowFlight(false);
+		if(event.getPlayer().getGameMode() != GameMode.CREATIVE){
+			if(event.getPlayer().hasPermission("pansentials.fly.join"))
+				event.getPlayer().setAllowFlight(true);
+			else
+				event.getPlayer().setAllowFlight(false);
+		}
 	}
 	
 	@EventHandler
 	private void onSwitchWorld(PlayerChangedWorldEvent event){
-		if(event.getPlayer().hasPermission("pansentials.fly.changeworld"))
-			event.getPlayer().setAllowFlight(true);
-		else
-			event.getPlayer().setAllowFlight(false);
+		if(event.getPlayer().getGameMode() != GameMode.CREATIVE){
+			if(event.getPlayer().hasPermission("pansentials.fly.changeworld"))
+				event.getPlayer().setAllowFlight(true);
+			else
+				event.getPlayer().setAllowFlight(false);
+		}
 	}
 }
