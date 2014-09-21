@@ -8,11 +8,20 @@ hat: "&6Enjoy your new hat!"
 heal:
   self: "&6You have been fully healed!"
   other: "&6You fully healed %player%"
-  noPlayer: "&cNo player found by the name %name%"
 feed:
   self: "&6You have been fully fed!"
   other: "&6You fully fed %player%"
-  noPlayer: "&cNo player found by the name %name%"
+speed:
+  selfFly: "&6Your fly speed has been set to %speed%"
+  otherFly: "&6%player%'s fly speed has been set to %speed%"
+  selfWalk: "&6Your walking speed has been set to %speed%"
+  otherWalk: "&6%player%'s walking speed has been set to %speed%"
+  invalidSpeed: "&cThe speed '%speed%' is not a valid speed!"
+  invalidParameter: "&c'%parameter%' is an invalid parameter, please use 'fly' or 'walk'"
+  maxSpeed:
+    donator: 3 #Permission: pansentials.maxspeed.donator
+    #If required, add more speed limiting permissions here
   
+noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
       

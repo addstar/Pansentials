@@ -35,6 +35,11 @@ permissions:
   pansentials.who:
     default: true
     
+  pansentials.speed:
+    default: op
+  pansentials.speed.other:
+    default: op
+    
 commands:
   pansentials:
     usage: /<command>
@@ -58,3 +63,6 @@ commands:
   who:
     usage: /<command>
     permission: pansentials.who
+  speed:
+    usage: /<command> [player]<speed/fly/walk> [speed]
+    permission: pansentials.speed

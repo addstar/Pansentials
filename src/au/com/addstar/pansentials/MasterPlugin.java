@@ -45,6 +45,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("HatModule", "au.com.addstar.pansentials.modules.HatModule");
 		registerModule("WorkbenchModule", "au.com.addstar.pansentials.modules.WorkbenchModule");
 		registerModule("HealModule", "au.com.addstar.pansentials.modules.HealModule");
+		registerModule("SpeedModule", "au.com.addstar.pansentials.modules.SpeedModule");
 		//TODO: Register additional modules here
 	}
 	
