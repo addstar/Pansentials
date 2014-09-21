@@ -13,12 +13,12 @@ public class WhoModule implements Module, CommandExecutor{
 
 	@Override
 	public void onEnable() {
-		plugin.getCommand("lwho").setExecutor(this);
+		plugin.getCommand("who").setExecutor(this);
 	}
 
 	@Override
 	public void onDisable() {
-		plugin.getCommand("lwho").setExecutor(null);
+		plugin.getCommand("who").setExecutor(null);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class WhoModule implements Module, CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String cmd,
 			String[] args) {
-		if(command.getName().equalsIgnoreCase("lwho")){
+		if(command.getName().equalsIgnoreCase("who")){
 			
 		}
 		return true;

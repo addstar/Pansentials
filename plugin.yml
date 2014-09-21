@@ -32,7 +32,7 @@ permissions:
   pansentials.feed.other:
     default: op
     
-  pansentials.lwho:
+  pansentials.who:
     default: true
     
 commands:
@@ -55,6 +55,6 @@ commands:
   heal:
     usage: /<command> [player]
     permission: pansentials.heal
-  lwho:
+  who:
     usage: /<command>
-    permission: pansentials.lwho
+    permission: pansentials.who
