@@ -48,7 +48,7 @@ commands:
   workbench:
     usage: /<command>
     permission: pansentials.workbench
-    aliases: [wb]
+    aliases: [wb, craft]
   feed:
     usage: /<command> [player]
     permission: pansentials.feed
