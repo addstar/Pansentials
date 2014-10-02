@@ -76,7 +76,7 @@ public class WhoIsModule implements Module, CommandExecutor{
 				if(econ != null){
 					sender.sendMessage(Utilities.format(config, "whois.money", "%money%:" + econ.getBalance(ply.getPlayer())));
 				}
-				sender.sendMessage(Utilities.format(config, "whois.ip", "%ip%:" + ply.getAddress().getHostName() + "/" + ply.getAddress().getAddress().getCanonicalHostName()));
+				sender.sendMessage(Utilities.format(config, "whois.ip", "%ip%:" + ply.getAddress().getAddress().toString()));
 				//Location
 				sender.sendMessage(Utilities.format(config, "whois.gamemode", "%gamemode%:" + ply.getGameMode().toString().toLowerCase()));
 				sender.sendMessage(Utilities.format(config, "whois.op", "%op%:" + ply.isOp()));
