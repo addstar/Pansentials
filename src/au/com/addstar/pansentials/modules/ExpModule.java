@@ -80,7 +80,10 @@ public class ExpModule implements Module, CommandExecutor{
 								"%amount%:" + level));
 					}
 					else{
-						ply.setTotalExperience(exp);
+						ply.setLevel(0);
+						ply.setExp(0);
+						ply.setTotalExperience(0);
+						ply.giveExp(exp);
 						sender.sendMessage(Utilities.format(config, "exp.setExp", "%player%:" + ply.getDisplayName(), 
 								"%amount%:" + exp, "%level%:" + ply.getLevel()));
 					}
@@ -92,7 +95,7 @@ public class ExpModule implements Module, CommandExecutor{
 								"%amount%:" + level, "%level%:" + ply.getLevel()));
 					}
 					else{
-						ply.setTotalExperience(ply.getTotalExperience() + exp);
+						ply.giveExp(exp);
 						sender.sendMessage(Utilities.format(config, "exp.addExp", "%player%:" + ply.getDisplayName(), 
 								"%amount%:" + exp, "%level%:" + ply.getLevel(), "%exp%:" + ply.getTotalExperience()));
 					}
