@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -80,8 +81,10 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 		if(event.getPlayer().getGameMode() != GameMode.CREATIVE){
 			if(event.getPlayer().hasPermission("pansentials.fly.join"))
 				event.getPlayer().setAllowFlight(true);
-			else
-				event.getPlayer().setAllowFlight(false);
+			else if(!((LivingEntity) event.getPlayer()).isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")){
+				event.getPlayer().setAllowFlight(true);
+				event.getPlayer().setFlying(true);
+			}
 		}
 	}
 	

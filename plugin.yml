@@ -16,6 +16,8 @@ permissions:
     default: false
   pansentials.fly.changeworld:
     default: false
+  pansentials.fly.safelogin:
+    default: op
   
   pansentials.hat:
     default: op
