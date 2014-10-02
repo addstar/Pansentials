@@ -42,6 +42,9 @@ permissions:
 
   pansentials.exp:
     default: op
+  
+  pansentials.whois:
+    default: op
     
 commands:
   pansentials:
@@ -73,3 +76,6 @@ commands:
     usage: /<command> [player] OR /<command> <set|give> <player> <amount|L<level>>
     permission: pansentials.exp
     aliases: [xp]
+  whois:
+    usage: /<command> <player>
+    permission: pansentials.whois

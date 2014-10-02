@@ -29,6 +29,20 @@ exp:
   setLevel: "&6Set %player%'s level to &c%amount%&6."
   setExp: "&6Set %player%'s exp to &c%amount% &6(Level &c%level%&6)."
   invalidExp: "&c%amount% is not a valid Exp amount!"
+
+whois:
+  header: "&6======== &cWhoIs: %player% &6========"
+  nick: "&cNick: &6%nick%"
+  health: "&cHealth: &6%health%"
+  hunger: "&cHunger: &6%hunger% (+%saturation% saturation)"
+  exp: "&cExp: &6%exp% (Level %level%)"
+  pos: "&cPosition: &6%world%, %x%, %y%, %z%"
+  money: "&cMoney: &6%money%"
+  ip: "&cIP Address: &6%ip%"
+  location: "&cLocation: &6%location%"
+  gamemode: "&cGamemode: &6%gamemode%"
+  op: "&cOP: &6%op%"
+  fly: "&cFly Mode: &6%flymode% (%flying%)"
   
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
