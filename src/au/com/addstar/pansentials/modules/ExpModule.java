@@ -1,11 +1,13 @@
 package au.com.addstar.pansentials.modules;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -13,7 +15,7 @@ import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
 
-public class ExpModule implements Module, CommandExecutor{
+public class ExpModule implements Module, CommandExecutor, TabCompleter{
 	
 	private MasterPlugin plugin;
 	private FileConfiguration config;
@@ -106,6 +108,19 @@ public class ExpModule implements Module, CommandExecutor{
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command,
+			String cmd, String[] args) {
+		if(args.length == 2){
+			if("set".startsWith(args[1]))
+				return Arrays.asList("set");
+			else if("add".startsWith(args[1]))
+				return Arrays.asList("add");
+			return Arrays.asList("add", "set");
+		}
+		return null;
 	}
 
 }
