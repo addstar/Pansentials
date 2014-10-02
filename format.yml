@@ -37,7 +37,7 @@ whois:
   hunger: "&cHunger: &6%hunger% (+%saturation% saturation)"
   exp: "&cExp: &6%exp% (Level %level%)"
   pos: "&cPosition: &6%world%, %x%, %y%, %z%"
-  money: "&cMoney: &6%money%"
+  money: "&cMoney: &6$%money%"
   ip: "&cIP Address: &6%ip%"
   location: "&cLocation: &6%location%"
   gamemode: "&cGamemode: &6%gamemode%"
