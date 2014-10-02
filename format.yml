@@ -21,6 +21,14 @@ speed:
   maxSpeed:
     donator: 3 #Permission: pansentials.maxspeed.donator
     #If required, add more speed limiting permissions here
+
+exp:
+  info: "&6%player% has &c%exp% &6Exp (level &c%level%&6) and needs &c%amount% &6more exp to level up."
+  addLevel: "&6Added &c%amount% &6levels to %player%. New level &c%level%&6."
+  addExp: "&6Added &c%amount% &6exp to %player%. New Exp &c%exp%&6 (Level &c%level%&6)."
+  setLevel: "&6Set %player%'s level to &c%amount%&6."
+  setExp: "&6Set %player%'s exp to &c%amount% &6(Level &c%level%&6)."
+  invalidExp: "&c%amount% is not a valid Exp amount!"
   
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"

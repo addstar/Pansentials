@@ -39,6 +39,9 @@ permissions:
     default: op
   pansentials.speed.other:
     default: op
+
+  pansentials.exp:
+    default: op
     
 commands:
   pansentials:
@@ -66,3 +69,7 @@ commands:
   speed:
     usage: /<command> [player]<speed/fly/walk> [speed]
     permission: pansentials.speed
+  exp:
+    usage: /<command> [player] OR /<command> <set|give> <player> <amount|L<level>>
+    permission: pansentials.exp
+    aliases: [xp]
