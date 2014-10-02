@@ -65,7 +65,7 @@ public class HealModule implements Module, CommandExecutor{
 						sender.sendMessage(Utilities.format(config, "heal.other", "%player%:" + players.get(0).getName()));
 					}
 					else{
-						sender.sendMessage(Utilities.format(config, "heal.noPlayer", "%name%:" + args[0]));
+						sender.sendMessage(Utilities.format(config, "noPlayer", "%name%:" + args[0]));
 					}
 				}
 				else{
@@ -92,7 +92,7 @@ public class HealModule implements Module, CommandExecutor{
 						sender.sendMessage(Utilities.format(config, "feed.other", "%player%:" + players.get(0).getName()));
 					}
 					else{
-						sender.sendMessage(Utilities.format(config, "feed.noPlayer", "%name%:" + args[0]));
+						sender.sendMessage(Utilities.format(config, "noPlayer", "%name%:" + args[0]));
 					}
 				}
 				else{
