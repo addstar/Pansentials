@@ -7,7 +7,6 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,18 +21,15 @@ import au.com.addstar.pansentials.Utilities;
 public class FlyModule implements Module, CommandExecutor, Listener{
 	
 	private MasterPlugin plugin;
-	private FileConfiguration conf;
 
 	@Override
 	public void onEnable() {
 		plugin.getCommand("fly").setExecutor(this);
-		conf = plugin.getFormatConfig();
 	}
 
 	@Override
 	public void onDisable() {
 		plugin.getCommand("fly").setExecutor(null);
-		conf = null;
 	}
 
 	@Override
@@ -49,11 +45,11 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 				Player ply = (Player) sender;
 				if(ply.getAllowFlight()){
 					ply.setAllowFlight(false);
-					ply.sendMessage(Utilities.format(conf, "fly.selfDisable"));
+					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "fly.selfDisable"));
 				}
 				else{
 					ply.setAllowFlight(true);
-					ply.sendMessage(Utilities.format(conf, "fly.selfEnable"));
+					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "fly.selfEnable"));
 				}
 			}
 			else if(args.length == 1 && sender.hasPermission("pansentials.fly.other")){
@@ -62,13 +58,13 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 					Player ply = players.get(0);
 					if(ply.getAllowFlight()){
 						ply.setAllowFlight(false);
-						ply.sendMessage(Utilities.format(conf, "fly.selfDisable"));
-						sender.sendMessage(Utilities.format(conf, "fly.other.execDisable", "%player%:" + ply.getName()));
+						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "fly.selfDisable"));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "fly.other.execDisable", "%player%:" + ply.getName()));
 					}
 					else{
 						ply.setAllowFlight(true);
-						ply.sendMessage(Utilities.format(conf, "fly.selfEnable"));
-						sender.sendMessage(Utilities.format(conf, "fly.other.execEnable", "%player%:" + ply.getName()));
+						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "fly.selfEnable"));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "fly.other.execEnable", "%player%:" + ply.getName()));
 					}
 				}
 			}

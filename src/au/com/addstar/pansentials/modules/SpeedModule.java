@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import au.com.addstar.pansentials.MasterPlugin;
@@ -18,20 +17,15 @@ import au.com.addstar.pansentials.Utilities;
 public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 	
 	private MasterPlugin plugin;
-	private FileConfiguration config;
 
 	@Override
 	public void onEnable() {
-		config = plugin.getFormatConfig();
-		
 		plugin.getCommand("speed").setExecutor(this);
 		plugin.getCommand("speed").setTabCompleter(this);
 	}
 
 	@Override
 	public void onDisable() {
-		config = null;
-
 		plugin.getCommand("speed").setExecutor(null);
 		plugin.getCommand("speed").setTabCompleter(null);
 	}
@@ -50,11 +44,11 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 				if(args[0].matches("[0-9]+(.[0-9]+)?") && Float.valueOf(args[0]) >= 0 && Float.valueOf(args[0]) <= 10){
 					float speed = Float.valueOf(args[0]);
 					
-					if(config.contains("speed.maxSpeed") && !ply.isOp()){
-						for(String key : config.getConfigurationSection("speed.maxSpeed").getKeys(false)){
+					if(plugin.getFormatConfig().contains("speed.maxSpeed") && !ply.isOp()){
+						for(String key : plugin.getFormatConfig().getConfigurationSection("speed.maxSpeed").getKeys(false)){
 							if(ply.hasPermission("pansentials.maxspeed." + key)){
-								if(speed > config.getInt("speed.maxSpeed." + key)){
-									speed = Double.valueOf(config.getDouble("speed.maxSpeed." + key)).floatValue();
+								if(speed > plugin.getFormatConfig().getInt("speed.maxSpeed." + key)){
+									speed = Double.valueOf(plugin.getFormatConfig().getDouble("speed.maxSpeed." + key)).floatValue();
 								}
 								break;
 							}
@@ -68,17 +62,17 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 					
 					if(ply.isFlying()){
 						ply.setFlySpeed(0.1f * speed);
-						ply.sendMessage(Utilities.format(config, "speed.selfFly", "%speed%:" + ss));
+						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.selfFly", "%speed%:" + ss));
 					}
 					else{
 						if(speed > 5)
 							speed = 5;
 						ply.setWalkSpeed(0.2f * speed);
-						ply.sendMessage(Utilities.format(config, "speed.selfWalk", "%speed%:" + ss));
+						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.selfWalk", "%speed%:" + ss));
 					}
 				}
 				else{
-					ply.sendMessage(Utilities.format(config, "speed.invalidSpeed", "%speed%:" + args[0]));
+					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.invalidSpeed", "%speed%:" + args[0]));
 				}
 			}
 			else if(args.length == 2){
@@ -96,18 +90,18 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 						if(speed > 5)
 							speed = 5;
 						ply.setWalkSpeed(0.2f * speed);
-						ply.sendMessage(Utilities.format(config, "speed.selfWalk", "%speed%:" + ss));
+						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.selfWalk", "%speed%:" + ss));
 					}
 					else{
 						ply.setFlySpeed(0.1f * speed);
-						ply.sendMessage(Utilities.format(config, "speed.selfFly", "%speed%:" + ss));
+						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.selfFly", "%speed%:" + ss));
 					}
 				}
 				else if(!args[1].matches("[0-9]+(.[0-9]+)?")){
-					sender.sendMessage(Utilities.format(config, "speed.invalidSpeed", "%speed%:" + args[1]));
+					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.invalidSpeed", "%speed%:" + args[1]));
 				}
 				else if(!args[0].equalsIgnoreCase("walk") && !args[0].equalsIgnoreCase("fly")){
-					sender.sendMessage(Utilities.format(config, "speed.invalidParameter", "%parameter%:" + args[0]));
+					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.invalidParameter", "%parameter%:" + args[0]));
 				}
 			}
 			else if(args.length == 3){
@@ -128,26 +122,26 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 								if(speed > 5)
 									speed = 5;
 								ply.setWalkSpeed(0.2f * speed);
-								ply.sendMessage(Utilities.format(config, "speed.selfWalk", "%speed%:" + ss));
-								sender.sendMessage(Utilities.format(config, "speed.otherWalk", "%player%:" + ply.getName(), 
+								ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.selfWalk", "%speed%:" + ss));
+								sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.otherWalk", "%player%:" + ply.getName(), 
 										"%speed%:" + ss));
 							}
 							else{
 								ply.setFlySpeed(0.1f * speed);
-								ply.sendMessage(Utilities.format(config, "speed.selfFly", "%speed%:" + ss));
-								sender.sendMessage(Utilities.format(config, "speed.otherFly", "%player%:" + ply.getName(), 
+								ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.selfFly", "%speed%:" + ss));
+								sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.otherFly", "%player%:" + ply.getName(), 
 										"%speed%:" + ss));
 							}
 						}
 						else if(!args[2].matches("[0-9]+(.[0-9]+)?")){
-							sender.sendMessage(Utilities.format(config, "speed.invalidSpeed", "%speed%:" + args[2]));
+							sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.invalidSpeed", "%speed%:" + args[2]));
 						}
 						else if(!args[1].equalsIgnoreCase("walk") && !args[1].equalsIgnoreCase("fly")){
-							sender.sendMessage(Utilities.format(config, "speed.invalidParameter", "%parameter%:" + args[1]));
+							sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "speed.invalidParameter", "%parameter%:" + args[1]));
 						}
 					}
 					else{
-						sender.sendMessage(Utilities.format(config, "noPlayer", "%player%:" + args[0]));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%player%:" + args[0]));
 					}
 				}
 			}
