@@ -71,6 +71,8 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 						ply.sendMessage(Utilities.format(config, "speed.selfFly", "%speed%:" + ss));
 					}
 					else{
+						if(speed > 5)
+							speed = 5;
 						ply.setWalkSpeed(0.2f * speed);
 						ply.sendMessage(Utilities.format(config, "speed.selfWalk", "%speed%:" + ss));
 					}
@@ -91,6 +93,8 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 					}
 					
 					if(args[0].equalsIgnoreCase("walk")){
+						if(speed > 5)
+							speed = 5;
 						ply.setWalkSpeed(0.2f * speed);
 						ply.sendMessage(Utilities.format(config, "speed.selfWalk", "%speed%:" + ss));
 					}
@@ -121,6 +125,8 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 							}
 							
 							if(args[1].equalsIgnoreCase("walk")){
+								if(speed > 5)
+									speed = 5;
 								ply.setWalkSpeed(0.2f * speed);
 								ply.sendMessage(Utilities.format(config, "speed.selfWalk", "%speed%:" + ss));
 								sender.sendMessage(Utilities.format(config, "speed.otherWalk", "%player%:" + ply.getName(), 
