@@ -34,9 +34,6 @@ permissions:
   pansentials.feed.other:
     default: op
     
-  pansentials.who:
-    default: true
-    
   pansentials.speed:
     default: op
   pansentials.speed.other:
@@ -68,9 +65,6 @@ commands:
   heal:
     usage: /<command> [player]
     permission: pansentials.heal
-  who:
-    usage: /<command>
-    permission: pansentials.who
   speed:
     usage: /<command> [player]<speed/fly/walk> [speed]
     permission: pansentials.speed
