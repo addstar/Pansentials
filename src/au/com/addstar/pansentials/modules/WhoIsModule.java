@@ -57,7 +57,7 @@ public class WhoIsModule implements Module, CommandExecutor{
 			String[] args) {
 		if(args.length == 1){
 			List<Player> plys = Bukkit.getServer().matchPlayer(args[0]);
-			if(plys.size() > 0){
+			if(!plys.isEmpty()){
 				Player ply = plys.get(0);
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.header", "%player%:" + ply.getName()));
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.nick", "%nick%:" + ply.getDisplayName()));
@@ -82,7 +82,7 @@ public class WhoIsModule implements Module, CommandExecutor{
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.fly", "%flymode%:" + ply.getAllowFlight(), "%flying%:" + isFlying));
 			}
 			else{
-				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", args[0]));
+				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
 			}
 			
 			return true;
