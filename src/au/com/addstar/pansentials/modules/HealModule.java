@@ -50,7 +50,7 @@ public class HealModule implements Module, CommandExecutor{
 			else{
 				if(sender.hasPermission("pansentials.heal.other")){
 					List<Player> players = plugin.getServer().matchPlayer(args[0]);
-					if(players.size() > 0){
+					if(!players.isEmpty()){
 						players.get(0).setHealth(20d);
 						players.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
 						for(PotionEffect eff : players.get(0).getActivePotionEffects()){
@@ -79,7 +79,7 @@ public class HealModule implements Module, CommandExecutor{
 			else{
 				if(sender.hasPermission("pansentials.feed.other")){
 					List<Player> players = plugin.getServer().matchPlayer(args[0]);
-					if(players.size() > 0){
+					if(!players.isEmpty()){
 						players.get(0).setFoodLevel(20);
 						players.get(0).setSaturation(20f);
 						players.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "feed.self"));

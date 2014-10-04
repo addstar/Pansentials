@@ -54,7 +54,7 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 			}
 			else if(args.length == 1 && sender.hasPermission("pansentials.fly.other")){
 				List<Player> players = Bukkit.getServer().matchPlayer(args[0]);
-				if(players.size() > 0){
+				if(!players.isEmpty()){
 					Player ply = players.get(0);
 					if(ply.getAllowFlight()){
 						ply.setAllowFlight(false);
