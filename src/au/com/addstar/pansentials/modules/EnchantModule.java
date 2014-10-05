@@ -45,29 +45,41 @@ public class EnchantModule implements Module, CommandExecutor{
 						unsafe = true;
 					}
 					int level = 1;
-					if(args[2].matches("[0-9]+"))
+					if(args[1].matches("[0-9]+"))
 						level = Integer.valueOf(args[1]);
 					else{
 						player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.invalidValue", "%value%:" + args[1]));
 						return true;
 					}
-					if(!unsafe){
-						try{
-							player.getItemInHand().addEnchantment(ench, level);
+					if(level != 0){
+						if(!unsafe){
+							try{
+								player.getItemInHand().addEnchantment(ench, level);
+								player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.success", 
+										"%item%:" + player.getItemInHand().getType().toString().toLowerCase(),
+										"%enchant%:" + ench.getName().toLowerCase(),
+										"%level%:" + level));
+							}
+							catch (IllegalArgumentException e){
+								player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.illegalEnchant", 
+										"%enchant%:" + ench.getName().toLowerCase(), 
+										"%level%:" + level, 
+										"%item%:" + player.getItemInHand().getType().toString().toLowerCase()));
+							}
+						}
+						else{
+							player.getItemInHand().addUnsafeEnchantment(ench, level);
 							player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.success", 
 									"%item%:" + player.getItemInHand().getType().toString().toLowerCase(),
-									"%enchant%:" + ench.toString().toLowerCase(),
+									"%enchant%:" + ench.getName().toLowerCase(),
 									"%level%:" + level));
-						}
-						catch (IllegalArgumentException e){
-							player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.illegalEnchant", 
-									"%enchant%:" + ench.toString().toLowerCase(), 
-									"%level%:" + level, 
-									"%item%:" + player.getItemInHand().getType().toString().toLowerCase()));
 						}
 					}
 					else{
-						player.getItemInHand().addUnsafeEnchantment(ench, level);
+						player.getItemInHand().removeEnchantment(ench);
+						player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.removed", 
+								"%enchant%:" + ench.getName().toLowerCase(), 
+								"%item%:" + player.getItemInHand().getType().toString().toLowerCase()));
 					}
 				}
 				else{

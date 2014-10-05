@@ -83,7 +83,8 @@ enchant:
   noItem: "&cYou must have an item in your hand to enchant!"
   invalidEnchant: "&c%name% is not a valid enchantment!"
   illegalEnchant: "&c%enchant% with level %level% is not possible on %item%!"
-  success: "&6Successfully enchanted &c%item% &6with &c%enchant% &6with a level of &c%level%"
+  success: "&6Successfully enchanted &c%item% &6with &c%enchant% &6with a level of &c%level%&6."
+  removed: "&6Successfully removed &c%enchant% &6from &c%item%&6."
 
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
