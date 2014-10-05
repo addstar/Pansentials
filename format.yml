@@ -43,6 +43,48 @@ whois:
   gamemode: "&6Gamemode: &f%gamemode%"
   op: "&6OP: &f%op%"
   fly: "&6Fly Mode: &f%flymode% (%flying%)"
+
+enchant:
+  types:
+    power: ARROW_DAMAGE
+    flame: ARROW_FIRE
+    infinity: ARROW_INFINITE
+    punch: ARROW_KNOCKBACK
+    sharpness: DAMAGE_ALL
+    spider_damage: DAMAGE_ARTHROPODS
+    spider: DAMAGE_ARTHROPODS
+    arthropods: DAMAGE_ARTHROPODS
+    bane_of_arthropods: DAMAGE_ARTHROPODS
+    smite: DAMAGE_UNDEAD
+    efficiency: DIG_SPEED
+    eff: DIG_SPEED
+    unbreaking: DURABILITY
+    fire: FIRE_ASPECT
+    knockback: KNOCKBACK
+    fortune: LOOT_BONUS_BLOCKS
+    looting: LOOT_BONUS_MOBS
+    luck: LUCK
+    luck_of_the_sea: LUCK
+    lure: LURE
+    respiration: OXYGEN
+    protection: PROTECTION_ENVIRONMENTAL
+    blast_resistance: PROTECTION_EXPLOSIONS
+    blast: PROTECTION_EXPLOSIONS
+    feather_falling: PROTECTION_FALL
+    fall: PROTECTION_FALL
+    fire_resistance: PROTECTION_FIRE
+    projectile_protection: PROTECTION_PROJECTILE
+    projectile: PROTECTION_PROJECTILE
+    silk: SILK_TOUCH
+    thorns: THORNS
+    aqua_affinity: WATER_WORKER
+    aqua: WATER_WORKER
+  invalidValue: "&c%value% is not a valid number!"
+  noItem: "&cYou must have an item in your hand to enchant!"
+  invalidEnchant: "&c%name% is not a valid enchantment!"
+  illegalEnchant: "&c%enchant% with level %level% is not possible on %item%!"
+  success: "&6Successfully enchanted &c%item% &6with &c%enchant% &6with a level of &c%level%"
+	
   
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"

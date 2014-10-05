@@ -45,6 +45,12 @@ permissions:
   pansentials.whois:
     default: op
     
+  pansentials.dropitem:
+    default: op
+    
+  pansentials.enchant:
+    default: op
+    
 commands:
   pansentials:
     usage: /<command>
@@ -75,3 +81,10 @@ commands:
   whois:
     usage: /<command> <player>
     permission: pansentials.whois
+  dropitem:
+    usage: /<command>
+    permission: pansentials.dropitem
+    aliases: [di, drop]
+  enchant:
+    usage: /<command> <enchantment> <level> [unsafe]
+    permission: pansentials.enchant

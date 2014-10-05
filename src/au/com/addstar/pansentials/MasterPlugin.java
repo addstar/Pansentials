@@ -48,6 +48,8 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("SpeedModule", "au.com.addstar.pansentials.modules.SpeedModule");
 		registerModule("ExpModule", "au.com.addstar.pansentials.modules.ExpModule");
 		registerModule("WhoIsModule", "au.com.addstar.pansentials.modules.WhoIsModule");
+		registerModule("DropItemModule", "au.com.addstar.pansentials.modules.DropItemModule");
+		registerModule("EnchantModule", "au.com.addstar.pansentials.modules.EnchantModule");
 		//TODO: Register additional modules here
 	}
 	
