@@ -1,6 +1,7 @@
 package au.com.addstar.pansentials;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -354,6 +355,7 @@ public class MasterPlugin extends JavaPlugin
 		}
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void reloadFormat(){
 		File f = new File(getDataFolder() + "/format.yml");
 		if(!f.exists()){
@@ -361,6 +363,19 @@ public class MasterPlugin extends JavaPlugin
 		}
 		f = new File(getDataFolder() + "/format.yml");
 		format = YamlConfiguration.loadConfiguration(f);
+		FileConfiguration inConf = YamlConfiguration.loadConfiguration(getResource("format.yml"));
+		for(String key : inConf.getKeys(true)){
+			if(!format.contains(key)){
+				format.set(key, inConf.get(key));
+			}
+		}
+		
+		try {
+			format.save(f);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public FileConfiguration getFormatConfig(){
