@@ -51,6 +51,30 @@ permissions:
   pansentials.enchant:
     default: op
     
+  pansentials.gamemode.*:
+    children:
+      pansentials.gamemode: true
+      pansentials.gamemode.survival: true
+      pansentials.gamemode.survival.other: true
+      pansentials.gamemode.adventure: true
+      pansentials.gamemode.adventure.other: true
+      pansentials.gamemode.creative: true
+      pansentials.gamemode.creative.other: true
+  pansentials.gamemode:
+    default: op
+  pansentials.gamemode.survival:
+    default: op
+  pansentials.gamemode.survival.other:
+    default: op
+  pansentials.gamemode.adventure:
+    default: op
+  pansentials.gamemode.adventure.other:
+    default: op
+  pansentials.gamemode.creative:
+    default: op
+  pansentials.gamemode.creative.other:
+    default: op
+    
 commands:
   pansentials:
     usage: /<command>
@@ -88,3 +112,7 @@ commands:
   enchant:
     usage: /<command> <enchantment> <level> [unsafe]
     permission: pansentials.enchant
+  gamemode:
+    usage: /<command> <gamemode> [player]
+    permission: pansentials.gamemode
+    aliases: [gm, gma, gmc, gms]

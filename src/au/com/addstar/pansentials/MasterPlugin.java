@@ -51,6 +51,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("WhoIsModule", "au.com.addstar.pansentials.modules.WhoIsModule");
 		registerModule("DropItemModule", "au.com.addstar.pansentials.modules.DropItemModule");
 		registerModule("EnchantModule", "au.com.addstar.pansentials.modules.EnchantModule");
+		registerModule("GamemodeModule", "au.com.addstar.pansentials.modules.GamemodeModule");
 		//TODO: Register additional modules here
 	}
 	
