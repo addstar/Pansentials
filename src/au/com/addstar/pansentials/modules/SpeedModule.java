@@ -141,7 +141,7 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 						}
 					}
 					else{
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%player%:" + args[0]));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
 					}
 				}
 			}
