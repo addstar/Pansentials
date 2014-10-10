@@ -54,6 +54,9 @@ permissions:
   pansentials.more:
     default: op
     
+  pansentials.repair:
+    default: op
+    
   pansentials.gamemode.*:
     children:
       pansentials.gamemode: true
@@ -122,3 +125,6 @@ commands:
   more:
     usage: /<command> [amount]
     permission: pansentials.more
+  repair:
+    usage: /<command>
+    permission: pansentials.repair
