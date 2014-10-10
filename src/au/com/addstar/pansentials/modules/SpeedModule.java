@@ -145,6 +145,9 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 					}
 				}
 			}
+			else{
+				return false;
+			}
 		}
 		return true;
 	}
