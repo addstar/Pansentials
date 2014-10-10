@@ -126,13 +126,13 @@ public class GamemodeModule implements Module, CommandExecutor{
 	}
 	
 	private GameMode getGamemode(String mode){
-		if(mode.equalsIgnoreCase("survival") || mode.equalsIgnoreCase("s")){
+		if(mode.equalsIgnoreCase("survival") || mode.equalsIgnoreCase("s") || mode.equalsIgnoreCase("0")){
 			return GameMode.SURVIVAL;
 		}
-		else if(mode.equalsIgnoreCase("creative") || mode.equalsIgnoreCase("c")){
+		else if(mode.equalsIgnoreCase("creative") || mode.equalsIgnoreCase("c") || mode.equalsIgnoreCase("1")){
 			return GameMode.CREATIVE;
 		}
-		else if(mode.equalsIgnoreCase("adventure") || mode.equalsIgnoreCase("a")){
+		else if(mode.equalsIgnoreCase("adventure") || mode.equalsIgnoreCase("a") || mode.equalsIgnoreCase("2")){
 			return GameMode.ADVENTURE;
 		}
 		return null;
