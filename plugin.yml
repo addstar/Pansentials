@@ -51,6 +51,9 @@ permissions:
   pansentials.enchant:
     default: op
     
+  pansentials.more:
+    default: op
+    
   pansentials.gamemode.*:
     children:
       pansentials.gamemode: true
@@ -116,3 +119,6 @@ commands:
     usage: /<command> <gamemode> [player]
     permission: pansentials.gamemode
     aliases: [gm, gma, gmc, gms]
+  more:
+    usage: /<command> [amount]
+    permission: pansentials.more
