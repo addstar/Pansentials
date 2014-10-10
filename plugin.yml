@@ -96,7 +96,7 @@ commands:
     usage: /<command> [player]
     permission: pansentials.heal
   speed:
-    usage: /<command> [player]<speed/fly/walk> [speed]
+    usage: /<command> [player] <speed/fly/walk> [speed]
     permission: pansentials.speed
   exp:
     usage: /<command> [player] OR /<command> <set|give> <player> <amount|L<level>>
