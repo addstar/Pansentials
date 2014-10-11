@@ -41,6 +41,8 @@ public class HealModule implements Module, CommandExecutor{
 				if(sender instanceof Player){
 					Player ply = (Player) sender;
 					ply.setHealth(20d);
+					ply.setFoodLevel(20);
+					ply.setSaturation(20f);
 					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
 					for(PotionEffect eff : ply.getActivePotionEffects()){
 						ply.removePotionEffect(eff.getType());
@@ -52,6 +54,8 @@ public class HealModule implements Module, CommandExecutor{
 					List<Player> players = plugin.getServer().matchPlayer(args[0]);
 					if(!players.isEmpty()){
 						players.get(0).setHealth(20d);
+						players.get(0).setFoodLevel(20);
+						players.get(0).setSaturation(20f);
 						players.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
 						for(PotionEffect eff : players.get(0).getActivePotionEffects()){
 							players.get(0).removePotionEffect(eff.getType());
