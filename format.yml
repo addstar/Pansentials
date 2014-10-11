@@ -91,6 +91,10 @@ gamemode:
   changedOther: "&6Changed %player%'s gamemode to &c%gamemode% &6mode."
   noGamemode: "&cNo gamemode found by the name %name%!"
 
+repair:
+  hand: "&6The item in your hand has been repaired."
+  all: "&6All your items have been repaired."
+
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
       
