@@ -40,8 +40,8 @@ public class MoreModule implements Module, CommandExecutor{
 					size = Integer.valueOf(args[0]);
 				}
 				stack.setAmount(size);
+				ply.updateInventory();
 			}
-			ply.updateInventory();
 		}
 		return true;
 	}
