@@ -80,6 +80,11 @@ permissions:
     default: op
   pansentials.gamemode.creative.other:
     default: op
+  
+  pansentials.god:
+    default: op
+  pansentials.god.other:
+    default: op
     
 commands:
   pansentials:
@@ -128,3 +133,7 @@ commands:
   repair:
     usage: /<command>
     permission: pansentials.repair
+  god:
+    usage: /<command> [player]
+    permission: pansentials.god
+    aliases: [ungod]

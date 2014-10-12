@@ -95,6 +95,12 @@ repair:
   hand: "&6The item in your hand has been repaired."
   all: "&6All your items have been repaired."
 
+god:
+  selfGod: "&6You are now a god."
+  selfUngod: "&6You are no longer a god."
+  otherGod: "&6You made &c%player% &6a god."
+  otherUngod: "&6You removed &c%player%'s &6godlike abilities."
+
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
       

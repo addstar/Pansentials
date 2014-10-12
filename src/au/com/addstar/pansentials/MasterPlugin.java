@@ -54,6 +54,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("GamemodeModule", "au.com.addstar.pansentials.modules.GamemodeModule");
 		registerModule("ModeModule", "au.com.addstar.pansentials.modules.MoreModule");
 		registerModule("RepairModule", "au.com.addstar.pansentials.modules.RepairModule");
+		registerModule("GodModule", "au.com.addstar.pansentials.modules.GodModule");
 		//TODO: Register additional modules here
 	}
 	
