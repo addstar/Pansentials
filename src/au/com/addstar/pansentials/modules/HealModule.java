@@ -43,6 +43,8 @@ public class HealModule implements Module, CommandExecutor{
 					ply.setHealth(20d);
 					ply.setFoodLevel(20);
 					ply.setSaturation(20f);
+					ply.setFireTicks(0);
+					ply.setRemainingAir(ply.getMaximumAir());
 					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
 					for(PotionEffect eff : ply.getActivePotionEffects()){
 						ply.removePotionEffect(eff.getType());
@@ -56,6 +58,8 @@ public class HealModule implements Module, CommandExecutor{
 						players.get(0).setHealth(20d);
 						players.get(0).setFoodLevel(20);
 						players.get(0).setSaturation(20f);
+						players.get(0).setFireTicks(0);
+						players.get(0).setRemainingAir(players.get(0).getMaximumAir());
 						players.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
 						for(PotionEffect eff : players.get(0).getActivePotionEffects()){
 							players.get(0).removePotionEffect(eff.getType());
