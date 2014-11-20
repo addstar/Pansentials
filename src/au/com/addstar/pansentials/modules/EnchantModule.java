@@ -38,7 +38,7 @@ public class EnchantModule implements Module, CommandExecutor{
 		if(sender instanceof Player && command.getName().equalsIgnoreCase("enchant") && args.length >= 2){
 			Player player = (Player) sender;
 			if(getEnchantment(args[0]) != null){
-				Enchantment ench = getEnchantment(args[0]);
+				Enchantment ench = getEnchantment(args[0].toUpperCase());
 				if(player.getItemInHand().getType() != Material.AIR){
 					boolean unsafe = false;
 					if(args.length == 3 && args[2].equalsIgnoreCase("unsafe")){
