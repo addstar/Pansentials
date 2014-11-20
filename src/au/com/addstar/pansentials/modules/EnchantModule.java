@@ -51,6 +51,13 @@ public class EnchantModule implements Module, CommandExecutor{
 						player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.invalidValue", "%value%:" + args[1]));
 						return true;
 					}
+					if ((unsafe) && (!player.hasPermission("pansentials.enchant.unsafe"))) {
+						player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.illegalEnchant",
+								"%enchant%:" + ench.getName().toLowerCase(),
+								"%level%:" + level,
+								"%item%:" + player.getItemInHand().getType().toString().toLowerCase()));
+						return true;
+					}
 					if(level != 0){
 						if(!unsafe){
 							try{
