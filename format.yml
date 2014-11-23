@@ -105,5 +105,11 @@ time:
   timeFormat: "&6Current time in &c%world% &6is &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
   setTime: "&6The time in &c%world%&6 was set to &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
 
+smite:
+  self: "&6You smote %player%."
+  other: "&cThou has been smitten!"
+  selfSchmite: "&6You &lSchmote &r&6%player%."
+  otherSchmite: "&cThou has been &lSchmitten!"
+
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"

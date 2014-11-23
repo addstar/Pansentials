@@ -56,6 +56,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("RepairModule", "au.com.addstar.pansentials.modules.RepairModule");
 		registerModule("GodModule", "au.com.addstar.pansentials.modules.GodModule");
 		registerModule("TimeModule", "au.com.addstar.pansentials.modules.TimeModule");
+		registerModule("SmiteModule", "au.com.addstar.pansentials.modules.SmiteModule");
 		//TODO: Register additional modules here
 	}
 	
