@@ -101,6 +101,9 @@ god:
   otherGod: "&6You made &c%player% &6a god."
   otherUngod: "&6You removed &c%player%'s &6godlike abilities."
 
+time:
+  timeFormat: "&6Current time in &c%world% &6is &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
+  setTime: "&6The time in &c%world%&6 was set to &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
+
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
-      

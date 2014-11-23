@@ -87,6 +87,11 @@ permissions:
     default: op
   pansentials.god.other:
     default: op
+
+  pansentials.time:
+    default: op
+  pansentials.time.set:
+    default: op
     
 commands:
   pansentials:
@@ -139,3 +144,6 @@ commands:
     usage: /<command> [player]
     permission: pansentials.god
     aliases: [ungod]
+  time:
+    usage: /<command> [world] [time]
+    permission: pansentials.time
