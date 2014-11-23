@@ -248,7 +248,8 @@ public class Utilities
 		if(!config.contains(path)) return ChatColor.RED + "No format value found for path:" + path + "!";
 		String form = ChatColor.translateAlternateColorCodes("&".charAt(0), config.getString(path));
 		for(String arg : args){
-			form = form.replaceAll(arg.split(":")[0], arg.split(":")[1]);
+			String[] parts = arg.split(":", 2);
+			form = form.replaceAll(parts[0], parts[1]);
 		}
 		return form;
 	}
