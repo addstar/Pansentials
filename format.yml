@@ -110,6 +110,10 @@ smite:
   other: "&cThou has been smitten!"
   selfSchmite: "&6You &lSchmote &r&6%player%."
   otherSchmite: "&cThou has been &lSchmitten!"
+  
+stack:
+  self: "&6The items in your inventory have been restacked."
+  other: "&c%player%&6's inventory items have been restacked."
 
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"

@@ -96,6 +96,9 @@ permissions:
   pansentials.smite:
     default: op
     
+  pansentials.stack:
+    default: op
+    
 commands:
   pansentials:
     usage: /<command>
@@ -154,3 +157,6 @@ commands:
     usage: /<command> [player] [effect]
     permission: pansentials.smite
     aliases: [schmite]
+  stack:
+    usage: /<command> [player]
+    permission: pansentials.stack
