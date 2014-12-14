@@ -1,6 +1,7 @@
 package au.com.addstar.pansentials.modules;
 
 import java.util.Map;
+import java.util.UUID;
 
 import com.google.common.collect.Maps;
 
@@ -12,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -81,6 +83,18 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		}
 		
 		String message = StringUtils.join(args, ' ').trim();
+		
+		String caller = null;
+		
+		if (message.startsWith("#")) {
+			int pos = message.indexOf(' ');
+			if (pos < 0) {
+				sender.sendMessage(ChatColor.RED + "You must also specify the command / chat after the caller tag");
+				return true;
+			}
+			caller = message.substring(1, pos);
+			message = message.substring(pos+1).trim();
+		}
 		boolean command = true;
 		
 		if (message.startsWith("-c")) {
@@ -94,7 +108,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 			powertools.put(player, tools);
 		}
 		
-		tools.put(item.getData(), new PowerTool(message, command));
+		tools.put(item.getData(), new PowerTool(message, caller, command));
 		
 		sender.sendMessage(ChatColor.GREEN + "That item is now a powertool");
 		
@@ -127,7 +141,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 				converted = converted.replace("{player}", ((Player)event.getRightClicked()).getName());
 			}
 			
-			runPowertool(tool, converted, player);
+			runPowertool(tool, converted, resolveCaller(tool.caller, event.getRightClicked(), player));
 			event.setCancelled(true);
 		}
 	}
@@ -171,7 +185,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 					.replace("{caller}", player.getName())
 					.replace("{calleruuid}", player.getUniqueId().toString());
 			
-			runPowertool(tool, converted, player);
+			runPowertool(tool, converted, resolveCaller(tool.caller, null, player));
 			event.setCancelled(true);
 		}
 	}
@@ -199,25 +213,53 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 				converted = converted.replace("{player}", ((Player)event.getEntity()).getName());
 			}
 			
-			runPowertool(tool, converted, player);
+			runPowertool(tool, converted, resolveCaller(tool.caller, event.getEntity(), player));
 			event.setCancelled(true);
 		}
 	}
 	
-	private void runPowertool(PowerTool tool, String converted, Player player) {
+	private void runPowertool(PowerTool tool, String converted, CommandSender player) {
 		if (System.currentTimeMillis() < tool.cooldown) {
 			return;
 		}
+		
+		if (player == null) {
+			return;
+		}
+		
 		converted = ChatColor.translateAlternateColorCodes('&', converted);
 		
 		if (tool.command) {
-			plugin.getLogger().info("[PT] " + player.getName() + " executed: " + converted);
 			Bukkit.dispatchCommand(player, converted);
-			tool.cooldown = System.currentTimeMillis() + cooldownDelay;
-		} else {
-			plugin.getLogger().info("[PT] " + player.getName() + " chatted: " + converted);
-			player.chat(converted);
-			tool.cooldown = System.currentTimeMillis() + cooldownDelay;
+		} else if (player instanceof Player) {
+			((Player)player).chat(converted);
+		}
+		
+		tool.cooldown = System.currentTimeMillis() + cooldownDelay;
+	}
+	
+	private CommandSender resolveCaller(String caller, Entity clicked, Player holder) {
+		if (caller == null) {
+			return holder;
+		}
+		
+		if (caller.equals("")) {
+			return Bukkit.getConsoleSender();
+		}
+		
+		if (caller.equals("{player}")) {
+			if (clicked instanceof Player) {
+				return (Player)clicked;
+			} else {
+				return null;
+			}
+		}
+		
+		try {
+			UUID id = UUID.fromString(caller);
+			return Bukkit.getPlayer(id);
+		} catch(IllegalArgumentException e) {
+			return Bukkit.getPlayer(caller);
 		}
 	}
 	
@@ -239,10 +281,12 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		public String message;
 		public boolean command;
 		public long cooldown;
+		public String caller;
 		
-		public PowerTool(String message, boolean command) {
+		public PowerTool(String message, String caller, boolean command) {
 			this.message = message;
 			this.command = command;
+			this.caller = caller;
 			cooldown = 0;
 		}
 	}
