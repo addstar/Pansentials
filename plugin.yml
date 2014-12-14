@@ -98,6 +98,9 @@ permissions:
     
   pansentials.stack:
     default: op
+
+  pansentials.powertool:
+    default: op
     
 commands:
   pansentials:
@@ -160,3 +163,7 @@ commands:
   stack:
     usage: /<command> [player]
     permission: pansentials.stack
+  powertool:
+    usage: /<command> <command|-c chat>
+    permission: pansentials.powertool
+    aliases: [pt]
