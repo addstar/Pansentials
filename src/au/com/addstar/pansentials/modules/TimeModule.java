@@ -25,11 +25,15 @@ public class TimeModule implements Module, CommandExecutor{
 	@Override
 	public void onEnable() {
 		plugin.getCommand("time").setExecutor(this);
+		plugin.getCommand("day").setExecutor(this);
+		plugin.getCommand("ptime").setExecutor(this);
 	}
 
 	@Override
 	public void onDisable() {
 		plugin.getCommand("time").setExecutor(null);
+		plugin.getCommand("day").setExecutor(null);
+		plugin.getCommand("ptime").setExecutor(null);
 	}
 
 	@Override
@@ -96,6 +100,112 @@ public class TimeModule implements Module, CommandExecutor{
 					return true;
 				}
 				setWorldsTime(sender, worlds, ticks);
+			}
+		} else if (command.getName().equals("ptime")) {
+			if (args.length == 0) {
+				sender.sendMessage("Usage: /ptime [player] <time>");
+				sender.sendMessage("The following options for <time> are available:");
+				sender.sendMessage("1. A time value like /time");
+				sender.sendMessage("2. A time value prefixed with '*' which makes it static");
+				sender.sendMessage("3. The value 'reset' to return to normal time");
+				return false;
+			}
+			
+			Player player = null;
+			if (sender instanceof Player) {
+				player = (Player)sender;
+			} else {
+				// Console must provide player + time
+				if (args.length == 1) {
+					sender.sendMessage(ChatColor.RED + "You must specify a player name to set player time from console.");
+					return true;
+				}
+			}
+			
+			String time;
+			if (args.length == 1) {
+				time = args[0];
+			} else {
+				if (!sender.hasPermission("pansentials.ptime.others")) {
+					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
+					return true;
+				}
+				player = Bukkit.getPlayer(args[0]);
+				if (player == null) {
+					sender.sendMessage(ChatColor.RED + "Invalid player name.");
+					return true;
+				}
+				time = args[1];                          
+			}
+			
+			if (time.equalsIgnoreCase("reset") || time.equalsIgnoreCase("default")) {
+				player.setPlayerTime(0, true);
+				sender.sendMessage(Utilities.format(
+						plugin.getFormatConfig(),
+						"time.setPTimeReset",
+						"%player%:" + player.getDisplayName()
+				));
+			} else {
+				boolean fixed = false;
+				if (time.startsWith("*")) {
+					time = time.substring(1);
+					fixed = true;
+				}
+				
+				long ticks;
+				try {
+					ticks = DescParseTickFormat.parse(time);
+				}
+				catch (NumberFormatException e) {
+					sender.sendMessage(ChatColor.RED + "Invalid time value.");
+					return true;
+				}
+				
+				if (fixed) {
+					player.setPlayerTime(ticks, false);
+					
+					sender.sendMessage(Utilities.format(
+							plugin.getFormatConfig(),
+							"time.setPTimeStatic",
+							"%player%:" + player.getDisplayName(),
+							"%time12%:" + DescParseTickFormat.format12(ticks),
+							"%time24%:" + DescParseTickFormat.format24(ticks),
+							"%ticks%:" + ticks
+					));
+				} else {
+					player.setPlayerTime(ticks - player.getWorld().getTime(), true);
+					sender.sendMessage(Utilities.format(
+							plugin.getFormatConfig(),
+							"time.setPTime",
+							"%player%:" + player.getDisplayName(),
+							"%time12%:" + DescParseTickFormat.format12(ticks),
+							"%time24%:" + DescParseTickFormat.format24(ticks),
+							"%ticks%:" + ticks
+					));
+				}
+			}
+		} else if (command.getName().equals("day")) {
+			if (!(sender instanceof Player) && args.length == 0) {
+				sender.sendMessage(ChatColor.RED + "You must specify a world name to set the time from console.");
+				return true;
+			}
+			
+			if (args.length == 0) {
+				Player p = (Player) sender;
+				worlds.add(p.getWorld());
+			} else {
+				World w = Bukkit.getWorld(args[0]);
+				if (w == null) {
+					sender.sendMessage(ChatColor.RED + "Invalid world name.");
+					return true;
+				}
+				worlds.add(w);
+			}
+			
+			if (cmd.equalsIgnoreCase("day")) {
+				setWorldsTime(sender, worlds, 0);
+			} else if (cmd.equalsIgnoreCase("night")) {
+				setWorldsTime(sender, worlds, 14000);
 			}
 		}
 		return true;

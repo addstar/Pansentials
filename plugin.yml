@@ -92,6 +92,10 @@ permissions:
     default: op
   pansentials.time.set:
     default: op
+  pansentials.ptime:
+    default: op
+  pansentials.ptime.others:
+    default: op
   
   pansentials.smite:
     default: op
@@ -156,6 +160,13 @@ commands:
   time:
     usage: /<command> [world] [time]
     permission: pansentials.time
+  day:
+    usage: /<command> [world]
+    permission: pansentials.time
+    aliases: [night]
+  ptime:
+    usage: /<command> [player] <time>
+    permission: pansentials.ptime
   smite:
     usage: /<command> [player] [effect]
     permission: pansentials.smite

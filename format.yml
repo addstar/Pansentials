@@ -104,6 +104,9 @@ god:
 time:
   timeFormat: "&6Current time in &c%world% &6is &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
   setTime: "&6The time in &c%world%&6 was set to &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
+  setPTime: "&6Local time for &c%player%&6 was set to &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
+  setPTimeStatic: "&6Local time for &c%player%&6is now fixed to &c%time12% &6or &c%time24% &6or &c%ticks% ticks"
+  setPTimeReset: "&6Local time for &c%player%&6 was reset to world time"
 
 smite:
   self: "&6You smote %player%."
