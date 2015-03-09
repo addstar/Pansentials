@@ -253,4 +253,70 @@ public class Utilities
 		}
 		return form;
 	}
+	
+	public static int parseInt(String value, String error)
+	{
+		return parseInt(value, Integer.MIN_VALUE, Integer.MAX_VALUE, error);
+	}
+	
+	public static int parseInt(String value, int min, int max, String error)
+	{
+		try
+		{
+			int i = Integer.parseInt(value);
+			if (i < min)
+				throw new IllegalArgumentException(error);
+			if (i > max)
+				throw new IllegalArgumentException(error);
+			return i;
+		}
+		catch (NumberFormatException e)
+		{
+			throw new IllegalArgumentException(error);
+		}
+	}
+	
+	public static float parseFloat(String value, String error)
+	{
+		return parseFloat(value, Float.MIN_VALUE, Float.MAX_VALUE, error);
+	}
+	
+	public static float parseFloat(String value, float min, float max, String error)
+	{
+		try
+		{
+			float i = Float.parseFloat(value);
+			if (i < min)
+				throw new IllegalArgumentException(error);
+			if (i > max)
+				throw new IllegalArgumentException(error);
+			return i;
+		}
+		catch (NumberFormatException e)
+		{
+			throw new IllegalArgumentException(error);
+		}
+	}
+	
+	public static double parseDouble(String value, String error)
+	{
+		return parseDouble(value, Double.MIN_VALUE, Double.MAX_VALUE, error);
+	}
+	
+	public static double parseDouble(String value, double min, double max, String error)
+	{
+		try
+		{
+			double i = Double.parseDouble(value);
+			if (i < min)
+				throw new IllegalArgumentException(error);
+			if (i > max)
+				throw new IllegalArgumentException(error);
+			return i;
+		}
+		catch (NumberFormatException e)
+		{
+			throw new IllegalArgumentException(error);
+		}
+	}
 }

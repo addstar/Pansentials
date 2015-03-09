@@ -59,6 +59,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("SmiteModule", "au.com.addstar.pansentials.modules.SmiteModule");
 		registerModule("StackModule", "au.com.addstar.pansentials.modules.StackModule");
 		registerModule("PowerTool", "au.com.addstar.pansentials.modules.PowertoolModule");
+		registerModule("SpawnMob", "au.com.addstar.pansentials.modules.SpawnMobModule");
 		//TODO: Register additional modules here
 	}
 	

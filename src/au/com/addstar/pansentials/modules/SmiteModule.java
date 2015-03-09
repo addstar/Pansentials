@@ -2,10 +2,12 @@ package au.com.addstar.pansentials.modules;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -37,7 +39,6 @@ public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 		this.plugin = plugin;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String cmd,
 			String[] args) {
@@ -81,7 +82,7 @@ public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 				
 				Player p = (Player)sender;
 				
-				smite(effect, p.getTargetBlock(null, 80).getLocation());
+				smite(effect, p.getTargetBlock((HashSet<Material>)null, 80).getLocation());
 				return true;
 			}
 		}
