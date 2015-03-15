@@ -108,6 +108,8 @@ permissions:
 
   pansentials.spawnmob:
     default: op
+  pansentials.recipe:
+    default: true
 
 commands:
   pansentials:
@@ -185,3 +187,6 @@ commands:
     usage: /<command> <mob[:options]>[,<mob[:options]>[,...]]
     permission: pansentials.spawnmob
     aliases: [spawnentity,spawnentities,spawnmobs]
+  recipe:
+    usage: /<command> [item]
+    permission: pansentials.recipe

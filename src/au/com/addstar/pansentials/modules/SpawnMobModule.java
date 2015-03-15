@@ -18,6 +18,7 @@ import au.com.addstar.monolith.template.EntitySettings;
 import au.com.addstar.monolith.template.EntityTemplate;
 import au.com.addstar.monolith.template.internal.EntityTemplateSetting;
 import au.com.addstar.monolith.util.Parser;
+import au.com.addstar.monolith.util.Stringifier;
 import au.com.addstar.pansentials.CommandModule;
 
 public class SpawnMobModule extends CommandModule
@@ -36,7 +37,7 @@ public class SpawnMobModule extends CommandModule
 		if (def == null)
 			throw new IllegalArgumentException("Unknown entity type " + options[0]);
 		
-		if (!def.getType().isSpawnable())
+		if (!def.isSpawnable())
 			throw new IllegalArgumentException(options[0] + " is not spawnable");
 		
 		EntityTemplate template = new EntityTemplate(def);
@@ -113,6 +114,53 @@ public class SpawnMobModule extends CommandModule
 		return template;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	private void doHelp(CommandSender sender, String entityType)
+	{
+		EntityDefinition def = Lookup.findEntityByName(entityType);
+		if (def == null)
+		{
+			sender.sendMessage(ChatColor.RED + "Unknown entity type " + entityType);
+			return;
+		}
+		
+		sender.sendMessage(ChatColor.WHITE + "Availble options for " + ChatColor.YELLOW + entityType + ChatColor.GRAY + ":");
+		for (EntityTemplateSetting setting : EntitySettings.values())
+		{
+			if (!setting.appliesTo(def))
+				continue;
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append(' ');
+			builder.append(ChatColor.YELLOW);
+			builder.append(setting.getNames()[0]);
+			
+			builder.append(ChatColor.GRAY);
+			builder.append(':');
+			builder.append(ChatColor.GOLD);
+			builder.append(setting.getType().getSimpleName());
+			
+			if (setting.getDefault() != null)
+			{
+				builder.append(ChatColor.GRAY);
+				builder.append(" default=");
+				builder.append(ChatColor.WHITE);
+				builder.append(Stringifier.toString(setting.getDefault()));
+			}
+			
+			if (setting.getNames().length > 1)
+			{
+				builder.append("\n  ");
+				builder.append(ChatColor.GRAY);
+				builder.append("aliases: ");
+				builder.append(ChatColor.WHITE);
+				builder.append(StringUtils.join(setting.getNames(), ", ", 1, setting.getNames().length));
+			}
+			
+			sender.sendMessage(builder.toString());
+		}
+	}
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
 	{
@@ -124,6 +172,16 @@ public class SpawnMobModule extends CommandModule
 		
 		if (args.length == 0)
 			return false;
+		
+		if (args[0].equalsIgnoreCase("help"))
+		{
+			if (args.length < 2)
+				sender.sendMessage("Usage /" + label + " help <entity>");
+			else
+				doHelp(sender, args[1]);
+			
+			return true;
+		}
 		
 		int count = 1;
 		int end = args.length;
