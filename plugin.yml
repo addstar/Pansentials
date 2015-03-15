@@ -68,6 +68,8 @@ permissions:
       pansentials.gamemode.adventure.other: true
       pansentials.gamemode.creative: true
       pansentials.gamemode.creative.other: true
+      pansentials.gamemode.spectator: true
+      pansentials.gamemode.spectator.other: true
   pansentials.gamemode:
     default: op
   pansentials.gamemode.survival:
@@ -81,6 +83,10 @@ permissions:
   pansentials.gamemode.creative:
     default: op
   pansentials.gamemode.creative.other:
+    default: op
+  pansentials.gamemode.spectator:
+    default: op
+  pansentials.gamemode.spectator.other:
     default: op
   
   pansentials.god:
@@ -151,7 +157,7 @@ commands:
   gamemode:
     usage: /<command> <gamemode> [player]
     permission: pansentials.gamemode
-    aliases: [gm, gma, gmc, gms]
+    aliases: [gm, gma, gmc, gms, gmsp]
   more:
     usage: /<command> [amount]
     permission: pansentials.more

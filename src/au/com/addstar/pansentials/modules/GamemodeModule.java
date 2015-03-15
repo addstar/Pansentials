@@ -43,6 +43,8 @@ public class GamemodeModule implements Module, CommandExecutor{
 					gm = GameMode.CREATIVE;
 				else if(cmd.equalsIgnoreCase("gma"))
 					gm = GameMode.ADVENTURE;
+				else if(cmd.equalsIgnoreCase("gmsp"))
+					gm = GameMode.SPECTATOR;
 				
 				if(gm != null && sender.hasPermission("pansentials.gamemode." + gm.toString().toLowerCase())){
 					((Player) sender).setGameMode(gm);
@@ -52,7 +54,8 @@ public class GamemodeModule implements Module, CommandExecutor{
 					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
 				}
 			}
-			else if(args.length == 1 && (cmd.equalsIgnoreCase("gms") || cmd.equalsIgnoreCase("gma") || cmd.equalsIgnoreCase("gmc"))){
+			else if(args.length == 1 && (cmd.equalsIgnoreCase("gms") || cmd.equalsIgnoreCase("gma") || 
+					cmd.equalsIgnoreCase("gmc") || cmd.equalsIgnoreCase("gmsp"))){
 				List<Player> plys = plugin.getServer().matchPlayer(args[0]);
 				if(!plys.isEmpty()){
 					Player ply = plys.get(0);
@@ -63,6 +66,8 @@ public class GamemodeModule implements Module, CommandExecutor{
 						gm = GameMode.CREATIVE;
 					else if(cmd.equalsIgnoreCase("gma"))
 						gm = GameMode.ADVENTURE;
+					else if(cmd.equalsIgnoreCase("gmsp"))
+						gm = GameMode.SPECTATOR;
 					
 					if(gm != null && sender.hasPermission("pansentials.gamemode." + gm.toString().toLowerCase() + ".other")){
 						ply.setGameMode(gm);
@@ -126,14 +131,17 @@ public class GamemodeModule implements Module, CommandExecutor{
 	}
 	
 	private GameMode getGamemode(String mode){
-		if(mode.equalsIgnoreCase("survival") || mode.equalsIgnoreCase("s") || mode.equalsIgnoreCase("0")){
+		if(mode.equalsIgnoreCase("survival") || mode.equalsIgnoreCase("s") || mode.equals("0")){
 			return GameMode.SURVIVAL;
 		}
-		else if(mode.equalsIgnoreCase("creative") || mode.equalsIgnoreCase("c") || mode.equalsIgnoreCase("1")){
+		else if(mode.equalsIgnoreCase("creative") || mode.equalsIgnoreCase("c") || mode.equals("1")){
 			return GameMode.CREATIVE;
 		}
-		else if(mode.equalsIgnoreCase("adventure") || mode.equalsIgnoreCase("a") || mode.equalsIgnoreCase("2")){
+		else if(mode.equalsIgnoreCase("adventure") || mode.equalsIgnoreCase("a") || mode.equals("2")){
 			return GameMode.ADVENTURE;
+		}
+		else if(mode.equalsIgnoreCase("spectator") || mode.equalsIgnoreCase("sp") || mode.equals("3")){
+			return GameMode.SPECTATOR;
 		}
 		return null;
 	}
