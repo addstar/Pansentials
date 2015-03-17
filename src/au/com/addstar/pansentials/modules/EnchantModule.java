@@ -1,7 +1,5 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.Set;
-
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 
+import au.com.addstar.monolith.lookup.Lookup;
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
@@ -37,8 +36,11 @@ public class EnchantModule implements Module, CommandExecutor{
 			String[] args) {
 		if(sender instanceof Player && command.getName().equalsIgnoreCase("enchant") && args.length >= 2){
 			Player player = (Player) sender;
-			if(getEnchantment(args[0]) != null){
-				Enchantment ench = getEnchantment(args[0].toUpperCase());
+			Enchantment ench = Lookup.findEnchantmentByName(args[0]);
+			if (ench == null) {
+				ench = Enchantment.getByName(args[0].toUpperCase());
+			}
+			if (ench != null) {
 				if(player.getItemInHand().getType() != Material.AIR){
 					boolean unsafe = false;
 					if(args.length == 3 && args[2].equalsIgnoreCase("unsafe")){
@@ -101,16 +103,4 @@ public class EnchantModule implements Module, CommandExecutor{
 		}
 		return false;
 	}
-	
-	private Enchantment getEnchantment(String name){
-		if(Enchantment.getByName(name.toUpperCase()) != null)
-			return Enchantment.getByName(name);
-		
-		Set<String> types = plugin.getFormatConfig().getConfigurationSection("enchant.types").getKeys(false);
-		if(types.contains(name.toLowerCase()))
-			return Enchantment.getByName(plugin.getFormatConfig().getString("enchant.types." + name.toLowerCase()));
-		
-		return null;
-	}
-
 }
