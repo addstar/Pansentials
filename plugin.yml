@@ -192,7 +192,7 @@ commands:
   spawnmob:
     usage: /<command> <mob[:options]>[,<mob[:options]>[,...]]
     permission: pansentials.spawnmob
-    aliases: [spawnentity,spawnentities,spawnmobs]
+    aliases: [spawnentity,spawnentities,spawnmobs,spawnent,spawnents]
   recipe:
     usage: /<command> [item]
     permission: pansentials.recipe

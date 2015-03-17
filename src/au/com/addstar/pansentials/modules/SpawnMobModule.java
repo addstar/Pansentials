@@ -18,6 +18,8 @@ import au.com.addstar.monolith.template.EntitySettings;
 import au.com.addstar.monolith.template.EntityTemplate;
 import au.com.addstar.monolith.template.internal.EntityTemplateSetting;
 import au.com.addstar.monolith.util.Parser;
+import au.com.addstar.monolith.util.Raytrace;
+import au.com.addstar.monolith.util.Raytrace.Hit;
 import au.com.addstar.monolith.util.Stringifier;
 import au.com.addstar.pansentials.CommandModule;
 
@@ -195,7 +197,15 @@ public class SpawnMobModule extends CommandModule
 		String[] mobs = line.split(",");
 		
 		Player player = (Player)sender;
-		Location location = player.getLocation();
+		
+		// Find the target location
+		Raytrace trace = new Raytrace()
+			.ignoreAllEntities()
+			.hitAir(true);
+		
+		Location playerLoc = player.getEyeLocation();
+		Hit hit = trace.traceOnce(playerLoc, playerLoc.getDirection(), 50);
+		Location target = hit.getLocation();
 		
 		try
 		{
@@ -239,7 +249,7 @@ public class SpawnMobModule extends CommandModule
 				Entity last = null;
 				for (EntityTemplate template : templates)
 				{
-					Entity ent = template.createAt(location);
+					Entity ent = template.createAt(target);
 					if (ent == null)
 						break;
 					
