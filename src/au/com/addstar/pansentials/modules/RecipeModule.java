@@ -76,9 +76,17 @@ public class RecipeModule extends CommandModule implements Listener
 		// One is specified
 		else
 		{
-			def = Parser.parseMaterialDefinition(args[0]);
-			
-			if (def == null)
+			try
+			{
+				def = Parser.parseMaterialDefinition(args[0]);
+				
+				if (def == null)
+				{
+					sender.sendMessage(ChatColor.RED + "Unknown item " + args[0]);
+					return true;
+				}
+			}
+			catch (IllegalArgumentException e)
 			{
 				sender.sendMessage(ChatColor.RED + "Unknown item " + args[0]);
 				return true;
