@@ -84,5 +84,19 @@ stack:
   self: "&6The items in your inventory have been restacked."
   other: "&c%player%&6's inventory items have been restacked."
 
+kill:
+  default.done: "&6You killed %player%"
+  default.msg: ["%player% died", "%player% suddenly died", "%player% magically died"] 
+  explode.done: "&6You blew up %player%"
+  explode.msg: ["%player% blew up", "%player% exploded"]
+  fall.done: "&6You killed %player%"
+  fall.msg: ["%player% fell to their death", "%player% failed to fight gravity", "%player% met the ground... hard"]
+  lightning.done: "&6You smote %player%"
+  lightning.msg: ["%player% was hit by lightning", "%player% decided to be a lightning rod"]
+  firework.done: "&6Turning %player% into a firework"
+  firework.msg: ["%player% blew up", "%player% became a firework"]
+  fire.done: "&6You ignited %player%"
+  fire.msg: ["%player% burnt to death", "%player% spontaneously combusted"]
+  
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"

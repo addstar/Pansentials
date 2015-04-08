@@ -116,6 +116,9 @@ permissions:
     default: op
   pansentials.recipe:
     default: true
+  
+  pansentials.kill:
+    default: op
 
 commands:
   pansentials:
@@ -196,3 +199,6 @@ commands:
   recipe:
     usage: /<command> [item]
     permission: pansentials.recipe
+  kill:
+    usage: /<command> <player> [effect] [deathMessage]
+    permission: pansentials.kill

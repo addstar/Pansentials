@@ -19,6 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 
+import com.google.common.base.Function;
+
 public class Utilities
 {
 	public static long parseDateDiff(String dateDiff)
@@ -232,6 +234,25 @@ public class Utilities
 		return matches;
 	}
 	
+	public static <T> List<String> matchStrings(String str, Collection<?> values, Function<T, String> toString)
+	{
+		str = str.toLowerCase();
+		ArrayList<String> matches = new ArrayList<String>();
+		
+		for(Object value : values)
+		{
+			@SuppressWarnings("unchecked")
+			String name = toString.apply((T)value);
+			
+			if(name.toLowerCase().startsWith(str))
+				matches.add(name);
+		}
+		
+		if(matches.isEmpty())
+			return null;
+		return matches;
+	}
+	
 	public static String format(FileConfiguration config, String path){
 		if(!config.contains(path)) return ChatColor.RED + "No format value found for path:" + path + "!";
 		return ChatColor.translateAlternateColorCodes("&".charAt(0), config.getString(path));
@@ -317,6 +338,16 @@ public class Utilities
 		catch (NumberFormatException e)
 		{
 			throw new IllegalArgumentException(error);
+		}
+	}
+	
+	public static final Function<Player, String> PlayerName = new PlayerNameFunction();
+	public static class PlayerNameFunction implements Function<Player, String>
+	{
+		@Override
+		public String apply(Player player)
+		{
+			return player.getName();
 		}
 	}
 }

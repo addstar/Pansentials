@@ -61,6 +61,8 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("PowerTool", "au.com.addstar.pansentials.modules.PowertoolModule");
 		registerModule("SpawnMob", "au.com.addstar.pansentials.modules.SpawnMobModule");
 		registerModule("Recipe", "au.com.addstar.pansentials.modules.RecipeModule");
+		registerModule("Kill", "au.com.addstar.pansentials.modules.KillModule");
+		
 		//TODO: Register additional modules here
 	}
 	
