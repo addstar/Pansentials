@@ -158,7 +158,7 @@ public class KillModule extends CommandModule implements Listener
 	private void kill(Player player, String message)
 	{
 		messages.put(player, message);
-		player.damage(player.getHealth());
+		player.damage(player.getMaxHealth() * 100);
 	}
 	
 	private void explodeKill(Player target, String message)
