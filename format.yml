@@ -90,13 +90,15 @@ kill:
   explode.done: "&6You blew up %player%"
   explode.msg: ["%player% blew up", "%player% exploded"]
   fall.done: "&6You killed %player%"
-  fall.msg: ["%player% fell to their death", "%player% failed to fight gravity", "%player% met the ground... hard"]
+  fall.msg: ["%player% fell to their death", "%player% failed to fight gravity", "%player% met the ground... hard", "%player% is terminally uncoordinated"]
   lightning.done: "&6You smote %player%"
   lightning.msg: ["%player% was hit by lightning", "%player% decided to be a lightning rod"]
   firework.done: "&6Turning %player% into a firework"
   firework.msg: ["%player% blew up", "%player% became a firework"]
   fire.done: "&6You ignited %player%"
   fire.msg: ["%player% burnt to death", "%player% spontaneously combusted"]
+near:
+  location.error: "%value% is not valid for the %coord% coordinate"
   
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"

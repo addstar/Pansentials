@@ -202,3 +202,5 @@ commands:
   kill:
     usage: /<command> <player> [effect] [deathMessage]
     permission: pansentials.kill
+near:
+  default-radius: 30
