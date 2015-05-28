@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -106,13 +107,35 @@ public class NearModule implements Module, CommandExecutor {
         }
         return true;
     }
+    private boolean doNearSpigot(Player sender, Integer radius, Location location){
+        Double rad = radius.doubleValue();
+        Collection<Entity> entities = location.getWorld().getNearbyEntities(location,rad,rad,rad);
+        Iterator<Entity> iter = entities.iterator();
+        Map<Player, Double> results = new HashMap<>();
+        while(iter.hasNext()){
+            Entity ent = iter.next();
+            if(ent instanceof Player ){
+                    results.put((Player)ent,location.distance(ent.getLocation()));
+            }
+        }
+        if (results.size()==0){
+            sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.empty"));
+            return true;
+        }
+        results =  Utilities.sortByValue(results);
+        Iterator iterator = results.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry pair = (Map.Entry)iterator.next();
+            Player player = (Player) pair.getKey();
+            Double distance = (Double) pair.getValue();
+            sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.info", "%player%:" + player.getName()) + "%distance%:" + distance.toString());
+        }
+        return true;
 
+    }
     private boolean doNear(Player sender, Integer radius, Location location){
-        final StringBuilder output = new StringBuilder();
         final long radiusSquared = radius * radius;
-
-        List<Player> players = location.getWorld().getPlayers();
-        Map<Player, Double> results = new HashMap<Player, Double>();
+        Map<Player, Double> results = new HashMap<>();
         boolean showHidden = sender.hasPermission("vanish.see");//check this is the correct pex or that we have a permission to see vanished players
         for(Player player : location.getWorld().getPlayers()){ //pretty crap we have to get all players in the world and parse through them
             //todo Do we need a world check here to ensure this isn't been run on a player in hardcore
