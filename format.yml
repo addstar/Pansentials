@@ -98,6 +98,8 @@ kill:
   fire.done: "&6You ignited %player%"
   fire.msg: ["%player% burnt to death", "%player% spontaneously combusted"]
 near:
+  info: "Player: %player% Distance:%distance%"
+  empty: "There are no players found using those parameters."
   location.error: "%value% is not valid for the %coord% coordinate"
   
 noPlayer: "&cNo player found by the name %name%"

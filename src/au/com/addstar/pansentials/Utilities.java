@@ -1,8 +1,6 @@
 package au.com.addstar.pansentials;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -349,5 +347,33 @@ public class Utilities
 		{
 			return player.getName();
 		}
+	}
+
+	/**
+	 * A Utility that sorts a map based on the value
+	 *
+	 * @param map The map to sort
+	 * @param <K> The key
+	 * @param <V> The Value
+	 * @return  map  sorted by the value.
+	 */
+	public static <K, V extends Comparable<? super V>> Map<K, V>
+	sortByValue( Map<K, V> map )
+	{
+		List<Map.Entry<K, V>> list =
+				new LinkedList<>( map.entrySet() );
+		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
+			@Override
+			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
+				return (o1.getValue()).compareTo(o2.getValue());
+			}
+		});
+
+		Map<K, V> result = new LinkedHashMap<>();
+		for (Map.Entry<K, V> entry : list)
+		{
+			result.put( entry.getKey(), entry.getValue() );
+		}
+		return result;
 	}
 }
