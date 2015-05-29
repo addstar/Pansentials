@@ -101,6 +101,7 @@ near:
   info: "Player: %player% Distance:%distance%"
   empty: "There are no players found using those parameters."
   location.error: "%value% is not valid for the %coord% coordinate"
+  coord.noPermission: "&cYou do not have permission to execute this command with those parameters!"
   
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
