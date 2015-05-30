@@ -60,6 +60,7 @@ public class NearModule implements Module, CommandExecutor {
             }
             //check sender perms for the basic command with a default radius
             if (sender.hasPermission("pansentials.near.self")) {
+                sender.sendMessage("Running Command around self.");
                 Location loc = s.getLocation();
                 return doNear(s, radius, loc);
             } else {
@@ -177,7 +178,7 @@ public class NearModule implements Module, CommandExecutor {
         return true;
     }
 
-    private boolean doNearSpigot(Player sender, Integer radius, Location location){
+    private boolean doNear(Player sender, Integer radius, Location location){
         Double rad = radius.doubleValue();
         Collection<Entity> entities = location.getWorld().getNearbyEntities(location,rad,rad,rad);
         Iterator<Entity> iter = entities.iterator();
@@ -196,36 +197,6 @@ public class NearModule implements Module, CommandExecutor {
         Iterator iterator = results.entrySet().iterator();
         while(iterator.hasNext()){
             Map.Entry pair = (Map.Entry)iterator.next();
-            Player player = (Player) pair.getKey();
-            Double distance = (Double) pair.getValue();
-            sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.info", "%player%:" + player.getName()) + "%distance%:" + distance.toString());
-        }
-        return true;
-
-    }
-    private boolean doNear(Player sender, Integer radius, Location location){
-        final long radiusSquared = radius * radius;
-        Map<Player, Double> results = new HashMap<>();
-        boolean showHidden = sender.hasPermission("vanish.see");//check this is the correct pex or that we have a permission to see vanished players
-        for(Player player : location.getWorld().getPlayers()){ //pretty crap we have to get all players in the world and parse through them
-            //todo Do we need a world check here to ensure this isn't been run on a player in hardcore
-            if (!player.equals(sender) && sender.canSee(player) || showHidden){ //do we need to check if the player isHidden from the sender or is canSee enough
-                final Location playerLoc = player.getLocation();
-                final long delta = (long)playerLoc.distanceSquared(location);
-                if (delta < radiusSquared){
-                    results.put(player, Math.sqrt(delta));
-                }
-            }
-        }
-        if (results.size()==0){
-            sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.empty"));
-            return true;
-        }
-
-        results =  Utilities.sortByValue(results);
-        Iterator iter = results.entrySet().iterator();
-        while(iter.hasNext()){
-            Map.Entry pair = (Map.Entry)iter.next();
             Player player = (Player) pair.getKey();
             Double distance = (Double) pair.getValue();
             sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.info", "%player%:" + player.getName()) + "%distance%:" + distance.toString());

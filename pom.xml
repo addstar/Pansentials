@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.com.addstar</groupId>
   <artifactId>Pansentials</artifactId>
-  <version>b${env.BUILD_NUMBER}</version>
+  <version>0.1</version>
   <name>Pansentials</name>
 
   <repositories>
@@ -117,6 +117,30 @@
           <source>1.7</source>
           <target>1.7</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <id>copy-to-spigot</id>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target name="copy-jar">
+                <copy todir="C:\Development\Minecraft_Dev\server\plugins\">
+                  <fileset dir="${project.build.directory}">
+                    <include name="${artifactId}-${project.version}.jar"/>
+                  </fileset>
+                  <mapper type="flatten"/>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
