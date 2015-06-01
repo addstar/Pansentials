@@ -260,7 +260,7 @@ public class Utilities
 	 * Formats a string from the format file and stuff...
 	 * @param config The format config
 	 * @param path The path of the config
-	 * @param arg Must match "%idname%:replacement
+	 * @param args Must match "%idname%:replacement
 	 * @return A formatted string
 	 */
 	public static String format(FileConfiguration config, String path, String... args){
@@ -338,7 +338,7 @@ public class Utilities
 			throw new IllegalArgumentException(error);
 		}
 	}
-	
+
 	public static final Function<Player, String> PlayerName = new PlayerNameFunction();
 	public static class PlayerNameFunction implements Function<Player, String>
 	{

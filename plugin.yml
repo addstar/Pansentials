@@ -203,7 +203,11 @@ commands:
     usage: /<command> <player> [effect] [deathMessage]
     permission: pansentials.kill
   near:
-        usage: /<command> r:<radius> <p:player | x:<x> y:<y> z:<z>>
-        permission: pansentials.kill
-near:
-  default-radius: 30
+        usage: /<command> <player> [radius]
+        permission: pansentials.near
+  animals:
+        usage: /<command> <player> [radius]
+        permission: pansentials.animals
+  hostiles:
+        usage: /<command> <player> [radius]
+        permission: pansentials.hostiles

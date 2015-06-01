@@ -99,6 +99,7 @@ kill:
   fire.msg: ["%player% burnt to death", "%player% spontaneously combusted"]
 near:
   info: "Player: %player% Distance:%space% ."
+  console.help: "near <x y z world | player> [radius]"
   empty: "There are no players found using those parameters."
   location.error: "%value% is not valid for the %coord% coordinate"
   coord.noPermission: "&cYou do not have permission to execute this command with those parameters!"
