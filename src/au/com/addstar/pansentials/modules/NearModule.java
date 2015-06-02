@@ -26,8 +26,7 @@ import java.util.Map;
  * pansentials.near.other to perform any of the commands against another player target
  * Players currently do not have an option to /near against a location defined by x y z
  *
- *
- * @author benjamincharlton on 27/05/2015.
+ *  @author benjamincharlton on 27/05/2015.
  */
 public class NearModule implements Module, CommandExecutor {
 
@@ -37,10 +36,13 @@ public class NearModule implements Module, CommandExecutor {
 
     private Player target;
 
+    private Double maxRadius = (double) 81;
+
     protected  static Class<? extends Entity> test; //the Class to test against
 
-    @Override
 
+    @Override
+    @SuppressWarnings("unchecked")
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
         Map<Entity, Double> result = new LinkedHashMap();
         radius = plugin.getConfig().getDouble("near.default-radius", 10);
@@ -73,7 +75,7 @@ public class NearModule implements Module, CommandExecutor {
 
                 }
                 for (Map.Entry pair : doNear(radius, target.getLocation()).entrySet()) {
-                    if (test.equals(pair.getKey().getClass())) {
+                    if (test.isInstance(pair.getKey())) {
                         result.put((Entity) pair.getKey(), (Double) pair.getValue());
                     }
                 }
@@ -87,6 +89,10 @@ public class NearModule implements Module, CommandExecutor {
                     sender.sendMessage("One of the 3 values for x y z could not be converted to a coordinate value.");
                     return false;
                 }
+                if (world == null) {
+                    sender.sendMessage(args[3] + " does not reference an available world");
+                    return false;
+                }
                 if (arglength == 5) {
                     try {
                         radius = Double.parseDouble(args[4]);
@@ -96,7 +102,7 @@ public class NearModule implements Module, CommandExecutor {
                     }
                 }
                 for (Map.Entry pair : doNear(radius, location).entrySet()) {
-                    if (test.equals(pair.getKey().getClass())) {
+                    if (test.isInstance(pair.getKey())) {
                         result.put((Entity) pair.getKey(), (Double) pair.getValue());
                     }
                 }
@@ -111,7 +117,7 @@ public class NearModule implements Module, CommandExecutor {
                 Player s = (Player) sender;
                 if (arglength == 0) { // "near"
                     for (Map.Entry pair : doNear(radius, s.getLocation()).entrySet()) {
-                        if (test.equals(pair.getKey().getClass())) {
+                        if (test.isInstance(pair.getKey())) {
                             Boolean canSee;
                             try {
                                 Player p = (Player) pair.getKey();
@@ -156,8 +162,8 @@ public class NearModule implements Module, CommandExecutor {
                         target = s;
                     }
                     for (Map.Entry pair : doNear(radius, target.getLocation()).entrySet()) {
-                        if (test.equals(pair.getKey().getClass())) {
-                            Boolean canSee = true;
+                        if (test.isInstance(pair.getKey())) {
+                            Boolean canSee;
                             try {
                                 Player p = (Player) pair.getKey();
                                 canSee = (s.hasPermission("vanish.see") || s.canSee(p));
@@ -175,7 +181,7 @@ public class NearModule implements Module, CommandExecutor {
                     return false;
                 }
             } else {//command running from anything other than a player or console not supported
-                plugin.getServer().getConsoleSender().sendMessage("/near run from sender:" + sender.getClass().getSimpleName());
+                plugin.getServer().getConsoleSender().sendMessage("/near run from sender:" + sender.getClass().getSimpleName() + ": " + sender.getName());
                 return false;
             }
         }
@@ -183,6 +189,9 @@ public class NearModule implements Module, CommandExecutor {
 
     private boolean printMap(Map<Entity, Double> result, CommandSender sender) {
         sender.sendMessage(ChatColor.GOLD + "|PLAYER : DISTANCE");
+        if (result.isEmpty()) {
+            sender.sendMessage((ChatColor.GREEN + "No entities found for that set of params."));
+        }
         for (Map.Entry pair : result.entrySet()) {
             Entity entity = (Entity) pair.getKey();
             Double distance = (Double) pair.getValue();
@@ -203,6 +212,9 @@ public class NearModule implements Module, CommandExecutor {
         if (rad == null) {
             rad = radius;
         }
+        if (rad > maxRadius) {
+            rad = maxRadius;
+        }
         Collection<Entity> entities = location.getWorld().getNearbyEntities(location, rad, rad, rad);
         Map<Entity, Double> results = new HashMap<>();
         for (Entity ent : entities) {
@@ -220,7 +232,7 @@ public class NearModule implements Module, CommandExecutor {
     public void onEnable() {
         plugin.getCommand("near").setExecutor(this);
         plugin.getCommand("animals").setExecutor(this);
-        plugin.getCommand("hostiles").setExecutor(this);
+        plugin.getCommand("monsters").setExecutor(this);
         plugin.getConfig().addDefault("near.default-radius", 10);
 
     }
@@ -229,7 +241,7 @@ public class NearModule implements Module, CommandExecutor {
     public void onDisable() {
         plugin.getCommand("near").setExecutor(null);
         plugin.getCommand("animals").setExecutor(null);
-        plugin.getCommand("hostiles").setExecutor(null);
+        plugin.getCommand("monsters").setExecutor(null);
     }
 
     @Override

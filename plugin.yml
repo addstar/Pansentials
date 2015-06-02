@@ -122,6 +122,14 @@ permissions:
   pansentials.kill:
     default: op
 
+  pansentials.near:
+    default: op
+  pansentials.monsters:
+    default: op
+  pansentials.animals:
+    default: op
+
+
 commands:
   pansentials:
     usage: /<command>
@@ -212,4 +220,4 @@ commands:
         permission: pansentials.animals
   monsters:
         usage: /<command> <player> [radius]
-        permission: pansentials.hostiles
+        permission: pansentials.monsters

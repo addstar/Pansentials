@@ -122,18 +122,22 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.8</version>
+        <configuration>
+          <failOnError>false</failOnError>
+        </configuration>
         <executions>
           <execution>
             <phase>install</phase>
+
             <id>copy-to-spigot</id>
             <goals>
               <goal>run</goal>
             </goals>
             <configuration>
               <target name="copy-jar">
-                <copy todir="${project.build.directory}/../../Spigot-1.8.3/plugins">
+                <copy todir="${server.plugin.directory}">
                   <fileset dir="${project.build.directory}">
-                    <include name="${artifactId}-${project.version}.jar"/>
+                    <include name="*.jar"/>
                   </fileset>
                   <mapper type="flatten"/>
                 </copy>
@@ -148,5 +152,6 @@
   <!-- encoding --><!-- really should declare this to ensure cross platform consistency-->
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <server.plugin.directory>J:\Development\Minecraft\spigot-1.8.3\plugins</server.plugin.directory>
   </properties>
 </project>
