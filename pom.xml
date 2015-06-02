@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.com.addstar</groupId>
   <artifactId>Pansentials</artifactId>
-  <version>0.1</version>
+  <version>b${env.BUILD_NUMBER}</version>
   <name>Pansentials</name>
 
   <repositories>
@@ -144,4 +144,9 @@
       </plugin>
     </plugins>
   </build>
+  <properties>
+  <!-- encoding --><!-- really should declare this to ensure cross platform consistency-->
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+  </properties>
 </project>

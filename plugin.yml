@@ -5,6 +5,8 @@ description: Pandora replacement for Essentials
 
 main: au.com.addstar.pansentials.MasterPlugin
 
+softdepend: [Monolith]
+
 permissions:
   pansentials.command:
     default: op
@@ -208,6 +210,6 @@ commands:
   animals:
         usage: /<command> <player> [radius]
         permission: pansentials.animals
-  hostiles:
+  monsters:
         usage: /<command> <player> [radius]
         permission: pansentials.hostiles
