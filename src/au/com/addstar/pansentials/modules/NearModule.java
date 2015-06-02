@@ -55,6 +55,7 @@ public class NearModule implements Module, CommandExecutor {
             test = Monster.class;
         }
         if (sender instanceof ConsoleCommandSender) {
+            boolean showCoords = true;
             if (arglength == 0) { // "near"
                 sender.sendMessage("Running Command without params as console is not supported.");
                 return true;
@@ -79,7 +80,7 @@ public class NearModule implements Module, CommandExecutor {
                         result.put((Entity) pair.getKey(), (Double) pair.getValue());
                     }
                 }
-                return printMap(result, sender);
+                return printMap(result, sender, showCoords);
             } else if (args.length == 4 || arglength == 5) {// "near x y z world <optional r>"
                 World world = plugin.getServer().getWorld(args[3]);
                 Location location;
@@ -106,7 +107,7 @@ public class NearModule implements Module, CommandExecutor {
                         result.put((Entity) pair.getKey(), (Double) pair.getValue());
                     }
                 }
-                return printMap(result, sender);
+                return printMap(result, sender, showCoords);
 
             } else {
                 sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.console.help"));
@@ -115,6 +116,7 @@ public class NearModule implements Module, CommandExecutor {
         } else {
             if (sender instanceof Player) {
                 Player s = (Player) sender;
+                boolean showCoords = true;
                 if (arglength == 0) { // "near"
                     for (Map.Entry pair : doNear(radius, s.getLocation()).entrySet()) {
                         if (test.isInstance(pair.getKey())) {
@@ -130,7 +132,7 @@ public class NearModule implements Module, CommandExecutor {
                             }
                         }
                     }
-                    return printMap(result, sender);
+                    return printMap(result, sender, showCoords);
                 } else if (arglength == 1 || arglength == 2) { // "near player <opt r>"
                     if (!s.hasPermission("Pansentials.near.other")) {
                         sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
@@ -175,7 +177,7 @@ public class NearModule implements Module, CommandExecutor {
                             }
                         }
                     }
-                    return printMap(result, sender);
+                    return printMap(result, sender, showCoords);
                 } else {
                     sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.help"));
                     return false;
@@ -187,7 +189,7 @@ public class NearModule implements Module, CommandExecutor {
         }
     }
 
-    private boolean printMap(Map<Entity, Double> result, CommandSender sender) {
+    private boolean printMap(Map<Entity, Double> result, CommandSender sender, boolean showCoords) {
         sender.sendMessage(ChatColor.GOLD + "|PLAYER : DISTANCE");
         if (result.isEmpty()) {
             sender.sendMessage((ChatColor.GREEN + "No entities found for that set of params."));
@@ -195,7 +197,27 @@ public class NearModule implements Module, CommandExecutor {
         for (Map.Entry pair : result.entrySet()) {
             Entity entity = (Entity) pair.getKey();
             Double distance = (Double) pair.getValue();
-            sender.sendMessage(ChatColor.GREEN + "|" + entity.getName() + " : " + distance.intValue());
+
+            // Capitalize the word (initially all caps)
+            // Pad with spaces to the right for a width of 10
+            String entityName = entity.getType().toString();
+            entityName = String.format("%-10s", entityName.substring(0, 1).toUpperCase() + entityName.substring(1).toLowerCase());
+            String distanceText = String.format("%2s", distance.intValue());
+
+            if (showCoords) {
+                Location loc = entity.getLocation();
+                String locString =
+                        Long.toString(Math.round(loc.getX())) + "," +
+                        Long.toString(Math.round(loc.getY())) + "," +
+                        Long.toString(Math.round(loc.getZ()));
+
+                sender.sendMessage(ChatColor.GREEN + "|" + entityName + " : " + distanceText + " @ " + locString);
+            }
+            else
+            {
+                sender.sendMessage(ChatColor.GREEN + "|" + entityName + " : " + distanceText);
+            }
+
         }
         return true;
     }
