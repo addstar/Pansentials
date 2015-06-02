@@ -36,7 +36,7 @@ public class NearModule implements Module, CommandExecutor {
 
     private Player target;
 
-    private Double maxRadius = (double) 81;
+    private Double maxRadius = (double) 78;
 
     protected  static Class<? extends Entity> test; //the Class to test against
 
@@ -47,12 +47,16 @@ public class NearModule implements Module, CommandExecutor {
         Map<Entity, Double> result = new LinkedHashMap();
         radius = plugin.getConfig().getDouble("near.default-radius", 10);
         Integer arglength = args.length;
+        String entityType = "UNKNOWN";
         if (command.getName().equalsIgnoreCase("near")) {
             test = Player.class;
+            entityType = "PLAYER";
         } else if (command.getName().equalsIgnoreCase("animals")) {
             test = Animals.class;
+            entityType = "ANIMAL";
         } else if (command.getName().equalsIgnoreCase("monsters")) {
             test = Monster.class;
+            entityType = "MONSTER";
         }
         if (sender instanceof ConsoleCommandSender) {
             boolean showCoords = true;
@@ -80,7 +84,7 @@ public class NearModule implements Module, CommandExecutor {
                         result.put((Entity) pair.getKey(), (Double) pair.getValue());
                     }
                 }
-                return printMap(result, sender, showCoords);
+                return printMap(result, sender, entityType, showCoords);
             } else if (args.length == 4 || arglength == 5) {// "near x y z world <optional r>"
                 World world = plugin.getServer().getWorld(args[3]);
                 Location location;
@@ -107,7 +111,7 @@ public class NearModule implements Module, CommandExecutor {
                         result.put((Entity) pair.getKey(), (Double) pair.getValue());
                     }
                 }
-                return printMap(result, sender, showCoords);
+                return printMap(result, sender, entityType, showCoords);
 
             } else {
                 sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.console.help"));
@@ -132,7 +136,7 @@ public class NearModule implements Module, CommandExecutor {
                             }
                         }
                     }
-                    return printMap(result, sender, showCoords);
+                    return printMap(result, sender, entityType, showCoords);
                 } else if (arglength == 1 || arglength == 2) { // "near player <opt r>"
                     if (!s.hasPermission("Pansentials.near.other")) {
                         sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
@@ -177,7 +181,7 @@ public class NearModule implements Module, CommandExecutor {
                             }
                         }
                     }
-                    return printMap(result, sender, showCoords);
+                    return printMap(result, sender, entityType, showCoords);
                 } else {
                     sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.help"));
                     return false;
@@ -189,8 +193,17 @@ public class NearModule implements Module, CommandExecutor {
         }
     }
 
-    private boolean printMap(Map<Entity, Double> result, CommandSender sender, boolean showCoords) {
-        sender.sendMessage(ChatColor.GOLD + "|PLAYER : DISTANCE");
+    private boolean printMap(Map<Entity, Double> result, CommandSender sender, String entityType, boolean showCoords) {
+        String formatCode;
+
+        if (entityType == "PLAYER") {
+            formatCode = "%-15s";
+        }
+        else {
+            formatCode = "%-10s";
+        }
+
+        sender.sendMessage(ChatColor.GOLD + "|" + String.format(formatCode, entityType) + " : DISTANCE");
         if (result.isEmpty()) {
             sender.sendMessage((ChatColor.GREEN + "No entities found for that set of params."));
         }
@@ -200,8 +213,16 @@ public class NearModule implements Module, CommandExecutor {
 
             // Capitalize the word (initially all caps)
             // Pad with spaces to the right for a width of 10
-            String entityName = entity.getType().toString();
-            entityName = String.format("%-10s", entityName.substring(0, 1).toUpperCase() + entityName.substring(1).toLowerCase());
+            String entityName;
+
+            if (entityType == "PLAYER") {
+                entityName = entity.getName();
+            }
+            else {
+                entityName = entity.getType().toString();
+            }
+
+            entityName = String.format(formatCode, entityName.substring(0, 1).toUpperCase() + entityName.substring(1).toLowerCase());
             String distanceText = String.format("%2s", distance.intValue());
 
             if (showCoords) {
