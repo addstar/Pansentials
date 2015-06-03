@@ -1,13 +1,5 @@
 package au.com.addstar.pansentials;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,6 +7,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class MasterPlugin extends JavaPlugin
 {
@@ -62,6 +62,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("SpawnMob", "au.com.addstar.pansentials.modules.SpawnMobModule");
 		registerModule("Recipe", "au.com.addstar.pansentials.modules.RecipeModule");
 		registerModule("Kill", "au.com.addstar.pansentials.modules.KillModule");
+		registerModule("Near", "au.com.addstar.pansentials.modules.NearModule");
 		
 		//TODO: Register additional modules here
 	}
