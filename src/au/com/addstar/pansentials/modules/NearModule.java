@@ -197,7 +197,7 @@ public class NearModule implements Module, CommandExecutor {
         String formatCode;
 
         if (entityType == "PLAYER") {
-            formatCode = "%-15s";
+            formatCode = "%-16s";
         }
         else {
             formatCode = "%-10s";
@@ -211,18 +211,27 @@ public class NearModule implements Module, CommandExecutor {
             Entity entity = (Entity) pair.getKey();
             Double distance = (Double) pair.getValue();
 
-            // Capitalize the word (initially all caps)
-            // Pad with spaces to the right for a width of 10
             String entityName;
+            String customName = "";
 
             if (entityType == "PLAYER") {
                 entityName = entity.getName();
             }
             else {
                 entityName = entity.getType().toString();
+                customName = entity.getName();
+                if (customName.equalsIgnoreCase(entityName))
+                    customName = "";
             }
 
-            entityName = String.format(formatCode, entityName.substring(0, 1).toUpperCase() + entityName.substring(1).toLowerCase());
+            // Capitalize the word (initially all caps)
+            entityName = entityName.substring(0, 1).toUpperCase() + entityName.substring(1).toLowerCase();
+            if (customName.length()> 0)
+                entityName = entityName + " (" + customName + ")";
+
+            // Pad with spaces to the right for a width of 10
+            entityName = String.format(formatCode,entityName);
+
             String distanceText = String.format("%2s", distance.intValue());
 
             if (showCoords) {
