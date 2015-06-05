@@ -1,8 +1,8 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,9 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StackModule implements Module, CommandExecutor{
 	
@@ -43,14 +42,18 @@ public class StackModule implements Module, CommandExecutor{
 				ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "stack.self"));
 			}
 			else{
-				List<Player> plys = Bukkit.matchPlayer(args[0]);
-				if(!plys.isEmpty()){
-					stack(plys.get(0));
-					plys.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "stack.self"));
-					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "stack.other", "%player%:" + plys.get(0).getName()));
-				}
-				else{
-					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
+				if(args.length > 0) { //correct Array out of bounds exception for /stack
+					List<Player> plys = Bukkit.matchPlayer(args[0]);
+					if (!plys.isEmpty()) {
+						stack(plys.get(0));
+						plys.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "stack.self"));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "stack.other", "%player%:" + plys.get(0).getName()));
+					} else {
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
+					}
+				}else{
+					sender.sendMessage("Cannot parse no arguments from console.");
+
 				}
 			}
 			return true;

@@ -213,11 +213,14 @@ commands:
     usage: /<command> <player> [effect] [deathMessage]
     permission: pansentials.kill
   near:
-        usage: /<command> <player> [radius]
-        permission: pansentials.near
+    usage: /<command> <player> [radius]
+    permission: pansentials.near
   animals:
-        usage: /<command> <player> [radius]
-        permission: pansentials.animals
+    usage: /<command> <player> [radius]
+    permission: pansentials.animals
   monsters:
-        usage: /<command> <player> [radius]
-        permission: pansentials.monsters
+    usage: /<command> <player> [radius]
+    permission: pansentials.monsters
+  npc:
+    usage /<command> <player> [radius]
+    permission: pansentials.npc

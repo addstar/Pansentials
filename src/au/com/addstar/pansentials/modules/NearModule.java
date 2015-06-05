@@ -10,11 +10,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,38 +35,58 @@ public class NearModule implements Module, CommandExecutor {
 
     private Player target;
 
+    private Boolean verbose;
+
     private Double maxRadius = (double) 78;
 
-    protected  static Class<? extends Entity> test; //the Class to test against
+    protected String[] testClasses;  //array of test classes now.
 
+    /**
+     *
+     * @param sender the CommandSender
+     * @param command  the command we are running
+     * @param cmd a string representation of the command
+     * @param args the extra arguements
+     * @return boolean true on success or false on failure.
+     */
 
     @Override
     @SuppressWarnings("unchecked")
     public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
-        Map<Entity, Double> result = new LinkedHashMap();
+        Map<Entity, Double> filteredEntities = new LinkedHashMap();
         radius = plugin.getConfig().getDouble("near.default-radius", 10);
         Integer arglength = args.length;
         String entityType = "UNKNOWN";
+        verbose = false;
         if (command.getName().equalsIgnoreCase("near")) {
-            test = Player.class;
+            testClasses = new String[1];
+            testClasses[0] = "org.bukkit.entity.Player";
             entityType = "PLAYER";
         } else if (command.getName().equalsIgnoreCase("animals")) {
-            test = Animals.class;
+            testClasses = new String[2];
+            testClasses[0] = "org.bukkit.entity.Animals";
+            testClasses[1] = "org.bukkit.entity.Golem";
             entityType = "ANIMAL";
         } else if (command.getName().equalsIgnoreCase("monsters")) {
-            test = Monster.class;
+            testClasses = new String[2];
+            testClasses[0] = "org.bukkit.entity.Monster";
+            testClasses[1]= "org.bukkit.entity.Slime";
             entityType = "MONSTER";
+        }else if(command.getName().equalsIgnoreCase("npcs")){
+            testClasses = new String[1];
+            testClasses[0] = "org.bukkit.entity.NPC";
+            entityType = "NPC";
         }
+
         if (sender instanceof ConsoleCommandSender) {
-            boolean showCoords = true;
             if (arglength == 0) { // "near"
                 sender.sendMessage("Running Command without params as console is not supported.");
                 return true;
-            } else if (arglength == 1 || arglength == 2) { // "near player <opt r>"
+            } else if (arglength <=3 ) { // "near player <opt r>"
                 target = plugin.getServer().getPlayer(args[0]);
                 if (target == null) {
-                    sender.sendMessage(args[1] + " is not valid for radius or Player name");
-                    return true;
+                    sender.sendMessage(args[0] + " is not valid for radius or Player name");
+                    return false;
                 }
                 if (arglength == 2) {
                     try {
@@ -79,13 +98,27 @@ public class NearModule implements Module, CommandExecutor {
                     }
 
                 }
-                for (Map.Entry pair : doNear(radius, target.getLocation()).entrySet()) {
-                    if (test.isInstance(pair.getKey())) {
-                        result.put((Entity) pair.getKey(), (Double) pair.getValue());
+                if (arglength == 3) {
+                    if((args[2].equals("-v")) || (args[2].equals("-verbose"))){
+                        verbose = true;
+                }else {
+                        sender.sendMessage(args[2] + " is not valid for 3rd param using " + Arrays.toString(args) + "did you want 'verbose or v'");
+                    }
+            }
+                Map<Entity, Double> totalEntities = doNear(radius, target.getLocation());
+                for (Map.Entry pair : totalEntities.entrySet()) {
+                    for (String testClass : testClasses) {
+                        try {
+                            if (Class.forName(testClass).isInstance(pair.getKey())) {
+                                filteredEntities.put((Entity) pair.getKey(), (Double) pair.getValue());
+                            }
+                        } catch (ClassNotFoundException e) {
+                            //report as debug error
+                        }
                     }
                 }
-                return printMap(result, sender, entityType, showCoords);
-            } else if (args.length == 4 || arglength == 5) {// "near x y z world <optional r>"
+                return printMap(filteredEntities, sender, entityType,totalEntities.size(), verbose);
+            } else if (args.length >= 4 || arglength <= 6) {// "near x y z world <optional r> <optional -v>"
                 World world = plugin.getServer().getWorld(args[3]);
                 Location location;
                 try {
@@ -106,12 +139,25 @@ public class NearModule implements Module, CommandExecutor {
                         sender.sendMessage(args[4] + " is not valid for radius using default value of " + radius);
                     }
                 }
-                for (Map.Entry pair : doNear(radius, location).entrySet()) {
-                    if (test.isInstance(pair.getKey())) {
-                        result.put((Entity) pair.getKey(), (Double) pair.getValue());
+                if (arglength == 6) {
+                    if((args[5].equals("-v")) || (args[5].equals("-verbose"))){
+                        verbose = true;
+                    }else {
+                        sender.sendMessage(args[5] + " is not valid for 6th param using " + Arrays.toString(args) + "did you want '-verbose or -v'");                    }
+                }
+                Map<Entity, Double> totalEntities = doNear(radius, location);
+                for (Map.Entry pair : totalEntities.entrySet()) {
+                    for (String testClass : testClasses) {
+                        try {
+                            if (Class.forName(testClass).isInstance(pair.getKey())) {
+                                filteredEntities.put((Entity) pair.getKey(), (Double) pair.getValue());
+                            }
+                        } catch (ClassNotFoundException e) {
+                            //report as debug error
+                        }
                     }
                 }
-                return printMap(result, sender, entityType, showCoords);
+                return printMap(filteredEntities, sender, entityType,totalEntities.size(), verbose);
 
             } else {
                 sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.console.help"));
@@ -120,24 +166,15 @@ public class NearModule implements Module, CommandExecutor {
         } else {
             if (sender instanceof Player) {
                 Player s = (Player) sender;
-                boolean showCoords = true;
                 if (arglength == 0) { // "near"
-                    for (Map.Entry pair : doNear(radius, s.getLocation()).entrySet()) {
-                        if (test.isInstance(pair.getKey())) {
-                            Boolean canSee;
-                            try {
-                                Player p = (Player) pair.getKey();
-                                canSee = (s.hasPermission("vanish.see") || s.canSee(p));
-                            } catch (ClassCastException e) {//supress if not a player
-                                canSee = true;
-                            }
-                            if (canSee) {
-                                result.put((Entity) pair.getKey(), (Double) pair.getValue());
-                            }
+                    return doPlayerNear((Player)sender, entityType,(Player)sender,radius, verbose);
+                } else if (arglength >= 1 || arglength <= 3) { // "near player <opt r>"
+                    if(arglength ==1){
+                        if((args[0].equals("-v")) || (args[0].equals("-verbose"))){
+                            verbose = true;
+                            return doPlayerNear((Player)sender, entityType,(Player)sender,radius, verbose);
                         }
                     }
-                    return printMap(result, sender, entityType, showCoords);
-                } else if (arglength == 1 || arglength == 2) { // "near player <opt r>"
                     if (!s.hasPermission("Pansentials.near.other")) {
                         sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
                         return true;
@@ -151,37 +188,33 @@ public class NearModule implements Module, CommandExecutor {
                             sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
                             sender.sendMessage("The value for radius could not be determined");
                             sender.sendMessage(args[1] + " is not valid for radius or Player name");
-                            return true;
+                            return false;
                         }
                     }
-                    if (arglength == 2) {
+                    if (arglength >= 2) {
                         try {
                             radius = Double.parseDouble(args[1]);
                         } catch (NumberFormatException exception) {
                             //not a Double
-                            sender.sendMessage("The value for radius could not be determined");
-                            sender.sendMessage(args[1] + " is not valid for radius using default value of " + radius);
+                            if((args[1].equals("-v")) || (args[1].equals("-verbose"))){
+                                verbose = true;
+                            }else {
+                                sender.sendMessage("The value for radius could not be determined");
+                                sender.sendMessage(args[1] + " is not valid for radius using default value of " + radius);
+                            }
                         }
 
+                    }
+                    if (arglength >= 3){
+                        if((args[2].equals("-v")) || (args[2].equals("-verbose"))){
+                            verbose = true;
+                        }else {
+                            sender.sendMessage(args[2] + " is not valid for 3rd param using " + Arrays.toString(args) + "did you want '-verbose or -v'");                    }
                     }
                     if (target == null) {
                         target = s;
                     }
-                    for (Map.Entry pair : doNear(radius, target.getLocation()).entrySet()) {
-                        if (test.isInstance(pair.getKey())) {
-                            Boolean canSee;
-                            try {
-                                Player p = (Player) pair.getKey();
-                                canSee = (s.hasPermission("vanish.see") || s.canSee(p));
-                            } catch (ClassCastException e) {//supress if not a player
-                                canSee = true;
-                            }
-                            if (canSee) {
-                                result.put((Entity) pair.getKey(), (Double) pair.getValue());
-                            }
-                        }
-                    }
-                    return printMap(result, sender, entityType, showCoords);
+                    return doPlayerNear((Player)sender, entityType,target,radius, verbose);
                 } else {
                     sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.help"));
                     return false;
@@ -193,21 +226,66 @@ public class NearModule implements Module, CommandExecutor {
         }
     }
 
-    private boolean printMap(Map<Entity, Double> result, CommandSender sender, String entityType, boolean showCoords) {
-        String formatCode;
+    private boolean doPlayerNear(Player sender, String entityType, Player target, Double rad, Boolean v){
+        Map<Entity, Double> filteredEntities = new LinkedHashMap();
+        if(target==null){
+            target=sender;
+        }
+        Map<Entity, Double> totalEntities = doNear(rad, target.getLocation());
+        for (Map.Entry pair : totalEntities.entrySet()) {
+            for (String testClass : testClasses) {
+                try {
+                    if (Class.forName(testClass).isInstance(pair.getKey())) {
+                        Boolean canSee;
+                        try {
+                            Player p = (Player) pair.getKey();
+                            canSee = (sender.hasPermission("vanish.see") || sender.canSee(p));
+                        } catch (ClassCastException e) {//supress if not a player
+                            canSee = true;
+                        }
+                        if (canSee) {
+                            filteredEntities.put((Entity) pair.getKey(), (Double) pair.getValue());
+                        }
+                    }
+                } catch (ClassNotFoundException e) {
+                    //report as debug error
+                }
+            }
+        }
+        if(!sender.hasPermission("pansentials.near.verbose")){
+            verbose=false;
+            if (v==true){
+                sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission") + "Cannot use -verbose");
+            }
+        }else{
+            verbose=v;
+        }
+        return printMap(filteredEntities, sender, entityType, totalEntities.size(), verbose);
+    }
 
+    private boolean printMap(Map<Entity, Double> result, CommandSender sender, String entityType,Integer total, Boolean verbose) {
+        String formatCode;
+        StringBuilder message =  new StringBuilder();
+        result = Utilities.sortByValue(result);
         if (entityType == "PLAYER") {
             formatCode = "%-16s";
         }
         else {
             formatCode = "%-10s";
         }
-
-        sender.sendMessage(ChatColor.GOLD + "|" + String.format(formatCode, entityType) + " : DISTANCE");
+        if(verbose){
+            sender.sendMessage(ChatColor.GOLD + "|" + String.format(formatCode, entityType) + " : DISTANCE @ Location (X,Y,Z)");}
+        else{
+            message.append(ChatColor.GOLD + "Found " + entityType + ":");
+        }
         if (result.isEmpty()) {
             sender.sendMessage((ChatColor.GREEN + "No entities found for that set of params."));
+            return true;
         }
+        message.append(ChatColor.GREEN);
+        int i = 0;
         for (Map.Entry pair : result.entrySet()) {
+            if (i>0 && i<result.size()){message.append(", ");}
             Entity entity = (Entity) pair.getKey();
             Double distance = (Double) pair.getValue();
 
@@ -230,11 +308,15 @@ public class NearModule implements Module, CommandExecutor {
                 entityName = entityName + " (" + customName + ")";
 
             // Pad with spaces to the right for a width of 10
-            entityName = String.format(formatCode,entityName);
+            String distanceText;
+            if(verbose) {
+                entityName = String.format(formatCode,entityName);
+                distanceText = String.format("%2s", distance.intValue());
+            }else{
+                distanceText = String.valueOf(distance.intValue());
+            }
 
-            String distanceText = String.format("%2s", distance.intValue());
-
-            if (showCoords) {
+            if (verbose) {
                 Location loc = entity.getLocation();
                 String locString =
                         Long.toString(Math.round(loc.getX())) + "," +
@@ -245,9 +327,15 @@ public class NearModule implements Module, CommandExecutor {
             }
             else
             {
-                sender.sendMessage(ChatColor.GREEN + "|" + entityName + " : " + distanceText);
+                message.append(ChatColor.GREEN + entityName + ChatColor.WHITE + "("+distanceText+")");
+                //sender.sendMessage(ChatColor.GREEN + "|" + entityName + " : " + distanceText);
             }
-
+        i++;
+        }
+        if(verbose){
+            sender.sendMessage("Total found: " + result.size() + " from " + total.toString() + " Entities");
+        }else{
+            sender.sendMessage(message.toString());
         }
         return true;
     }
@@ -261,21 +349,16 @@ public class NearModule implements Module, CommandExecutor {
      **/
 
     private Map<Entity, Double> doNear(Double rad, Location location) {
-        if (rad == null) {
-            rad = radius;
-        }
-        if (rad > maxRadius) {
-            rad = maxRadius;
-        }
-        Collection<Entity> entities = location.getWorld().getNearbyEntities(location, rad, rad, rad);
+        radius = (rad == null)?radius:rad;
+        radius = (radius > maxRadius)?maxRadius:radius;
+        Collection<Entity> entities = location.getWorld().getNearbyEntities(location, radius, radius, radius);
         Map<Entity, Double> results = new HashMap<>();
         for (Entity ent : entities) {
             Double distance = location.distance(ent.getLocation());
-            if(distance<=rad) {
+            if(distance<=radius) {
                 results.put(ent, distance);
             }
         }
-        results = Utilities.sortByValue(results);
         return results;
     }
 
@@ -285,6 +368,7 @@ public class NearModule implements Module, CommandExecutor {
         plugin.getCommand("near").setExecutor(this);
         plugin.getCommand("animals").setExecutor(this);
         plugin.getCommand("monsters").setExecutor(this);
+        plugin.getCommand("npcs").setExecutor(this);
         plugin.getConfig().addDefault("near.default-radius", 10);
 
     }
@@ -294,6 +378,7 @@ public class NearModule implements Module, CommandExecutor {
         plugin.getCommand("near").setExecutor(null);
         plugin.getCommand("animals").setExecutor(null);
         plugin.getCommand("monsters").setExecutor(null);
+        plugin.getCommand("npcs").setExecutor(null);
     }
 
     @Override
