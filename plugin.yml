@@ -221,6 +221,6 @@ commands:
   monsters:
     usage: /<command> <player> [radius]
     permission: pansentials.monsters
-  npc:
-    usage /<command> <player> [radius]
+  npcs:
+    usage: /<command> <player> [radius]
     permission: pansentials.npc
