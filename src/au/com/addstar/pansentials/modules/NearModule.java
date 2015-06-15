@@ -12,14 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.entity.Animals;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Ghast;
-import org.bukkit.entity.Golem;
-import org.bukkit.entity.Monster;
-import org.bukkit.entity.NPC;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Slime;
+import org.bukkit.entity.*;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -181,7 +174,7 @@ public class NearModule implements Module, CommandExecutor {
                             //not a Double
                             sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
                             sender.sendMessage("The value for radius could not be determined");
-                            sender.sendMessage(args[1] + " is not valid for radius or Player name");
+                            sender.sendMessage(args[0] + " is not valid for radius or Player name");
                             return false;
                         }
                     }
@@ -208,6 +201,12 @@ public class NearModule implements Module, CommandExecutor {
                     }
                     if (target == null) {
                         target = s;
+                    }
+                    if (target != s) {
+                        if (!s.canSee(target)) {
+                            sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
+                            return true;
+                        }
                     }
                     return doPlayerNear((Player)sender, entityType, target, radius, verbose);
                 } else {
@@ -290,7 +289,11 @@ public class NearModule implements Module, CommandExecutor {
             String customName = "";
 
             if (entityType.equals("Players")) {
-                entityName = entity.getName();
+                if (entity.hasMetadata("NPC")) {
+                    entityName = entity.getName() + "(NPC)";
+                } else {
+                    entityName = entity.getName();
+                }
             } else {
                 entityName = entity.getType().toString();
                 customName = entity.getName();
@@ -318,9 +321,12 @@ public class NearModule implements Module, CommandExecutor {
                 Location loc = entity.getLocation();
                 String locString =
                         Long.toString(Math.round(loc.getX())) + "," +
-                        Long.toString(Math.round(loc.getY())) + "," +
-                        Long.toString(Math.round(loc.getZ()));
-
+                                Long.toString(Math.round(loc.getY())) + "," +
+                                Long.toString(Math.round(loc.getZ()));
+                if (entityType == "NPCs") {
+                    Villager v = (Villager) entity;
+                    entityName = entityName + "(" + v.getProfession() + ")";
+                }
                 sender.sendMessage(ChatColor.GREEN + "|" + entityName + " : " + distanceText + " @ " + locString);
             } else {
                 message.append(ChatColor.GREEN + entityName + ChatColor.WHITE + "(" + distanceText + ")");
