@@ -158,7 +158,7 @@ public class KillModule extends CommandModule implements Listener
 	private void kill(Player player, String message)
 	{
 		messages.put(player, message);
-		player.damage(player.getMaxHealth() * 100);
+		player.setHealth(0);
 	}
 	
 	private void explodeKill(Player target, String message)
@@ -178,6 +178,9 @@ public class KillModule extends CommandModule implements Listener
 	
 	private void fireworkKill(final Player target, final String message)
 	{
+		if (target.isFlying())
+			target.setFlying(false);
+		
 		target.setVelocity(new Vector(0, 2, 0));
 		
 		Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
@@ -241,7 +244,7 @@ public class KillModule extends CommandModule implements Listener
 			.build();
 	}
 	
-	@EventHandler(priority=EventPriority.LOWEST, ignoreCancelled=false)
+	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=false)
 	private void onPlayerDeath(PlayerDeathEvent event)
 	{
 		String message = messages.remove(event.getEntity());
