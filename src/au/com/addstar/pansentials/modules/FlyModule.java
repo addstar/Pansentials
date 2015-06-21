@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -72,25 +73,30 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 		return true;
 	}
 	
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	private void onJoin(PlayerJoinEvent event){
 		if(event.getPlayer().getGameMode() != GameMode.CREATIVE){
 			if(event.getPlayer().hasPermission("pansentials.fly.join"))
 				event.getPlayer().setAllowFlight(true);
-			else if(!((LivingEntity) event.getPlayer()).isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")){
+			if(!((LivingEntity) event.getPlayer()).isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")){
 				event.getPlayer().setAllowFlight(true);
 				event.getPlayer().setFlying(true);
 			}
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority=EventPriority.HIGHEST)
 	private void onSwitchWorld(PlayerChangedWorldEvent event){
 		if(event.getPlayer().getGameMode() != GameMode.CREATIVE){
 			if(event.getPlayer().hasPermission("pansentials.fly.changeworld"))
 				event.getPlayer().setAllowFlight(true);
 			else
 				event.getPlayer().setAllowFlight(false);
+			
+			if(!((LivingEntity) event.getPlayer()).isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")) {
+				event.getPlayer().setAllowFlight(true);
+				event.getPlayer().setFlying(true);
+			}
 		}
 	}
 }
