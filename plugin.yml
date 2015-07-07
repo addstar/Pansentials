@@ -224,3 +224,6 @@ commands:
   npcs:
     usage: /<command> <player> [radius]
     permission: pansentials.npc
+  calc:
+    usage: /<command> <equation>
+    permission: pansentials.calc
