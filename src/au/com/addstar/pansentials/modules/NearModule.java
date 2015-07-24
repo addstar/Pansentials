@@ -3,7 +3,6 @@ package au.com.addstar.pansentials.modules;
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,11 +13,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.*;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A note regarding permissions
@@ -38,7 +34,7 @@ public class NearModule implements Module, CommandExecutor {
 
     private boolean verbose;
 
-    private double maxRadius = 78;
+    //maxRadius set in doNear
 
     protected Class<?>[] testClasses;
 
@@ -159,7 +155,7 @@ public class NearModule implements Module, CommandExecutor {
                     if(arglength == 1) {
                         if(args[0].equals("-v") || args[0].equals("-verbose")) {
                             verbose = true;
-                            return doPlayerNear((Player)sender, entityType, (Player)sender, radius, verbose);
+                            return doPlayerNear((Player) sender, entityType, (Player) sender, radius, true);
                         }
                     }
                     if (!s.hasPermission("Pansentials.near.other")) {
@@ -202,11 +198,9 @@ public class NearModule implements Module, CommandExecutor {
                     if (target == null) {
                         target = s;
                     }
-                    if (target != s) {
-                        if (!s.canSee(target)) {
-                            sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
-                            return true;
-                        }
+                    if (target != s && !s.canSee(target)) {
+                        sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
+                        return true;
                     }
                     return doPlayerNear((Player)sender, entityType, target, radius, verbose);
                 } else {
@@ -261,6 +255,7 @@ public class NearModule implements Module, CommandExecutor {
     private boolean printMap(Map<Entity, Double> result, CommandSender sender, String entityType, int total, boolean verbose) {
         String formatCode;
         StringBuilder message =  new StringBuilder();
+        List<String> vmessage = new ArrayList<>();
         result = Utilities.sortByValue(result);
         if (entityType.equals("Players")) {
             formatCode = "%-16s";
@@ -268,9 +263,9 @@ public class NearModule implements Module, CommandExecutor {
             formatCode = "%-10s";
         }
         if (verbose) {
-            sender.sendMessage(ChatColor.GOLD + "|" + String.format(formatCode, entityType) + " : DISTANCE @ Location (X,Y,Z)");
+            vmessage.add(ChatColor.GOLD + "|" + String.format(formatCode, entityType) + " : DISTANCE @ Location (X,Y,Z)");
         } else {
-            message.append(ChatColor.GOLD + "Found " + entityType + ": ");
+            message.append(ChatColor.GOLD).append("Found ").append(entityType).append(": ");
         }
         if (result.isEmpty()) {
             sender.sendMessage(ChatColor.GREEN + "No entities found for that set of params.");
@@ -279,13 +274,12 @@ public class NearModule implements Module, CommandExecutor {
         message.append(ChatColor.GREEN);
         int i = 0;
         for (Map.Entry<Entity, Double> pair : result.entrySet()) {
-            if (i > 0 && i < result.size()) {
-            	message.append(", ");
-            }
+
             Entity entity = pair.getKey();
             Double distance = pair.getValue();
 
             String entityName;
+            String entityDetail = "";
             String customName = "";
 
             if (entityType.equals("Players")) {
@@ -305,7 +299,7 @@ public class NearModule implements Module, CommandExecutor {
             // Capitalize the word (initially all caps)
             entityName = entityName.substring(0, 1).toUpperCase() + entityName.substring(1).toLowerCase();
             if (customName.length() > 0) {
-                entityName = entityName + " (" + customName + ")";
+                entityDetail = ChatColor.LIGHT_PURPLE + "" + ChatColor.ITALIC + "(\"" + customName + "\")";
             }
 
             // Pad with spaces to the right for a width of 10
@@ -323,18 +317,63 @@ public class NearModule implements Module, CommandExecutor {
                         Long.toString(Math.round(loc.getX())) + "," +
                                 Long.toString(Math.round(loc.getY())) + "," +
                                 Long.toString(Math.round(loc.getZ()));
-                if (entityType == "NPCs") {
+                if (entityType.equals("NPCs")) { //should probably check instanceof here.
                     Villager v = (Villager) entity;
-                    entityName = entityName + "(" + v.getProfession() + ")";
+                    entityDetail = entityDetail + ChatColor.GREEN + " Prof:" + v.getProfession();
                 }
-                sender.sendMessage(ChatColor.GREEN + "|" + entityName + " : " + distanceText + " @ " + locString);
+                if (entity instanceof Ageable) {
+                    Ageable ae = (Ageable) entity;
+                    long age = TimeUnit.SECONDS.toHours(ae.getTicksLived() / 20);
+                    String ageT;
+                    if (age > 24) {
+                        age = TimeUnit.HOURS.toDays(age);
+                        ageT = age + "dys";
+                    } else {
+                        ageT = age + "hrs";
+                    }
+
+                    if (ae.isAdult()) {
+                        entityDetail = entityDetail + ChatColor.GREEN + " Adult:" + ageT;
+                    } else {
+                        entityDetail = entityDetail + ChatColor.GREEN + " Juvenile:" + ageT;
+                    }
+                    if (ae.canBreed()) {
+                        entityDetail = entityDetail + ChatColor.RED + "B";
+                    }
+                }
+                if (entityType.equals("Animals") && entity instanceof Animals) { //should probably check instanceof here.
+                    if (entity instanceof Tameable) {
+                        Tameable t = (Tameable) entity;
+                        if (t.isTamed()) {
+                            entityDetail = entityDetail + ChatColor.AQUA + " owner:" + t.getOwner().getName();
+                        } else {
+                            entityDetail = entityDetail + ChatColor.AQUA + " wild";
+                        }
+                    }
+
+                    Animals a = (Animals) entity;
+                    if (a.isLeashed()) {
+                        Location loc2 = a.getLeashHolder().getLocation();
+                        String loc2String =
+                                Long.toString(Math.round(loc2.getX())) + "," +
+                                        Long.toString(Math.round(loc2.getY())) + "," +
+                                        Long.toString(Math.round(loc2.getZ()));
+                        entityDetail = entityDetail + ChatColor.GOLD + " Leashed:" + a.getLeashHolder().getName() + " @ " + loc2String;
+                    }
+                }
+                vmessage.add(ChatColor.GREEN + "" + i + "." + entityName + " : " + ChatColor.YELLOW + distanceText + " @ " + locString + entityDetail);
             } else {
-                message.append(ChatColor.GREEN + entityName + ChatColor.WHITE + "(" + distanceText + ")");
+                message.append(ChatColor.GREEN).append(entityName).append(entityDetail).append(ChatColor.YELLOW).append("(")
+                        .append(distanceText).append(")");
+            }
+            if (i < result.size()) {
+                message.append(", ");
             }
             i++;
         }
         if(verbose) {
-            sender.sendMessage("Total found: " + result.size() + " from " + total + " Entities");
+            sender.sendMessage(vmessage.toArray(new String[result.size()]));
+            sender.sendMessage("Total found: " + ChatColor.YELLOW + result.size() + ChatColor.GREEN + " from " + total + " Entities");
         } else {
             sender.sendMessage(message.toString());
         }
@@ -350,6 +389,7 @@ public class NearModule implements Module, CommandExecutor {
 
     private Map<Entity, Double> doNear(double rad, Location location) {
         radius = rad;
+        double maxRadius = 78;
         radius = (radius > maxRadius) ? maxRadius : radius;
         Collection<Entity> entities = location.getWorld().getNearbyEntities(location, radius, radius, radius);
         Map<Entity, Double> results = new HashMap<>();
