@@ -1,8 +1,10 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-import java.util.Map;
-
+import au.com.addstar.monolith.StringTranslator;
+import au.com.addstar.monolith.lookup.MaterialDefinition;
+import au.com.addstar.monolith.util.Parser;
+import au.com.addstar.pansentials.CommandModule;
+import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,12 +28,8 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.google.common.collect.Maps;
-
-import au.com.addstar.monolith.StringTranslator;
-import au.com.addstar.monolith.lookup.MaterialDefinition;
-import au.com.addstar.monolith.util.Parser;
-import au.com.addstar.pansentials.CommandModule;
+import java.util.List;
+import java.util.Map;
 
 public class RecipeModule extends CommandModule implements Listener
 {
@@ -58,20 +56,16 @@ public class RecipeModule extends CommandModule implements Listener
 		// Try item in hand
 		if (args.length == 0)
 		{
-			if (sender instanceof Player)
-			{
-				Player player = (Player)sender;
-				
-				if (player.getItemInHand() == null || player.getItemInHand().getType() == Material.AIR)
-				{
-					sender.sendMessage(ChatColor.RED + "You are not holding an item, either hold one, or use /" + label + " <item>");
-					return true;
-				}
-				
-				def = MaterialDefinition.from(player.getItemInHand());
+
+			Player player = (Player) sender;
+
+			if (player.getItemInHand() == null || player.getItemInHand().getType() == Material.AIR) {
+				sender.sendMessage(ChatColor.RED + "You are not holding an item, either hold one, or use /" + label + " <item>");
+				return true;
 			}
-			else
-				return false;
+
+			def = MaterialDefinition.from(player.getItemInHand());
+
 		}
 		// One is specified
 		else
