@@ -203,7 +203,7 @@ commands:
     permission: pansentials.powertool
     aliases: [pt]
   spawnmob:
-    usage: /<command> <mob[:options]>[,<mob[:options]>[,...]]
+    usage: /<command> [@a|#world|player[x,y,z]] <mob[:options]>[,<mob[:options]>[,...]]
     permission: pansentials.spawnmob
     aliases: [spawnentity,spawnentities,spawnmobs,spawnent,spawnents]
   recipe:

@@ -155,8 +155,9 @@ public class SpawnMobModule extends CommandModule {
 			if (args.length < 2) {
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " help <entity name>");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " <entitySpec> [mob count]");
-				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " playerName[x,y,z] <entitySpec> [mob count]");
-				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " @a[x,y,z] <entitySpec> [mob count]");
+				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " [x,y,z] <entitySpec> [mob count]");
+				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " playerName[~x,~y,~z] <entitySpec> [mob count]");
+				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " @a[~x,~y,~z] <entitySpec> [mob count]");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " #world[x,y,z] <entitySpec> [mob count]");
 			} else {
 				// Show help on the given entity (typically mob name)
@@ -212,8 +213,13 @@ public class SpawnMobModule extends CommandModule {
 			if (showDebug)
 				sender.sendMessage("Debug: parse " + reMatch.group(0));
 
-			// playerName could be a specific playerName, @a, #worldName or @a#worldName
-			String playerWorldSpec = reMatch.group(1).toString();
+			// playerWorldSpec could be a specific playerName, @a, #worldName, @a#worldName, or blank
+
+			String playerWorldSpec = "";
+
+			if (reMatch.group(1) != null) {
+				playerWorldSpec = reMatch.group(1).toString();
+			}
 
 			coordX = reMatch.group(2).toString();
 			coordY = reMatch.group(3).toString();
@@ -507,6 +513,11 @@ public class SpawnMobModule extends CommandModule {
 
 		if (showDebug)
 			sender.sendMessage("Debug: world spec: " + worldName);
+
+		if (worldName.isEmpty()) {
+			sender.sendMessage(ChatColor.RED + "Missing world name after the # sign");
+			return false;
+		}
 
 		if (!(AddWorldPlayers(worldName, playerList, relativeCoordinates))) {
 			sender.sendMessage(ChatColor.RED + "World not found: " + worldName);
