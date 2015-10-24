@@ -156,9 +156,10 @@ public class SpawnMobModule extends CommandModule {
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " help <entity name>");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " <entitySpec> [mob count]");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " [x,y,z] <entitySpec> [mob count]");
-				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " playerName[~x,~y,~z] <entitySpec> [mob count]");
-				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " @a[~x,~y,~z] <entitySpec> [mob count]");
+				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " PlayerName[~x,~y,~z] <entitySpec> [mob count]");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " #world[x,y,z] <entitySpec> [mob count]");
+				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " @a[~x,~y,~z] <entitySpec> [mob count]");
+				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " @a#world[~x,~y,~z] <entitySpec> [mob count]");
 			} else {
 				// Show help on the given entity (typically mob name)
 				doHelp(sender, args[1]);
@@ -185,7 +186,7 @@ public class SpawnMobModule extends CommandModule {
 		// Examples:
 		//
 		// [x,y,z]               spawn entities at the given coordinates (not valid at console)
-		// playername[~x,~y,~z]  spawn at coordinates relative to the given player (not all terms must be relative)
+		// PlayerName[~x,~y,~z]  spawn at coordinates relative to the given player (not all terms must be relative)
 		// @a[~x,~y,~z]          spawn at coordinates relative to all players on the server
 		// #survival[15,65,43] slime|size=1 10    - Spawn 10 slimes of size 1 at absolute coordinates x=15,y=65,z=43 on survival
 		// @a#survival[~5,~,~-15] slime|size=1 5  - Spawn 5 slimes at relative coordinates from every player on the survival world
@@ -193,13 +194,14 @@ public class SpawnMobModule extends CommandModule {
 		Pattern coordsPattern = Pattern.compile("([a-zA-Z0-9_@#]+)?\\[([0-9~-]+),([0-9~-]+),([0-9~-]+)\\]");
 		Matcher reMatch = coordsPattern.matcher(args[0]);
 
-		String worldName = "";
 		String coordX = "";
 		String coordY = "";
 		String coordZ = "";
 		boolean relativeCoordinates = false;
 
-		List<String> playerList = new ArrayList<String>();
+		// List of player names to target
+		// If using @a with absolute coordinates, instead has world names starting with #, for example #hub
+		List<String> playerList = new ArrayList<>();
 
 		if (showDebug)
 			sender.sendMessage("Debug: Look for coordinate info");
@@ -238,16 +240,11 @@ public class SpawnMobModule extends CommandModule {
 					Player targetPlayer = (Player) sender;
 					String playerName = targetPlayer.getName();
 					playerList.add(playerName);
-					worldName = targetPlayer.getWorld().getName();
 				} else {
-					if (relativeCoordinates) {
-						// Cannot have relative coordinates when running from console and no player specified  (or @a not used)
-						ShowConsoleUsageWarning(sender);
-						return true;
-					}
 
-					// Store an empty string for player name, meaning absolute coordinates are in use
-					playerList.add("");
+					// When calling from the console, must use @a or PlayerName or #world
+					ShowConsoleUsageWarning(sender);
+					return true;
 				}
 
 				coordsParsed = true;
@@ -255,7 +252,7 @@ public class SpawnMobModule extends CommandModule {
 
 			if (!coordsParsed && playerWorldSpec.equals("@a")) {
 				// Add all players in all worlds if relative coordinates
-				// Add just one player if absolute coordinates
+				// Add just one player for each world if absolute coordinates
 
 				if (showDebug)
 					sender.sendMessage("Debug: found @a, Bukkit.getOnlinePlayers");
@@ -264,15 +261,18 @@ public class SpawnMobModule extends CommandModule {
 					if (showDebug)
 						sender.sendMessage("Debug: found @a, add " + player.getName());
 
-					playerList.add(player.getName());
+					if (relativeCoordinates) {
+						// Store the player name
+						playerList.add(player.getName());
+					} else {
+						// Store the world name, but only if we haven't parsed this world yet
+						String playerWorld = "#" + player.getWorld().getName();
 
-					if (!relativeCoordinates)
-						break;
-				}
+						if (!playerList.contains(playerWorld))
+							playerList.add(playerWorld);
+					}
 
-				if (playerList.isEmpty() && !relativeCoordinates) {
-					// Store an empty string for player name, meaning absolute coordinates are in use
-					playerList.add("");
+
 				}
 
 				if (playerList.isEmpty()) {
@@ -295,7 +295,7 @@ public class SpawnMobModule extends CommandModule {
 					return true;
 				}
 
-				worldName = worldSpec.substring(1);
+				String worldName = worldSpec.substring(1);
 
 				if (!AddWorldPlayers(sender, worldName, playerList, relativeCoordinates)) {
 					// Warning message has already been shown
@@ -306,7 +306,7 @@ public class SpawnMobModule extends CommandModule {
 			}
 
 			if (!coordsParsed && playerWorldSpec.startsWith("#")) {
-				worldName = playerWorldSpec.substring(1);
+				String worldName = playerWorldSpec.substring(1);
 
 				// Auto-remove @a if present; it is implied when using #world
 				worldName.replace("@a", "");
@@ -332,10 +332,9 @@ public class SpawnMobModule extends CommandModule {
 				Player targetPlayer = players.get(0);
 
 				playerList.add(targetPlayer.getName());
-				worldName = targetPlayer.getWorld().getName();
 
 				if (showDebug)
-					sender.sendMessage("Debug: target player " + targetPlayer.getName() + " on world " + worldName);
+					sender.sendMessage("Debug: target player " + targetPlayer.getName());
 
 				coordsParsed = true;
 			}
@@ -365,7 +364,6 @@ public class SpawnMobModule extends CommandModule {
 
 			String playerName = targetPlayer.getName();
 			playerList.add(playerName);
-			worldName = targetPlayer.getWorld().getName();
 
 			if (showDebug)
 				sender.sendMessage("Debug: coords " + coordX + "," + coordY + "," + coordZ + " from Raytrace of " + targetPlayer);
@@ -437,13 +435,23 @@ public class SpawnMobModule extends CommandModule {
 				Double targetY;
 				Double targetZ;
 
-				if (playerName.isEmpty()) {
-					// Absolute coordinates, sent from console
-					targetWorld = Bukkit.getWorld(worldName);
-					if (targetWorld == null) {
-						sender.sendMessage(ChatColor.RED + "World not found: " + worldName);
+				if (playerName.startsWith("#")) {
+					// Absolute coordinates on a given world
+
+					String worldName = playerName.substring(1);
+
+					if (worldName.isEmpty()) {
+						// World name required
+						ShowConsoleUsageWarning(sender);
 						return true;
 					}
+
+					targetWorld = Bukkit.getWorld(worldName);
+					if (targetWorld == null) {
+						ShowWorldNotFound(sender, worldName);
+						return true;
+					}
+
 					targetX = Double.parseDouble(coordX);
 					targetY = Double.parseDouble(coordY);
 					targetZ = Double.parseDouble(coordZ);
@@ -520,17 +528,17 @@ public class SpawnMobModule extends CommandModule {
 		}
 
 		if (!(AddWorldPlayers(worldName, playerList, relativeCoordinates))) {
-			sender.sendMessage(ChatColor.RED + "World not found: " + worldName);
+			ShowWorldNotFound(sender, worldName);
 			return false;
 		}
 
 		if (playerList.isEmpty() && !relativeCoordinates) {
-			// Store an empty string for player name, meaning absolute coordinates are in use
-			playerList.add("");
+			// Store #world, meaning absolute coordinates are in use
+			playerList.add("#" + worldName);
 		}
 
 		if (playerList.isEmpty()) {
-			sender.sendMessage("No online players found on world " + worldName);
+			sender.sendMessage(ChatColor.RED + "No online players found on world " + worldName);
 			return false;
 		}
 
@@ -580,8 +588,28 @@ public class SpawnMobModule extends CommandModule {
 	}
 
 	private void ShowConsoleUsageWarning(CommandSender sender) {
-		sender.sendMessage("Must specify absolute coordinates with [x,y,z] since not in-game");
-		sender.sendMessage("Alternatively, use absolute and/or relative coordinates with PlayerName[x,y,z] or #worldName[x,y,z] or @a[x,y,z] or @a#worldName[x,y,z]");
+		sender.sendMessage(ChatColor.RED + "Must specify absolute coordinates with #world[x,y,z] since not in-game");
+		sender.sendMessage(ChatColor.RED + "Or, use absolute and/or relative coordinates with PlayerName[x,y,z] or #worldName[x,y,z] or @a[x,y,z] or @a#worldName[x,y,z]");
+	}
+
+	private void ShowWorldNotFound(CommandSender sender, String worldName) {
+		sender.sendMessage(ChatColor.RED + "World not found: " + worldName);
+
+		if(!sender.hasPermission("multiverse.core.list.worlds")) {
+			return;
+		}
+
+		// Display a list of available worlds
+
+		List<String> worldNameList = new ArrayList<>();
+
+		for (World item : Bukkit.getWorlds()) {
+			worldNameList.add(item.getName());
+		}
+
+		String worldList = StringUtils.join(worldNameList, ", ");
+
+		sender.sendMessage(ChatColor.YELLOW + "Options are: " + worldList);
 	}
 
 	@Override
