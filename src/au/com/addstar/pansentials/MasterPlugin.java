@@ -64,6 +64,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("Kill", "au.com.addstar.pansentials.modules.KillModule");
 		registerModule("Near", "au.com.addstar.pansentials.modules.NearModule");
 		registerModule("Calc", "au.com.addstar.pansentials.modules.CalcModule");
+		registerModule("Burn", "au.com.addstar.pansentials.modules.BurnCommand");
 		
 		//TODO: Register additional modules here
 	}

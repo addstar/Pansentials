@@ -129,6 +129,8 @@ permissions:
   pansentials.animals:
     default: op
 
+  pansentials.burn:
+    default: op
 
 commands:
   pansentials:
@@ -227,3 +229,7 @@ commands:
   calc:
     usage: /<command> <equation>
     permission: pansentials.calc
+  burn:
+    usage: /<command> <player> <time> [<allowdamage>] [<message>]
+    permission: pansentials.burn
+    aliases: [ignite]

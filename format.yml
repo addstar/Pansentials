@@ -103,6 +103,10 @@ near:
   empty: "There are no players found using those parameters."
   location.error: "%value% is not valid for the %coord% coordinate"
   coord.noPermission: "&cYou do not have permission to execute this command with those parameters!"
-  
+
+burn:
+  invalid.time: "&cUnknown time length. Must be either a value in seconds, or a time diff (2m, 4m25s, etc.)"
+  done: "&6You ignited %player%"
+  ignited: "&6You have been ignited"
 noPlayer: "&cNo player found by the name %name%"
 noPermission: "&cYou do not have permission to execute this command!"
