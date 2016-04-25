@@ -1,9 +1,9 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import net.milkbowl.vault.economy.Economy;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,9 +12,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.List;
 
 public class WhoIsModule implements Module, CommandExecutor{
 	
@@ -61,8 +59,8 @@ public class WhoIsModule implements Module, CommandExecutor{
 				Player ply = plys.get(0);
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.header", "%player%:" + ply.getName()));
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.nick", "%nick%:" + ply.getDisplayName()));
-				Damageable dmg = (Damageable) ply;
-				Double d = Double.valueOf(dmg.getHealth());
+				Damageable dmg = ply;
+				Double d = dmg.getHealth();
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.health", "%health%:" + d.intValue() + "/20"));
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.hunger", "%hunger%:" + ply.getFoodLevel() + "/20", 
 						"%saturation%:" + Float.valueOf(ply.getSaturation()).intValue()));

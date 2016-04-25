@@ -1,9 +1,6 @@
 package au.com.addstar.pansentials;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.google.common.base.Function;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -17,7 +14,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 
-import com.google.common.base.Function;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utilities
 {
@@ -30,52 +29,48 @@ public class Utilities
 		dateDiff = dateDiff.toLowerCase();
 		
 		Matcher m = dateDiffPattern.matcher(dateDiff);
-		
-		if(m.matches())
-		{
-			int years,months,weeks,days,hours,minutes,seconds;
-			boolean negative;
-			
-			if(m.group(1) != null)
-				negative = (m.group(1).compareTo("-") == 0);
-			else
-				negative = false;
 
-			if(m.group(2) != null)
+		if (m.matches()) {
+			int years, months, weeks, days, hours, minutes, seconds;
+			boolean negative;
+
+			negative = m.group(1) != null && (m.group(1).compareTo("-") == 0);
+
+			if (m.group(2) != null)
 				years = Integer.parseInt(m.group(2));
 			else
 				years = 0;
-			
-			if(m.group(3) != null)
+
+			if (m.group(3) != null)
 				months = Integer.parseInt(m.group(3));
 			else
 				months = 0;
-			
-			if(m.group(4) != null)
+
+			if (m.group(4) != null)
 				weeks = Integer.parseInt(m.group(4));
 			else
 				weeks = 0;
-			
-			if(m.group(5) != null)
+
+			if (m.group(5) != null)
 				days = Integer.parseInt(m.group(5));
 			else
 				days = 0;
-			
-			if(m.group(6) != null)
+
+			if (m.group(6) != null)
 				hours = Integer.parseInt(m.group(6));
 			else
 				hours = 0;
-			
-			if(m.group(7) != null)
+
+			if (m.group(7) != null)
 				minutes = Integer.parseInt(m.group(7));
 			else
 				minutes = 0;
-			
-			if(m.group(8) != null)
+
+			if (m.group(8) != null)
 				seconds = Integer.parseInt(m.group(8));
 			else
 				seconds = 0;
-			
+
 			// Now calculate the time
 			long time = 0;
 			time += seconds * 1000L;
@@ -85,10 +80,10 @@ public class Utilities
 			time += weeks * 504000000L;
 			time += months * 2191500000L;
 			time += years * 26298000000L;
-			
-			if(negative)
+
+			if (negative)
 				time *= -1;
-			
+
 			return time;
 		}
 		
@@ -189,8 +184,8 @@ public class Utilities
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(beforePlugin);
 		if(plugin == null || !plugin.isEnabled())
 			return;
-		
-		ArrayList<RegisteredListener> theirs = new ArrayList<RegisteredListener>();
+
+		ArrayList<RegisteredListener> theirs = new ArrayList<>();
 		RegisteredListener mine = null;
 		
 		for(RegisteredListener regListener : list.getRegisteredListeners())
@@ -219,7 +214,7 @@ public class Utilities
 	public static List<String> matchStrings(String str, Collection<String> values)
 	{
 		str = str.toLowerCase();
-		ArrayList<String> matches = new ArrayList<String>();
+		ArrayList<String> matches = new ArrayList<>();
 		
 		for(String value : values)
 		{
@@ -235,7 +230,7 @@ public class Utilities
 	public static <T> List<String> matchStrings(String str, Collection<?> values, Function<T, String> toString)
 	{
 		str = str.toLowerCase();
-		ArrayList<String> matches = new ArrayList<String>();
+		ArrayList<String> matches = new ArrayList<>();
 		
 		for(Object value : values)
 		{

@@ -1,14 +1,13 @@
 package au.com.addstar.pansentials.modules;
 
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
 
 public class HatModule implements Module, CommandExecutor{
 	
@@ -35,9 +34,9 @@ public class HatModule implements Module, CommandExecutor{
 		if(command.getName().equalsIgnoreCase("hat") && sender instanceof Player){
 			Player ply = (Player) sender;
 			ItemStack hat = ply.getInventory().getHelmet();
-			
-			ply.getInventory().setHelmet(ply.getItemInHand());
-			ply.setItemInHand(hat);
+
+			ply.getInventory().setHelmet(ply.getInventory().getItemInMainHand());
+			ply.getInventory().setItemInMainHand(hat);
 			ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "hat"));
 		}
 		return true;

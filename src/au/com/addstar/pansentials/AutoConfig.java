@@ -1,26 +1,16 @@
 package au.com.addstar.pansentials;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.*;
+import java.util.*;
 
 /**
  * AutoConfiguration System<br/><br/>
@@ -61,7 +51,7 @@ public abstract class AutoConfig
 	protected AutoConfig(File file)
 	{
 		mFile = file;
-		mCategoryComments = new HashMap<String, String>();
+		mCategoryComments = new HashMap<>();
 	}
 	
 	protected void setCategoryComment(String category, String comment)
@@ -74,12 +64,14 @@ public abstract class AutoConfig
 	 * performing validation and translation
 	 * @throws InvalidConfigurationException Thrown if a field has an invalid value
 	 */
-	protected void onPostLoad() throws InvalidConfigurationException {};
+	protected void onPostLoad() throws InvalidConfigurationException {
+	}
 	
 	/**
 	 * This should be used to update/convert any data in fields for saving
 	 */
-	protected void onPreSave(){};
+	protected void onPreSave() {
+	}
 	
 	private <T> Set<T> newSet(Class<? extends Set<T>> setClass, Collection<T> data) throws InvalidConfigurationException
 	{
@@ -308,7 +300,7 @@ public abstract class AutoConfig
 			onPreSave();
 			
 			YamlConfiguration config = new YamlConfiguration();
-			Map<String, String> comments = new HashMap<String, String>();
+			Map<String, String> comments = new HashMap<>();
 			
 			// Add all the category comments
 			comments.putAll(mCategoryComments);
@@ -376,7 +368,7 @@ public abstract class AutoConfig
 						|| type.equals(Short.class) || type.equals(Boolean.class)
 						|| type.equals(String.class))
 					{
-						config.set(path, (List<?>)field.get(this));
+						config.set(path, field.get(this));
 					}
 					else
 						throw new IllegalArgumentException("Cannot use type " + field.getType().getSimpleName() + "<" + type.toString() + "> for AutoConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -393,7 +385,7 @@ public abstract class AutoConfig
 						|| type.equals(Short.class) || type.equals(Boolean.class)
 						|| type.equals(String.class))
 					{
-						config.set(path, new ArrayList<Object>((Set<?>)field.get(this)));
+						config.set(path, new ArrayList<>((Set<?>) field.get(this)));
 					}
 					else
 						throw new IllegalArgumentException("Cannot use type " + field.getType().getSimpleName() + "<" + type.toString() + "> for AutoConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -444,7 +436,7 @@ public abstract class AutoConfig
 			
 			// Apply comments
 			String category = ""; //$NON-NLS-1$
-			List<String> lines = new ArrayList<String>(Arrays.asList(output.split("\n"))); //$NON-NLS-1$
+			List<String> lines = new ArrayList<>(Arrays.asList(output.split("\n"))); //$NON-NLS-1$
 			for(int l = 0; l < lines.size(); l++)
 			{
 				String line = lines.get(l);
@@ -498,16 +490,7 @@ public abstract class AutoConfig
 			writer.write(output);
 			writer.close();
 			return true;
-		}
-		catch ( IllegalArgumentException e )
-		{
-			e.printStackTrace();
-		}
-		catch ( IllegalAccessException e )
-		{
-			e.printStackTrace();
-		}
-		catch ( IOException e )
+		} catch (IllegalArgumentException | IOException | IllegalAccessException e)
 		{
 			e.printStackTrace();
 		}

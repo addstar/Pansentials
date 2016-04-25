@@ -1,10 +1,8 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,9 +14,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LightningStrike;
 import org.bukkit.entity.Player;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 	
@@ -49,7 +48,7 @@ public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 					Player ply = plys.get(0);
 					boolean isSchmite = false;
 					if(sender instanceof Player){
-						if(((Player)sender).getName().equalsIgnoreCase("Schmoller")){
+						if (sender.getName().equalsIgnoreCase("Schmoller")) {
 							isSchmite = true;
 						}
 					}
@@ -94,7 +93,7 @@ public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 			String cmd, String[] args) {
 		if(command.getName().equalsIgnoreCase("smite")){
 			if(args.length == 1){
-				List<String> plys = new ArrayList<String>();
+				List<String> plys = new ArrayList<>();
 				for(Player p : Bukkit.matchPlayer(args[0])){
 					plys.add(p.getName());
 				}

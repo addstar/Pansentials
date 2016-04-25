@@ -62,12 +62,12 @@ public class StackModule implements Module, CommandExecutor{
 	}
 	
 	private void stack(Player ply){
-		List<ItemStack> items = new ArrayList<ItemStack>();
+		List<ItemStack> items = new ArrayList<>();
 		for(int c = 0; c < ply.getInventory().getContents().length; c++){
 			ItemStack i = ply.getInventory().getItem(c);
 			if(i != null && i.getAmount() < 64){
 				boolean add = true;
-				for(ItemStack d : new ArrayList<ItemStack>(items)){
+				for (ItemStack d : new ArrayList<>(items)) {
 					if(i.getType() == d.getType() && i.getDurability() == d.getDurability()){
 						int amt = i.getAmount() + d.getAmount();
 						int over = 0;

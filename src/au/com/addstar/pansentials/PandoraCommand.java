@@ -1,17 +1,12 @@
 package au.com.addstar.pansentials;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+
+import java.util.*;
 
 public class PandoraCommand implements CommandExecutor, TabCompleter
 {
@@ -30,8 +25,8 @@ public class PandoraCommand implements CommandExecutor, TabCompleter
 			sender.sendMessage(String.format(ChatColor.GRAY + "Pansentials version %s:", ChatColor.YELLOW + mPlugin.getDescription().getVersion() + ChatColor.GRAY));
 			
 			Set<String> modules = mPlugin.getAllModules();
-			
-			ArrayList<String> all = new ArrayList<String>(modules.size());
+
+			ArrayList<String> all = new ArrayList<>(modules.size());
 			for(String module : modules)
 			{
 				if(mPlugin.isModuleLoaded(module))
@@ -122,7 +117,7 @@ public class PandoraCommand implements CommandExecutor, TabCompleter
 	
 	private List<String> matchModules(String module)
 	{
-		ArrayList<String> matching = new ArrayList<String>();
+		ArrayList<String> matching = new ArrayList<>();
 		for(String name : mPlugin.getAllModules())
 		{
 			if(module.isEmpty() || name.startsWith(module))

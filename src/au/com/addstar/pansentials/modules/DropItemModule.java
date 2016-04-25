@@ -1,10 +1,7 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -24,22 +21,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DropItemModule implements Module, CommandExecutor, Listener{
 	
 	private MasterPlugin plugin;
 	private List<Player> active;
-	private Map<String, Item> items;
+	private Map<String, Item> items = new HashMap<>();
 
 	@Override
 	public void onEnable() {
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 		
 		plugin.getCommand("dropitem").setExecutor(this);
-		active = new ArrayList<Player>();
-		items = new HashMap<String, Item>();
+		active = new ArrayList<>();
 		//Load from file
 	}
 
@@ -89,9 +87,9 @@ public class DropItemModule implements Module, CommandExecutor, Listener{
 			loc.setY(loc.getY() + 1.2);
 			
 			event.setCancelled(true);
-			
-			if(ply.getItemInHand().getType() != Material.AIR){
-				spawnItem(ply.getItemInHand(), loc);
+
+			if (ply.getInventory().getItemInMainHand().getType() != Material.AIR) {
+				spawnItem(ply.getInventory().getItemInMainHand(), loc);
 				//Message
 			}
 			else{

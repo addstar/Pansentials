@@ -1,19 +1,13 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import au.com.addstar.pansentials.CommandModule;
+import au.com.addstar.pansentials.Utilities;
+import com.google.common.base.Functions;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.RandomUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Effect;
-import org.bukkit.FireworkEffect;
+import org.bukkit.*;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,11 +20,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 
-import com.google.common.base.Functions;
-import com.google.common.collect.Maps;
-
-import au.com.addstar.pansentials.CommandModule;
-import au.com.addstar.pansentials.Utilities;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class KillModule extends CommandModule implements Listener
 {
@@ -164,7 +156,7 @@ public class KillModule extends CommandModule implements Listener
 	private void explodeKill(Player target, String message)
 	{
 		target.getWorld().playEffect(target.getLocation(), Effect.EXPLOSION_HUGE, 100);
-		target.getWorld().playSound(target.getLocation(), Sound.EXPLODE, 1, 30);
+		target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 30);
 		
 		kill(target, message);
 	}

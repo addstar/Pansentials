@@ -1,10 +1,9 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
-
+import au.com.addstar.pansentials.DescParseTickFormat;
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -13,10 +12,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import au.com.addstar.pansentials.DescParseTickFormat;
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class TimeModule implements Module, CommandExecutor{
 	
@@ -43,7 +42,7 @@ public class TimeModule implements Module, CommandExecutor{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
-		final Set<World> worlds = new TreeSet<World>(new WorldNameComparator());
+		final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
 		if (command.getName().equalsIgnoreCase("time")) {
 			// If theres no arguments to /time we just display current time(s)
 			if (args.length == 0) {

@@ -14,18 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.FurnaceRecipe;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.*;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
@@ -59,12 +50,12 @@ public class RecipeModule extends CommandModule implements Listener
 
 			Player player = (Player) sender;
 
-			if (player.getItemInHand() == null || player.getItemInHand().getType() == Material.AIR) {
+			if (player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 				sender.sendMessage(ChatColor.RED + "You are not holding an item, either hold one, or use /" + label + " <item>");
 				return true;
 			}
 
-			def = MaterialDefinition.from(player.getItemInHand());
+			def = MaterialDefinition.from(player.getInventory().getItemInMainHand());
 
 		}
 		// One is specified

@@ -2,9 +2,9 @@ package au.com.addstar.pansentials;
 
 public interface Module
 {
-	public void onEnable();
-	
-	public void onDisable();
-	
-	public void setPandoraInstance(MasterPlugin plugin);
+	void onEnable();
+
+	void onDisable();
+
+	void setPandoraInstance(MasterPlugin plugin);
 }

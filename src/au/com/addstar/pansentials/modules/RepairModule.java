@@ -1,15 +1,14 @@
 package au.com.addstar.pansentials.modules;
 
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
 
 public class RepairModule implements Module, CommandExecutor{
 	
@@ -65,12 +64,10 @@ public class RepairModule implements Module, CommandExecutor{
 			return false;
 
 		Material mat = stack.getType();
-		if (stack.getDurability() == 0 || stack.getMaxStackSize() < 0 ||
-				mat.isBlock() || mat.isRecord() || 
+		return !(stack.getDurability() == 0 || stack.getMaxStackSize() < 0 ||
+				mat.isBlock() || mat.isRecord() ||
 				mat == Material.MONSTER_EGG || mat == Material.MONSTER_EGGS ||
-				mat == Material.SKULL || mat == Material.SKULL_ITEM)
-					return false;
+				mat == Material.SKULL || mat == Material.SKULL_ITEM);
 
-		return true;
 	}
 }

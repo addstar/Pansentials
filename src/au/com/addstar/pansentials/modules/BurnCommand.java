@@ -1,8 +1,8 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-import java.util.Map;
-
+import au.com.addstar.pansentials.CommandModule;
+import au.com.addstar.pansentials.Utilities;
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,10 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-import com.google.common.collect.Maps;
-
-import au.com.addstar.pansentials.CommandModule;
-import au.com.addstar.pansentials.Utilities;
+import java.util.List;
+import java.util.Map;
 
 public class BurnCommand extends CommandModule implements Listener {
 	private final Map<Player, Long> immunePlayers;
@@ -67,11 +65,7 @@ public class BurnCommand extends CommandModule implements Listener {
 		if (args.length >= 3) {
 			if (args[2].equalsIgnoreCase("none")) {
 				takeDamage = false;
-			} else if (args[2].equalsIgnoreCase("false")) {
-				takeDamage = false;
-			} else {
-				takeDamage = true;
-			}
+			} else takeDamage = !args[2].equalsIgnoreCase("false");
 		} else {
 			takeDamage = true;
 		}

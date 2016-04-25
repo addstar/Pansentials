@@ -1,9 +1,8 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,9 +16,9 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GodModule implements Module, CommandExecutor, Listener{
 	
@@ -29,7 +28,7 @@ public class GodModule implements Module, CommandExecutor, Listener{
 	@Override
 	public void onEnable() {
 		plugin.getCommand("god").setExecutor(this);
-		gods = new HashSet<Player>();
+		gods = new HashSet<>();
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 

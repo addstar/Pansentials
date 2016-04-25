@@ -1,16 +1,14 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-
+import au.com.addstar.pansentials.CommandModule;
 import net.md_5.bungee.api.ChatColor;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import au.com.addstar.pansentials.CommandModule;
+import java.util.List;
 
 public class CalcModule extends CommandModule {
 	public CalcModule() {
@@ -27,9 +25,7 @@ public class CalcModule extends CommandModule {
 			
 			double value = expr.evaluate();
 			sender.sendMessage(ChatColor.GRAY + fullEquation + " = " + ChatColor.WHITE + value);
-		} catch (IllegalArgumentException e) {
-			sender.sendMessage(ChatColor.RED + "Invalid equation");
-		} catch (ArithmeticException e) {
+		} catch (IllegalArgumentException | ArithmeticException e) {
 			sender.sendMessage(ChatColor.RED + "Invalid equation");
 		}
 		return true;

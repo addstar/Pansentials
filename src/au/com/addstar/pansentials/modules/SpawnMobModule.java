@@ -1,22 +1,5 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
-import com.google.common.collect.Lists;
-
 import au.com.addstar.monolith.lookup.EntityDefinition;
 import au.com.addstar.monolith.lookup.Lookup;
 import au.com.addstar.monolith.template.EntitySettings;
@@ -27,6 +10,21 @@ import au.com.addstar.monolith.util.Raytrace;
 import au.com.addstar.monolith.util.Raytrace.Hit;
 import au.com.addstar.monolith.util.Stringifier;
 import au.com.addstar.pansentials.CommandModule;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SpawnMobModule extends CommandModule {
 	public SpawnMobModule() {
@@ -220,12 +218,12 @@ public class SpawnMobModule extends CommandModule {
 			String playerWorldSpec = "";
 
 			if (reMatch.group(1) != null) {
-				playerWorldSpec = reMatch.group(1).toString();
+				playerWorldSpec = reMatch.group(1);
 			}
 
-			coordX = reMatch.group(2).toString();
-			coordY = reMatch.group(3).toString();
-			coordZ = reMatch.group(4).toString();
+			coordX = reMatch.group(2);
+			coordY = reMatch.group(3);
+			coordZ = reMatch.group(4);
 
 			boolean coordsParsed = false;
 
@@ -515,6 +513,13 @@ public class SpawnMobModule extends CommandModule {
 		return true;
 	}
 
+	/**
+	 * @param sender
+	 * @param worldName
+	 * @param playerList
+	 * @param relativeCoordinates
+	 * @return
+	 */
 	private boolean AddWorldPlayers(CommandSender sender, String worldName, List<String> playerList, boolean relativeCoordinates) {
 
 		boolean showDebug = false;

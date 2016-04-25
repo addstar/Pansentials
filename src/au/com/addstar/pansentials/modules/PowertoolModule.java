@@ -1,10 +1,8 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.Map;
-import java.util.UUID;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
 import com.google.common.collect.Maps;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,8 +24,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
+import java.util.Map;
+import java.util.UUID;
 
 public class PowertoolModule implements Module, CommandExecutor, Listener {
 	private MasterPlugin plugin;
@@ -60,8 +58,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		}
 		
 		Player player = (Player)sender;
-		
-		ItemStack item = player.getItemInHand();
+
+		ItemStack item = player.getInventory().getItemInMainHand();
 		if (item == null) {
 			sender.sendMessage(ChatColor.RED + "You are not holding an item");
 			return true;
@@ -123,8 +121,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 	@EventHandler(priority=EventPriority.LOW, ignoreCancelled=false)
 	public void onClick(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
-		
-		PowerTool tool = getTool(player.getItemInHand(), player);
+
+		PowerTool tool = getTool(player.getInventory().getItemInMainHand(), player);
 		if (tool != null) {
 			Location loc = event.getRightClicked().getLocation();
 			String converted = tool.message
@@ -138,7 +136,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 					.replace("{calleruuid}", player.getUniqueId().toString());
 			
 			if (event.getRightClicked() instanceof Player) {
-				converted = converted.replace("{player}", ((Player)event.getRightClicked()).getName());
+				converted = converted.replace("{player}", event.getRightClicked().getName());
 			}
 			
 			runPowertool(tool, converted, resolveCaller(tool.caller, event.getRightClicked(), player));
@@ -153,8 +151,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		if (event.getAction() == Action.PHYSICAL) {
 			return;
 		}
-		
-		PowerTool tool = getTool(player.getItemInHand(), player);
+
+		PowerTool tool = getTool(player.getInventory().getItemInMainHand(), player);
 		if (tool != null) {
 			String converted = tool.message;
 			
@@ -197,8 +195,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		}
 
 		Player player = (Player)event.getDamager();
-		
-		PowerTool tool = getTool(player.getItemInHand(), player);
+
+		PowerTool tool = getTool(player.getInventory().getItemInMainHand(), player);
 		if (tool != null) {
 			Location loc = event.getEntity().getLocation();
 			String converted = tool.message
@@ -249,7 +247,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		
 		if (caller.equals("{player}")) {
 			if (clicked instanceof Player) {
-				return (Player)clicked;
+				return clicked;
 			} else {
 				return null;
 			}

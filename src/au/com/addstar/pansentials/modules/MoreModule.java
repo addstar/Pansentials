@@ -1,13 +1,12 @@
 package au.com.addstar.pansentials.modules;
 
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
 
 public class MoreModule implements Module, CommandExecutor{
 	
@@ -33,7 +32,7 @@ public class MoreModule implements Module, CommandExecutor{
 			String[] args) {
 		if(command.getName().equalsIgnoreCase("more") && sender instanceof Player){
 			Player ply = (Player) sender;
-			ItemStack stack = ply.getItemInHand();
+			ItemStack stack = ply.getInventory().getItemInMainHand();
 			if(stack != null){
 				int size = stack.getMaxStackSize();
 				if (args.length > 0) {
