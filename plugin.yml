@@ -233,3 +233,7 @@ commands:
     usage: /<command> <player> <time> [<allowdamage>] [<message>]
     permission: pansentials.burn
     aliases: [ignite]
+  itemnbt:
+    usage: /<command> [get|set] [tags,tags...]
+    permission: pansentials.listnbt
+

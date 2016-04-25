@@ -34,10 +34,10 @@ public class MasterPlugin extends JavaPlugin
 	
 	public MasterPlugin()
 	{
-		mAvailableModules = new HashMap<String, ModuleDefinition>();
-		mAvailableModulesByName = new HashMap<String, ModuleDefinition>();
-		
-		mLoadedModules = new HashMap<String, Module>();
+		mAvailableModules = new HashMap<>();
+		mAvailableModulesByName = new HashMap<>();
+
+		mLoadedModules = new HashMap<>();
 	}
 	
 	private void registerModules()
@@ -65,6 +65,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("Near", "au.com.addstar.pansentials.modules.NearModule");
 		registerModule("Calc", "au.com.addstar.pansentials.modules.CalcModule");
 		registerModule("Burn", "au.com.addstar.pansentials.modules.BurnCommand");
+		registerModule("ItemTag", "au.com.addstar.pansentials.modules.ItemTagModule");
 		
 		//TODO: Register additional modules here
 	}
@@ -156,13 +157,10 @@ public class MasterPlugin extends JavaPlugin
 		mLoadedModules.put(module, instance);
 		return true;
 	}
-	
-	public final boolean enableModule(String module)
-	{
-		if(isModuleLoaded(module))
-			return false;
-		
-		return loadModule(module);
+
+	public final boolean enableModule(String module) {
+		return !isModuleLoaded(module) && loadModule(module);
+
 	}
 	
 	public final boolean disableModule(String module)
@@ -307,18 +305,11 @@ public class MasterPlugin extends JavaPlugin
 				getLogger().severe("Failed to enable module: " + name);
 				e.printStackTrace();
 			}
-		}
-		catch(InstantiationException e)
+		} catch (InstantiationException | ExceptionInInitializerError e)
 		{
 			getLogger().severe("Failed to instanciate " + name);
 			e.printStackTrace();
-		}
-		catch(ExceptionInInitializerError e)
-		{
-			getLogger().severe("Failed to instanciate " + name);
-			e.printStackTrace();
-		}
-		catch ( IllegalAccessException e )
+		} catch (IllegalAccessException e)
 		{
 			getLogger().severe("Failed to instanciate " + name + ". No public default constructor available.");
 			e.printStackTrace();
@@ -340,12 +331,12 @@ public class MasterPlugin extends JavaPlugin
 		}
 		
 		@ConfigField()
-		public HashSet<String> disabledModules = new HashSet<String>();
+		public HashSet<String> disabledModules = new HashSet<>();
 		
 		@Override
 		protected void onPostLoad() throws InvalidConfigurationException
 		{
-			HashSet<String> lowerCaseSet = new HashSet<String>(disabledModules.size());
+			HashSet<String> lowerCaseSet = new HashSet<>(disabledModules.size());
 			
 			for(String name : disabledModules)
 				lowerCaseSet.add(name.toLowerCase());
