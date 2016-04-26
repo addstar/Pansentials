@@ -1,6 +1,6 @@
 package au.com.addstar.pansentials.modules;
 
-import au.com.addstar.monolith.util.NBTItem;
+import au.com.addstar.monolith.util.NBTItemStack;
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import org.apache.commons.lang.StringUtils;
@@ -43,19 +43,24 @@ public class ItemTagModule implements Module, CommandExecutor {
             Player player = (Player) sender;
             if (player.hasPermission("pansentials.showNBT")) {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                sender.sendMessage("Item: ");
-                sender.sendMessage(item.toString());
-                sender.sendMessage("NBT Data: ");
-                NBTItem nItem = new NBTItem(item);
-                sender.sendMessage(nItem.listNBT());
+                NBTItemStack nItem = new NBTItemStack(item);
+                if (args.length == 0) {
+                    sender.sendMessage("Item: ");
+                    sender.sendMessage(item.toString());
+                    sender.sendMessage("NBT Data: ");
+                    sender.sendMessage(nItem.listNBT());
+                }
                 if (args.length > 0) {
-                    if (args[0] == "get") {
-                        String[] nbttags = StringUtils.split(args[1], ",");
-                        for (String tag : nbttags) {
-                            sender.sendMessage("Key: " + tag + "Value:" + nItem.getString(tag));
+                    if (args[0].equals("get")) {
+                        String[] nbtTags = StringUtils.split(args[1], ",");
+                        if (nbtTags.length == 0) {
+                            sender.sendMessage("Key: " + args[1] + "Value:" + nItem.getString(args[1]));
+                        } else {
+                            for (String tag : nbtTags)
+                                sender.sendMessage("Key: " + tag + "Value:" + nItem.getString(tag));
                         }
                     }
-                    if (args[0] == "set") {
+                    if (args[0].equals("set")) {
                         sender.sendMessage("Not yet available");
                     }
                 }
