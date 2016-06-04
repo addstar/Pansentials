@@ -131,6 +131,8 @@ permissions:
 
   pansentials.burn:
     default: op
+  pansentials.itemattribute:
+    default: op
 
 commands:
   pansentials:
@@ -236,4 +238,6 @@ commands:
   itemnbt:
     usage: /<command> [get|set] [tags,tags...]
     permission: pansentials.listnbt
-
+  itemattribute:
+    usage: /<command> <list|<attribute> [setbase|add|remove]>
+    permission: pansentials.itemattribute
