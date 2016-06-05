@@ -8,6 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
+import com.google.common.collect.Iterables;
+
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
@@ -32,77 +34,67 @@ public class HealModule implements Module, CommandExecutor{
 	public void setPandoraInstance(MasterPlugin plugin) {
 		this.plugin = plugin;
 	}
+	
+	private void heal(Player player) {
+		player.setHealth(player.getMaxHealth());
+		player.setRemainingAir(player.getMaximumAir());
+		player.setFoodLevel(20);
+		player.setSaturation(20f);
+		player.setFireTicks(0);
+		
+		for (PotionEffect effect : player.getActivePotionEffects()) {
+			player.removePotionEffect(effect.getType());
+		}
+	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String cmd,
-			String[] args) {
-		if(command.getName().equalsIgnoreCase("heal")){
-			if(args.length == 0){
-				if(sender instanceof Player){
-					Player ply = (Player) sender;
-					ply.setHealth(20d);
-					ply.setFoodLevel(20);
-					ply.setSaturation(20f);
-					ply.setFireTicks(0);
-					ply.setRemainingAir(ply.getMaximumAir());
-					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
-					for(PotionEffect eff : ply.getActivePotionEffects()){
-						ply.removePotionEffect(eff.getType());
-					}
+	public boolean onCommand(CommandSender sender, Command command, String cmd, String[] args) {
+		if (command.getName().equalsIgnoreCase("heal")) {
+			if (args.length == 0) {
+				if (sender instanceof Player) {
+					heal((Player)sender);
+					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
 				}
-			}
-			else{
-				if(sender.hasPermission("pansentials.heal.other")){
+			} else {
+				if (sender.hasPermission("pansentials.heal.other")) {
 					List<Player> players = plugin.getServer().matchPlayer(args[0]);
-					if(!players.isEmpty()){
-						players.get(0).setHealth(20d);
-						players.get(0).setFoodLevel(20);
-						players.get(0).setSaturation(20f);
-						players.get(0).setFireTicks(0);
-						players.get(0).setRemainingAir(players.get(0).getMaximumAir());
-						players.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
-						for(PotionEffect eff : players.get(0).getActivePotionEffects()){
-							players.get(0).removePotionEffect(eff.getType());
-						}
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.other", "%player%:" + players.get(0).getName()));
-					}
-					else{
+					Player target = Iterables.getFirst(players, null);
+					if (target != null) {
+						heal(target);
+						target.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.self"));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "heal.other", "%player%:" + target.getDisplayName()));
+					} else {
 						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
 					}
-				}
-				else{
+				} else {
 					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
 				}
 			}
-		}
-		else if(command.getName().equalsIgnoreCase("feed")){
-			if(args.length == 0){
+		} else if(command.getName().equalsIgnoreCase("feed")) {
+			if (args.length == 0) {
 				if(sender instanceof Player){
 					Player ply = (Player) sender;
 					ply.setFoodLevel(20);
 					ply.setSaturation(20f);
 					ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "feed.self"));
 				}
-			}
-			else{
-				if(sender.hasPermission("pansentials.feed.other")){
+			} else {
+				if (sender.hasPermission("pansentials.feed.other")) {
 					List<Player> players = plugin.getServer().matchPlayer(args[0]);
-					if(!players.isEmpty()){
-						players.get(0).setFoodLevel(20);
-						players.get(0).setSaturation(20f);
-						players.get(0).sendMessage(Utilities.format(plugin.getFormatConfig(), "feed.self"));
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "feed.other", "%player%:" + players.get(0).getName()));
-					}
-					else{
+					Player target = Iterables.getFirst(players, null);
+					if (target != null) {
+						target.setFoodLevel(20);
+						target.setSaturation(20f);
+						target.sendMessage(Utilities.format(plugin.getFormatConfig(), "feed.self"));
+						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "feed.other", "%player%:" + target.getDisplayName()));
+					} else {
 						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
 					}
-				}
-				else{
+				} else {
 					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
 				}
 			}
 		}
 		return true;
 	}
-
 }
