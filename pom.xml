@@ -2,14 +2,48 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>au.com.addstar</groupId>
   <artifactId>Pansentials</artifactId>
-  <version>b${env.BUILD_NUMBER}</version>
+  <version>1.0-SNAPSHOT</version>
   <name>Pansentials</name>
-
+  <properties>
+    <build.number/>
+    <plugin.version>${project.version}-${build.number}</plugin.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <scm>
+    <connection>scm:git:git@github.com:AddstarMC/Pansentials.git</connection>
+    <developerConnection>scm:git:git@github.com:AddstarMC/Pansentials.git</developerConnection>
+    <url>https://github.com/AddstarMC/Pansentials</url>
+    <tag>HEAD</tag>
+  </scm>
+  <developers>
+    <developer>
+      <id>AddstarMC</id>
+      <name>AddstarMC</name>
+      <url>http://github.com/AddstarMC</url>
+      <roles>
+        <role>developer</role>
+        <role>maintainer</role>
+      </roles>
+      <timezone>10</timezone>
+    </developer>
+  </developers>
+  <distributionManagement>
+    <repository>
+      <id>maven.addstar.com.au</id>
+      <name>maven.addstar.com.au-releases</name>
+      <url>http://maven.addstar.com.au/artifactory/ext-release-local</url>
+    </repository>
+    <snapshotRepository>
+      <id>maven.addstar.com.au</id>
+      <name>maven.addstar.com.au-snapshots</name>
+      <url>http://maven.addstar.com.au/artifactory/ext-snapshot-local</url>
+    </snapshotRepository>
+  </distributionManagement>
   <repositories>
     <!-- For spigot -->
     <repository>
       <id>spigot-repo</id>
-      <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+      <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
     <!-- Addstar repos -->
     <repository>
@@ -32,8 +66,8 @@
     
     <!-- For Vault -->
     <repository>
-      <id>theyeticave</id>
-      <url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
+      <id>vault-repo</id>
+      <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
     </repository>
     
     <!-- Maven central -->
@@ -49,21 +83,15 @@
     <dependency>
         <groupId>org.spigotmc</groupId>
         <artifactId>spigot-api</artifactId>
-      <version>1.9-R0.1-SNAPSHOT</version>
+      <version>1.12-R0.1-SNAPSHOT</version>
         <scope>provided</scope>
-    	<exclusions>
-          <exclusion>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>sneaky-throw</artifactId>
-          </exclusion>
-        </exclusions>
     </dependency>
     
     <!-- Used for Economy interop -->
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <artifactId>Vault</artifactId>
-      <version>1.4.1</version>
+      <artifactId>VaultApi</artifactId>
+      <version>1.6</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -79,7 +107,7 @@
     <dependency>
       <groupId>au.com.addstar</groupId>
       <artifactId>Monolith</artifactId>
-      <version>1.4.3-SNAPSHOT</version>
+      <version>1.4.4-SNAPSHOT</version>
       <scope>provided</scope>
       <optional>true</optional>
       <exclusions>
@@ -114,7 +142,7 @@
       	<targetPath>lang</targetPath>
       </resource>
     </resources>
-
+    <!-- todo reformat project structure to follow maven guidelines -->
     <sourceDirectory>src</sourceDirectory>
     <plugins>
       <plugin>
@@ -122,8 +150,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -138,6 +166,11 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.1</version>
       </plugin>
     </plugins>
   </build>

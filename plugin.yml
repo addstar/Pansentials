@@ -1,5 +1,5 @@
 name: Pansentials
-version: ${pom.version}
+version: ${plugin.version}
 
 description: Pandora replacement for Essentials
 

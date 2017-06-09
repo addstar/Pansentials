@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -256,9 +257,10 @@ public class MasterPlugin extends JavaPlugin
 		{
 			if(!Bukkit.getPluginManager().isPluginEnabled(plugin))
 			{
-				if(!missingDeps.isEmpty())
-					missingDeps += ", ";
-				missingDeps += plugin;
+                if (!missingDeps.isEmpty()) {
+                    missingDeps += ", ";
+                }
+                missingDeps += plugin;
 			}
 		}
 		
@@ -361,16 +363,17 @@ public class MasterPlugin extends JavaPlugin
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void reloadFormat(){
 		File f = new File(getDataFolder() + "/format.yml");
 		if(!f.exists()){
 			saveResource("format.yml", false);
 		}
 		f = new File(getDataFolder() + "/format.yml");
+
 		format = YamlConfiguration.loadConfiguration(f);
-		FileConfiguration inConf = YamlConfiguration.loadConfiguration(getResource("format.yml"));
-		for(String key : inConf.getKeys(true)){
+        InputStreamReader reader = new InputStreamReader(getResource("format.yml"));
+        FileConfiguration inConf = YamlConfiguration.loadConfiguration(reader);
+        for(String key : inConf.getKeys(true)){
 			if(!format.contains(key)){
 				format.set(key, inConf.get(key));
 			}
