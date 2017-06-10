@@ -90,7 +90,7 @@
     <!-- Used for Economy interop -->
     <dependency>
       <groupId>net.milkbowl.vault</groupId>
-      <artifactId>VaultApi</artifactId>
+      <artifactId>VaultAPI</artifactId>
       <version>1.6</version>
       <scope>provided</scope>
       <exclusions>
