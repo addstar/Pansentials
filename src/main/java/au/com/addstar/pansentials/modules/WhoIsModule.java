@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -25,19 +24,18 @@ public class WhoIsModule implements Module, CommandExecutor{
 		
 		setupEconomy();
 	}
-	
-	private boolean setupEconomy(){
+
+    private void setupEconomy() {
         if(plugin.getServer().getPluginManager().getPlugin("Vault") == null){
         	plugin.getLogger().info("Vault Not Found!");
-            return false;
+            return;
         }
         RegisteredServiceProvider<Economy> rsp = plugin.getServer().getServicesManager().getRegistration(Economy.class);
         if(rsp == null){
         	plugin.getLogger().info("No Economy Plugin Found!");
-            return false;
+            return;
         }
         econ = rsp.getProvider();
-        return econ != null;
     }
 
 	@Override
@@ -59,8 +57,7 @@ public class WhoIsModule implements Module, CommandExecutor{
 				Player ply = plys.get(0);
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.header", "%player%:" + ply.getName()));
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.nick", "%nick%:" + ply.getDisplayName()));
-				Damageable dmg = ply;
-				Double d = dmg.getHealth();
+                Double d = ply.getHealth();
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.health", "%health%:" + d.intValue() + "/20"));
 				sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "whois.hunger", "%hunger%:" + ply.getFoodLevel() + "/20", 
 						"%saturation%:" + Float.valueOf(ply.getSaturation()).intValue()));

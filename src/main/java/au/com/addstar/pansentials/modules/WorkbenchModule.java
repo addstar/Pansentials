@@ -1,12 +1,11 @@
 package au.com.addstar.pansentials.modules;
 
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
 
 public class WorkbenchModule implements Module, CommandExecutor{
 	

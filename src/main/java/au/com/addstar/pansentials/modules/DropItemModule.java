@@ -13,9 +13,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -30,7 +30,7 @@ public class DropItemModule implements Module, CommandExecutor, Listener{
 	
 	private MasterPlugin plugin;
 	private List<Player> active;
-	private Map<String, Item> items = new HashMap<>();
+    private final Map<String, Item> items = new HashMap<>();
 
 	@Override
 	public void onEnable() {
@@ -108,7 +108,7 @@ public class DropItemModule implements Module, CommandExecutor, Listener{
 	}
 	
 	@EventHandler
-	private void pickup(PlayerPickupItemEvent event){
+    private void pickup(EntityPickupItemEvent event) {
 		if(event.getItem().hasMetadata("permitem")){
 			event.setCancelled(true);
 		}

@@ -1,7 +1,6 @@
 package au.com.addstar.pansentials;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
@@ -19,10 +18,10 @@ import java.util.Set;
 
 public class MasterPlugin extends JavaPlugin
 {
-	private HashMap<String, Module> mLoadedModules;
-	
-	private HashMap<String, ModuleDefinition> mAvailableModules;
-	private HashMap<String, ModuleDefinition> mAvailableModulesByName;
+	private final HashMap<String, Module> mLoadedModules;
+
+	private final HashMap<String, ModuleDefinition> mAvailableModules;
+	private final HashMap<String, ModuleDefinition> mAvailableModulesByName;
 	
 	private Config mConfig;
 	private FileConfiguration format;
@@ -195,7 +194,7 @@ public class MasterPlugin extends JavaPlugin
 	 * @param moduleClass Class for the module
 	 * @param dependencies Names of plugins needed for this module to load
 	 */
-	public void registerModule(String name, String moduleClass, String... dependencies)
+	private void registerModule(String name, String moduleClass, String... dependencies)
 	{
 		ModuleDefinition def = new ModuleDefinition(name, moduleClass, dependencies);
 		mAvailableModules.put(moduleClass, def);
@@ -327,17 +326,16 @@ public class MasterPlugin extends JavaPlugin
 	
 	private static class Config extends AutoConfig
 	{
-		public Config(File file)
+		Config(File file)
 		{
 			super(file);
 		}
 		
 		@ConfigField()
-		public HashSet<String> disabledModules = new HashSet<>();
+		HashSet<String> disabledModules = new HashSet<>();
 		
 		@Override
-		protected void onPostLoad() throws InvalidConfigurationException
-		{
+		protected void onPostLoad() {
 			HashSet<String> lowerCaseSet = new HashSet<>(disabledModules.size());
 			
 			for(String name : disabledModules)
@@ -349,10 +347,11 @@ public class MasterPlugin extends JavaPlugin
 	
 	private static class ModuleDefinition
 	{
-		public final String name;
-		public final String moduleClass;
-		public final String[] dependencies;
-		public ModuleDefinition(String name, String moduleClass, String... dependencies)
+		final String name;
+		final String moduleClass;
+		final String[] dependencies;
+
+		ModuleDefinition(String name, String moduleClass, String... dependencies)
 		{
 			this.name = name;
 			this.moduleClass = moduleClass;
@@ -371,9 +370,14 @@ public class MasterPlugin extends JavaPlugin
 		f = new File(getDataFolder() + "/format.yml");
 
 		format = YamlConfiguration.loadConfiguration(f);
+<<<<<<< HEAD:src/au/com/addstar/pansentials/MasterPlugin.java
         InputStreamReader reader = new InputStreamReader(getResource("format.yml"));
         FileConfiguration inConf = YamlConfiguration.loadConfiguration(reader);
         for(String key : inConf.getKeys(true)){
+=======
+		FileConfiguration inConf = YamlConfiguration.loadConfiguration(getTextResource("format.yml"));
+		for(String key : inConf.getKeys(true)){
+>>>>>>> dev:src/main/java/au/com/addstar/pansentials/MasterPlugin.java
 			if(!format.contains(key)){
 				format.set(key, inConf.get(key));
 			}

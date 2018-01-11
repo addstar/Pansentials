@@ -144,8 +144,8 @@ public class Utilities
 		
 		return player.teleport(closest.add(0.5, 0, 0.5));
 	}
-	
-	public static boolean isSafeLocation(Location loc)
+
+    private static boolean isSafeLocation(Location loc)
 	{
 		Block feet = loc.getBlock();
 		Block ground = feet.getRelative(BlockFace.DOWN);
@@ -236,8 +236,8 @@ public class Utilities
 		{
 			@SuppressWarnings("unchecked")
 			String name = toString.apply((T)value);
-			
-			if(name.toLowerCase().startsWith(str))
+
+            if (name != null && name.toLowerCase().startsWith(str))
 				matches.add(name);
 		}
 		
@@ -272,8 +272,8 @@ public class Utilities
 	{
 		return parseInt(value, Integer.MIN_VALUE, Integer.MAX_VALUE, error);
 	}
-	
-	public static int parseInt(String value, int min, int max, String error)
+
+    private static int parseInt(String value, int min, int max, String error)
 	{
 		try
 		{
@@ -294,8 +294,8 @@ public class Utilities
 	{
 		return parseFloat(value, Float.MIN_VALUE, Float.MAX_VALUE, error);
 	}
-	
-	public static float parseFloat(String value, float min, float max, String error)
+
+    private static float parseFloat(String value, float min, float max, String error)
 	{
 		try
 		{
@@ -316,8 +316,8 @@ public class Utilities
 	{
 		return parseDouble(value, Double.MIN_VALUE, Double.MAX_VALUE, error);
 	}
-	
-	public static double parseDouble(String value, double min, double max, String error)
+
+    private static double parseDouble(String value, double min, double max, String error)
 	{
 		try
 		{
@@ -335,7 +335,8 @@ public class Utilities
 	}
 
 	public static final Function<Player, String> PlayerName = new PlayerNameFunction();
-	public static class PlayerNameFunction implements Function<Player, String>
+
+    static class PlayerNameFunction implements Function<Player, String>
 	{
 		@Override
 		public String apply(Player player)
@@ -357,12 +358,7 @@ public class Utilities
 	{
 		List<Map.Entry<K, V>> list =
 				new LinkedList<>( map.entrySet() );
-		Collections.sort(list, new Comparator<Map.Entry<K, V>>() {
-			@Override
-			public int compare(Map.Entry<K, V> o1, Map.Entry<K, V> o2) {
-				return (o1.getValue()).compareTo(o2.getValue());
-			}
-		});
+        list.sort(Comparator.comparing(o -> (o.getValue())));
 
 		Map<K, V> result = new LinkedHashMap<>();
 		for (Map.Entry<K, V> entry : list)

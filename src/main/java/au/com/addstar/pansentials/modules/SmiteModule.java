@@ -5,7 +5,6 @@ import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,7 +15,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 
 public class SmiteModule implements Module, CommandExecutor, TabCompleter{
@@ -80,8 +79,8 @@ public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 					effect = args[1];
 				
 				Player p = (Player)sender;
-				
-				smite(effect, p.getTargetBlock((HashSet<Material>)null, 80).getLocation());
+
+				smite(effect, p.getTargetBlock(null, 80).getLocation());
 				return true;
 			}
 		}
@@ -103,9 +102,9 @@ public class SmiteModule implements Module, CommandExecutor, TabCompleter{
 			if(args.length == 2){
 				if(!args[1].equalsIgnoreCase("")){
 					if("explode".startsWith(args[1]))
-						return Arrays.asList("explode");
+						return Collections.singletonList("explode");
 					else if("lightning".startsWith(args[1]))
-						return Arrays.asList("lightning");
+						return Collections.singletonList("lightning");
 				}
 				else
 					return Arrays.asList("lightning", "explode");

@@ -50,9 +50,7 @@ public class TimeModule implements Module, CommandExecutor{
 					Player p = (Player) sender;
 					worlds.add(p.getWorld());
 				} else {
-					for (World w : Bukkit.getWorlds()) {
-						worlds.add(w);
-					}
+					worlds.addAll(Bukkit.getWorlds());
 				}
 				getWorldsTime(sender, worlds);
 			} else {

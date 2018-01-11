@@ -17,13 +17,13 @@ public final class DescParseTickFormat
 	// ============================================
 	// First some information vars. TODO: Should this be in a config file?
 	// --------------------------------------------
-	public static final Map<String, Integer> nameToTicks = new LinkedHashMap<>();
-	public static final Set<String> resetAliases = new HashSet<>();
-	public static final int ticksAtMidnight = 18000;
-	public static final int ticksPerDay = 24000;
-	public static final int ticksPerHour = 1000;
-	public static final double ticksPerMinute = 1000d / 60d;
-	public static final double ticksPerSecond = 1000d / 60d / 60d;
+	private static final Map<String, Integer> nameToTicks = new LinkedHashMap<>();
+	private static final Set<String> resetAliases = new HashSet<>();
+	private static final int ticksAtMidnight = 18000;
+	private static final int ticksPerDay = 24000;
+	private static final int ticksPerHour = 1000;
+	private static final double ticksPerMinute = 1000d / 60d;
+	private static final double ticksPerSecond = 1000d / 60d / 60d;
 	private static final SimpleDateFormat SDFTwentyFour = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
 	private static final SimpleDateFormat SDFTwelve = new SimpleDateFormat("h:mm aa", Locale.ENGLISH);
 
@@ -70,8 +70,7 @@ public final class DescParseTickFormat
 		try
 		{
 			return parseTicks(desc);
-		}
-		catch (NumberFormatException e)
+		} catch (NumberFormatException ignored)
 		{
 		}
 
@@ -79,8 +78,7 @@ public final class DescParseTickFormat
 		try
 		{
 			return parse24(desc);
-		}
-		catch (NumberFormatException e)
+		} catch (NumberFormatException ignored)
 		{
 		}
 
@@ -88,8 +86,7 @@ public final class DescParseTickFormat
 		try
 		{
 			return parse12(desc);
-		}
-		catch (NumberFormatException e)
+		} catch (NumberFormatException ignored)
 		{
 		}
 
@@ -97,15 +94,15 @@ public final class DescParseTickFormat
 		try
 		{
 			return parseAlias(desc);
-		}
-		catch (NumberFormatException e)
+		} catch (NumberFormatException ignored)
 		{
 		}
 
 		// Well we failed to understand...
 		throw new NumberFormatException();
 	}
-	public static long parseTicks(String desc) throws NumberFormatException
+
+	private static long parseTicks(String desc) throws NumberFormatException
 	{
 		if (!desc.matches("^[0-9]+ti?c?k?s?$"))
 		{
@@ -117,7 +114,7 @@ public final class DescParseTickFormat
 		return Long.parseLong(desc) % 24000;
 	}
 
-	public static long parse24(String desc) throws NumberFormatException
+	private static long parse24(String desc) throws NumberFormatException
 	{
 		if (!desc.matches("^[0-9]{2}[^0-9]?[0-9]{2}$"))
 		{
@@ -137,7 +134,7 @@ public final class DescParseTickFormat
 		return hoursMinutesToTicks(hours, minutes);
 	}
 
-	public static long parse12(String desc) throws NumberFormatException
+	private static long parse12(String desc) throws NumberFormatException
 	{
 		if (!desc.matches("^[0-9]{1,2}([^0-9]?[0-9]{2})?(pm|am)$"))
 		{
@@ -155,27 +152,23 @@ public final class DescParseTickFormat
 			throw new NumberFormatException();
 		}
 
-		if (parsetime.length() == 4)
-		{
-			hours += Integer.parseInt(parsetime.substring(0, 2));
-			minutes += Integer.parseInt(parsetime.substring(2, 4));
-		}
-		else if (parsetime.length() == 3)
-		{
-			hours += Integer.parseInt(parsetime.substring(0, 1));
-			minutes += Integer.parseInt(parsetime.substring(1, 3));
-		}
-		else if (parsetime.length() == 2)
-		{
-			hours += Integer.parseInt(parsetime.substring(0, 2));
-		}
-		else if (parsetime.length() == 1)
-		{
-			hours += Integer.parseInt(parsetime.substring(0, 1));
-		}
-		else
-		{
-			throw new NumberFormatException();
+		switch (parsetime.length()) {
+			case 4:
+				hours += Integer.parseInt(parsetime.substring(0, 2));
+				minutes += Integer.parseInt(parsetime.substring(2, 4));
+				break;
+			case 3:
+				hours += Integer.parseInt(parsetime.substring(0, 1));
+				minutes += Integer.parseInt(parsetime.substring(1, 3));
+				break;
+			case 2:
+				hours += Integer.parseInt(parsetime.substring(0, 2));
+				break;
+			case 1:
+				hours += Integer.parseInt(parsetime.substring(0, 1));
+				break;
+			default:
+				throw new NumberFormatException();
 		}
 
 		if (desc.endsWith("pm") && hours != 12)
@@ -191,7 +184,7 @@ public final class DescParseTickFormat
 		return hoursMinutesToTicks(hours, minutes);
 	}
 
-	public static long hoursMinutesToTicks(final int hours, final int minutes)
+	private static long hoursMinutesToTicks(final int hours, final int minutes)
 	{
 		long ret = ticksAtMidnight;
 		ret += (hours) * ticksPerHour;
@@ -202,7 +195,7 @@ public final class DescParseTickFormat
 		return ret;
 	}
 
-	public static long parseAlias(final String desc) throws NumberFormatException
+	private static long parseAlias(final String desc) throws NumberFormatException
 	{
 		final Integer ret = nameToTicks.get(desc);
 		if (ret == null)
@@ -240,13 +233,13 @@ public final class DescParseTickFormat
 		}
 	}
 
-	public static String formatDateFormat(final long ticks, final SimpleDateFormat format)
+	private static String formatDateFormat(final long ticks, final SimpleDateFormat format)
 	{
 		final Date date = ticksToDate(ticks);
 		return format.format(date);
 	}
 
-	public static Date ticksToDate(long ticks)
+	private static Date ticksToDate(long ticks)
 	{
 		// Assume the server time starts at 0. It would start on a day.
 		// But we will simulate that the server started with 0 at midnight.

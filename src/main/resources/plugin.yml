@@ -20,13 +20,10 @@ permissions:
     default: false
   pansentials.fly.safelogin:
     default: op
-  
   pansentials.hat:
     default: op
-    
   pansentials.workbench:
     default: op
-    
   pansentials.heal:
     default: op
   pansentials.heal.other:
@@ -35,32 +32,24 @@ permissions:
     default: op
   pansentials.feed.other:
     default: op
-    
   pansentials.speed:
     default: op
   pansentials.speed.other:
     default: op
-
   pansentials.exp:
     default: op
-  
   pansentials.whois:
     default: op
-    
   pansentials.dropitem:
     default: op
-    
   pansentials.enchant:
     default: op
   pansentials.enchant.unsafe:
     default: op
-    
   pansentials.more:
     default: op
-    
   pansentials.repair:
     default: op
-    
   pansentials.gamemode.*:
     children:
       pansentials.gamemode: true
@@ -90,12 +79,10 @@ permissions:
     default: op
   pansentials.gamemode.spectator.other:
     default: op
-  
   pansentials.god:
     default: op
   pansentials.god.other:
     default: op
-
   pansentials.time:
     default: op
   pansentials.time.set:
@@ -104,36 +91,32 @@ permissions:
     default: op
   pansentials.ptime.others:
     default: op
-  
   pansentials.smite:
     default: op
-    
   pansentials.stack:
     default: op
-
   pansentials.powertool:
     default: op
-
   pansentials.spawnmob:
     default: op
   pansentials.recipe:
     default: true
-  
   pansentials.kill:
     default: op
-
   pansentials.near:
     default: op
   pansentials.monsters:
     default: op
   pansentials.animals:
     default: op
-
   pansentials.burn:
     default: op
+<<<<<<< HEAD:plugin.yml
   pansentials.itemattribute:
     default: op
 
+=======
+>>>>>>> dev:src/main/resources/plugin.yml
 commands:
   pansentials:
     usage: /<command>

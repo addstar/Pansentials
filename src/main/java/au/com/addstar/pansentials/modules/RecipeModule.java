@@ -22,10 +22,10 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.List;
 import java.util.Map;
 
-public class RecipeModule extends CommandModule implements Listener
+class RecipeModule extends CommandModule implements Listener
 {
 	private static final short WILDCARD = 32767;
-	private Map<Player, RecipeDisplay> mOpenInventories;
+    private final Map<Player, RecipeDisplay> mOpenInventories;
 	
 	
 	public RecipeModule()
@@ -146,14 +146,14 @@ public class RecipeModule extends CommandModule implements Listener
 	
 	private class RecipeDisplay
 	{
-		private List<Recipe> mRecipes;
+        private final List<Recipe> mRecipes;
 		private int mIndex;
-		public Player player;
-		public Inventory inventory;
-		public boolean isChanging = false;
+        final Player player;
+        Inventory inventory;
+        boolean isChanging = false;
 		private BukkitTask mChangeTask;
-		
-		public RecipeDisplay(List<Recipe> recipes, Player player)
+
+        RecipeDisplay(List<Recipe> recipes, Player player)
 		{
 			mRecipes = recipes;
 			mIndex = 0;
@@ -161,17 +161,11 @@ public class RecipeModule extends CommandModule implements Listener
 			
 			if (recipes.size() > 1)
 			{
-				mChangeTask = Bukkit.getScheduler().runTaskTimer(getPlugin(), new Runnable() {
-					@Override
-					public void run()
-					{
-						next();
-					}
-				}, 60, 60);
+                mChangeTask = Bukkit.getScheduler().runTaskTimer(getPlugin(), this::next, 60, 60);
 			}
 		}
-		
-		public void next()
+
+        void next()
 		{
 			++mIndex;
 			if (mIndex >= mRecipes.size())
@@ -180,8 +174,8 @@ public class RecipeModule extends CommandModule implements Listener
 			showCurrent();
 			isChanging = false;
 		}
-		
-		public void showCurrent()
+
+        void showCurrent()
 		{
 			Inventory inv;
 			Recipe raw = mRecipes.get(mIndex);
@@ -252,8 +246,8 @@ public class RecipeModule extends CommandModule implements Listener
 			player.openInventory(inv);
 			inventory = inv;
 		}
-		
-		public void close()
+
+        void close()
 		{
 			if (mChangeTask != null)
 				mChangeTask.cancel();

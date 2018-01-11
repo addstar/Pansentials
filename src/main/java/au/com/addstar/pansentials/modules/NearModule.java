@@ -30,13 +30,11 @@ public class NearModule implements Module, CommandExecutor {
 
     private double radius;
 
-    private Player target;
-
     private boolean verbose;
 
     //maxRadius set in doNear
 
-    protected Class<?>[] testClasses;
+    private Class<?>[] testClasses;
 
     /**
      *
@@ -68,6 +66,7 @@ public class NearModule implements Module, CommandExecutor {
             entityType = "NPCs";
         }
 
+        Player target;
         if (sender instanceof ConsoleCommandSender) {
             if (arglength == 0) { // "near"
                 sender.sendMessage("Running Command without params as console is not supported.");
@@ -151,7 +150,7 @@ public class NearModule implements Module, CommandExecutor {
                 Player s = (Player) sender;
                 if (arglength == 0) { // "near"
                     return doPlayerNear((Player)sender, entityType, (Player)sender, radius, verbose);
-                } else if (arglength >= 1 || arglength <= 3) { // "near player <opt r>"
+                } else { // "near player <opt r>"
                     if(arglength == 1) {
                         if(args[0].equals("-v") || args[0].equals("-verbose")) {
                             verbose = true;
@@ -203,9 +202,6 @@ public class NearModule implements Module, CommandExecutor {
                         return true;
                     }
                     return doPlayerNear((Player)sender, entityType, target, radius, verbose);
-                } else {
-                    sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "near.help"));
-                    return false;
                 }
             } else { // command running from anything other than a player or console not supported
                 plugin.getServer().getConsoleSender().sendMessage("/near run from sender:" + sender.getClass().getSimpleName() + ": " + sender.getName());

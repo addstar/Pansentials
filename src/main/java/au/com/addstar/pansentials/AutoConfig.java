@@ -43,12 +43,11 @@ import java.util.*;
  * @author Schmoller
  * @version 1.5
  */
-public abstract class AutoConfig
-{
-	private File mFile;
-	private HashMap<String, String> mCategoryComments;
-	
-	protected AutoConfig(File file)
+abstract class AutoConfig {
+    private final File mFile;
+    private final HashMap<String, String> mCategoryComments;
+
+    AutoConfig(File file)
 	{
 		mFile = file;
 		mCategoryComments = new HashMap<>();
@@ -62,15 +61,14 @@ public abstract class AutoConfig
 	/**
 	 * This should be used to process any data loaded from the config including
 	 * performing validation and translation
-	 * @throws InvalidConfigurationException Thrown if a field has an invalid value
 	 */
-	protected void onPostLoad() throws InvalidConfigurationException {
+    void onPostLoad() {
 	}
 	
 	/**
 	 * This should be used to update/convert any data in fields for saving
 	 */
-	protected void onPreSave() {
+    private void onPreSave() {
 	}
 	
 	private <T> Set<T> newSet(Class<? extends Set<T>> setClass, Collection<T> data) throws InvalidConfigurationException
@@ -270,23 +268,7 @@ public abstract class AutoConfig
 			onPostLoad();
 			
 			return true;
-		}
-		catch( IOException e )
-		{
-			e.printStackTrace();
-			return false;
-		}
-		catch ( InvalidConfigurationException e )
-		{
-			e.printStackTrace();
-			return false;
-		}
-		catch ( IllegalArgumentException e )
-		{
-			e.printStackTrace();
-			return false;
-		}
-		catch ( IllegalAccessException e )
+		} catch (IOException | IllegalAccessException | IllegalArgumentException | InvalidConfigurationException e)
 		{
 			e.printStackTrace();
 			return false;
@@ -300,10 +282,9 @@ public abstract class AutoConfig
 			onPreSave();
 			
 			YamlConfiguration config = new YamlConfiguration();
-			Map<String, String> comments = new HashMap<>();
-			
+
 			// Add all the category comments
-			comments.putAll(mCategoryComments);
+            Map<String, String> comments = new HashMap<>(mCategoryComments);
 			
 			// Add all the values
 			for(Field field : getClass().getDeclaredFields())

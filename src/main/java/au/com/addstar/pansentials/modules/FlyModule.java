@@ -1,13 +1,13 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,9 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.List;
 
 public class FlyModule implements Module, CommandExecutor, Listener{
 	
@@ -78,7 +76,7 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 		if(event.getPlayer().getGameMode() != GameMode.CREATIVE){
 			if(event.getPlayer().hasPermission("pansentials.fly.join"))
 				event.getPlayer().setAllowFlight(true);
-			if(!((LivingEntity) event.getPlayer()).isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")){
+            if (!event.getPlayer().isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")) {
 				event.getPlayer().setAllowFlight(true);
 				event.getPlayer().setFlying(true);
 			}
@@ -92,8 +90,8 @@ public class FlyModule implements Module, CommandExecutor, Listener{
 				event.getPlayer().setAllowFlight(true);
 			else
 				event.getPlayer().setAllowFlight(false);
-			
-			if(!((LivingEntity) event.getPlayer()).isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")) {
+
+            if (!event.getPlayer().isOnGround() && event.getPlayer().hasPermission("pansentials.fly.safelogin")) {
 				event.getPlayer().setAllowFlight(true);
 				event.getPlayer().setFlying(true);
 			}

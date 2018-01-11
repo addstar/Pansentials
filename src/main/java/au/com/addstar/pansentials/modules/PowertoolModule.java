@@ -99,13 +99,9 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 			command = false;
 			message = message.substring(2).trim();
 		}
-		
-		Map<MaterialData, PowerTool> tools = powertools.get(player);
-		if (tools == null) {
-			tools = Maps.newHashMap();
-			powertools.put(player, tools);
-		}
-		
+
+		Map<MaterialData, PowerTool> tools = powertools.computeIfAbsent(player, k -> Maps.newHashMap());
+
 		tools.put(item.getData(), new PowerTool(message, caller, command));
 		
 		sender.sendMessage(ChatColor.GREEN + "That item is now a powertool");
@@ -117,8 +113,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		powertools.remove(event.getPlayer());
 	}
-	
-	@EventHandler(priority=EventPriority.LOW, ignoreCancelled=false)
+
+	@EventHandler(priority = EventPriority.LOW)
 	public void onClick(PlayerInteractEntityEvent event) {
 		Player player = event.getPlayer();
 
@@ -143,8 +139,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 			event.setCancelled(true);
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.LOW, ignoreCancelled=false)
+
+	@EventHandler(priority = EventPriority.LOW)
 	public void onClick(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		
@@ -187,8 +183,8 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 			event.setCancelled(true);
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.LOW, ignoreCancelled=false)
+
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPunchEntity(EntityDamageByEntityEvent event) {
 		if (!(event.getDamager() instanceof Player)) {
 			return;
@@ -208,7 +204,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 					.replace("{uuid}", event.getEntity().getUniqueId().toString());
 			
 			if (event.getEntity() instanceof Player) {
-				converted = converted.replace("{player}", ((Player)event.getEntity()).getName());
+				converted = converted.replace("{player}", event.getEntity().getName());
 			}
 			
 			runPowertool(tool, converted, resolveCaller(tool.caller, event.getEntity(), player));
@@ -276,12 +272,12 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 	}
 	
 	private static class PowerTool {
-		public String message;
-		public boolean command;
-		public long cooldown;
-		public String caller;
-		
-		public PowerTool(String message, String caller, boolean command) {
+		final String message;
+		final boolean command;
+		long cooldown;
+		final String caller;
+
+		PowerTool(String message, String caller, boolean command) {
 			this.message = message;
 			this.command = command;
 			this.caller = caller;

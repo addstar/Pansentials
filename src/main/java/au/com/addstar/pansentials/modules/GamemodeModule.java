@@ -1,16 +1,15 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.List;
 
 public class GamemodeModule implements Module, CommandExecutor{
 	
@@ -68,23 +67,11 @@ public class GamemodeModule implements Module, CommandExecutor{
 						gm = GameMode.ADVENTURE;
 					else if(cmd.equalsIgnoreCase("gmsp"))
 						gm = GameMode.SPECTATOR;
-					
-					if(gm != null && sender.hasPermission("pansentials.gamemode." + gm.toString().toLowerCase() + ".other")){
-						ply.setGameMode(gm);
-						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.changed", 
-								"%gamemode%:" + gm.toString().toLowerCase()));
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.changedOther", "%player%:" + ply.getName(), 
-								"%gamemode%:" + gm.toString().toLowerCase()));
-					}
-					else if(gm == null){
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.noGamemode", "%name%:" + args[0]));
-					}
-					else{
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
-					}
+
+					setGameMode(sender, args, ply, gm);
 				}
 				else{
-					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[1]));
+					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[0]));
 				}
 			}
 			else if(args.length == 1 && sender instanceof Player){
@@ -107,21 +94,8 @@ public class GamemodeModule implements Module, CommandExecutor{
 				if(!plys.isEmpty()){
 					Player ply = plys.get(0);
 					GameMode gm = getGamemode(args[0]);
-					if(gm != null && sender.hasPermission("pansentials.gamemode." + gm.toString().toLowerCase() + ".other")){
-						ply.setGameMode(gm);
-						ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.changed", 
-								"%gamemode%:" + gm.toString().toLowerCase()));
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.changedOther", "%player%:" + ply.getName(), 
-								"%gamemode%:" + gm.toString().toLowerCase()));
-					}
-					else if(gm == null){
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.noGamemode", "%name%:" + args[0]));
-					}
-					else{
-						sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
-					}
-				}
-				else{
+					setGameMode(sender, args, ply, gm);
+				} else {
 					sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPlayer", "%name%:" + args[1]));
 				}
 			}
@@ -129,8 +103,23 @@ public class GamemodeModule implements Module, CommandExecutor{
 		}
 		return false;
 	}
-	
-	private GameMode getGamemode(String mode){
+
+	private void setGameMode(CommandSender sender, String[] args, Player ply, GameMode gm) {
+		if (gm != null && sender.hasPermission("pansentials.gamemode." + gm.toString().toLowerCase() + ".other")) {
+			ply.setGameMode(gm);
+			ply.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.changed",
+					"%gamemode%:" + gm.toString().toLowerCase()));
+			sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.changedOther", "%player%:" + ply.getName(),
+					"%gamemode%:" + gm.toString().toLowerCase()));
+		} else if (gm == null) {
+			sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "gamemode.noGamemode", "%name%:" + args[0]));
+		} else {
+			sender.sendMessage(Utilities.format(plugin.getFormatConfig(), "noPermission"));
+		}
+	}
+
+
+	private GameMode getGamemode(String mode) {
 		if(mode.equalsIgnoreCase("survival") || mode.equalsIgnoreCase("s") || mode.equals("0")){
 			return GameMode.SURVIVAL;
 		}

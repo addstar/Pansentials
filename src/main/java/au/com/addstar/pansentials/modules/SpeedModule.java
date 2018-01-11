@@ -1,8 +1,8 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.Arrays;
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,9 +10,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import au.com.addstar.pansentials.MasterPlugin;
-import au.com.addstar.pansentials.Module;
-import au.com.addstar.pansentials.Utilities;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 	
@@ -157,16 +157,16 @@ public class SpeedModule implements Module, CommandExecutor, TabCompleter{
 			String cmd, String[] args) {
 		if(args.length == 1){
 			if("fly".startsWith(args[0]))
-				return Arrays.asList("fly");
+                return Collections.singletonList("fly");
 			else if("walk".startsWith(args[0]))
-				return Arrays.asList("walk");
+                return Collections.singletonList("walk");
 			return Arrays.asList("fly", "walk");
 		}
 		else if(args.length == 2 && !(args[0].equalsIgnoreCase("fly") || args[0].equalsIgnoreCase("walk"))){
 			if("fly".startsWith(args[1]))
-				return Arrays.asList("fly");
+                return Collections.singletonList("fly");
 			else if("walk".startsWith(args[1]))
-				return Arrays.asList("walk");
+                return Collections.singletonList("walk");
 			return Arrays.asList("fly", "walk");
 		}
 		return null;

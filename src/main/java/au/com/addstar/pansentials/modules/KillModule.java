@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class KillModule extends CommandModule implements Listener
 {
-	private Map<Player, String> messages;
+	private final Map<Player, String> messages;
 	
 	public KillModule()
 	{
@@ -155,7 +155,7 @@ public class KillModule extends CommandModule implements Listener
 	
 	private void explodeKill(Player target, String message)
 	{
-		target.getWorld().playEffect(target.getLocation(), Effect.EXPLOSION_HUGE, 100);
+		target.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, target.getLocation(), 100);
 		target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 1, 30);
 		
 		kill(target, message);
@@ -174,34 +174,27 @@ public class KillModule extends CommandModule implements Listener
 			target.setFlying(false);
 		
 		target.setVelocity(new Vector(0, 2, 0));
-		
-		Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
-			@Override
-			public void run()
-			{
-				Location loc = target.getLocation();
-				final Firework firework = loc.getWorld().spawn(loc, Firework.class);
-				
-				// Assign effect
-				FireworkMeta meta = firework.getFireworkMeta();
-				
-				meta.addEffect(newRandomFirework());
-				meta.addEffect(newRandomFirework());
-				meta.addEffect(newRandomFirework());
-				
-				firework.setFireworkMeta(meta);
-				
-				// Fireworks cannot be detonated on the same tick
-				Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
-					@Override
-					public void run() {
-						firework.detonate();
-						
-						// Kill them
-						kill(target, message);
-					}
-				}, 2);
-			}
+
+		Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
+			Location loc = target.getLocation();
+			final Firework firework = loc.getWorld().spawn(loc, Firework.class);
+
+			// Assign effect
+			FireworkMeta meta = firework.getFireworkMeta();
+
+			meta.addEffect(newRandomFirework());
+			meta.addEffect(newRandomFirework());
+			meta.addEffect(newRandomFirework());
+
+			firework.setFireworkMeta(meta);
+
+			// Fireworks cannot be detonated on the same tick
+			Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
+				firework.detonate();
+
+				// Kill them
+				kill(target, message);
+			}, 2);
 		}, 30);
 	}
 	
@@ -213,14 +206,10 @@ public class KillModule extends CommandModule implements Listener
 		messages.put(target, message);
 		
 		// Just in case they dont die from fire damage
-		Bukkit.getScheduler().runTaskLater(getPlugin(), new Runnable() {
-			@Override
-			public void run() {
-				if (messages.containsKey(target))
-				{
-					// Kill them
-					kill(target, message);
-				}
+		Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
+			if (messages.containsKey(target)) {
+				// Kill them
+				kill(target, message);
 			}
 		}, 40);
 	}
@@ -235,8 +224,8 @@ public class KillModule extends CommandModule implements Listener
 			.trail(RandomUtils.nextBoolean())
 			.build();
 	}
-	
-	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled=false)
+
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void onPlayerDeath(PlayerDeathEvent event)
 	{
 		String message = messages.remove(event.getEntity());

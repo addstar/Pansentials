@@ -8,9 +8,8 @@ import org.bukkit.command.TabCompleter;
 
 import java.util.*;
 
-public class PandoraCommand implements CommandExecutor, TabCompleter
-{
-	private MasterPlugin mPlugin;
+class PandoraCommand implements CommandExecutor, TabCompleter {
+	private final MasterPlugin mPlugin;
 	
 	public PandoraCommand(MasterPlugin plugin)
 	{
@@ -35,14 +34,7 @@ public class PandoraCommand implements CommandExecutor, TabCompleter
 					all.add(ChatColor.RED + module);
 			}
 
-			Collections.sort(all, new Comparator<String>()
-			{
-				@Override
-				public int compare( String o1, String o2 )
-				{
-					return ChatColor.stripColor(o1).compareTo(ChatColor.stripColor(o2));
-				}
-			});
+			all.sort(Comparator.comparing(ChatColor::stripColor));
 			
 			String moduleList = "";
 			for(String mod : all)
@@ -134,13 +126,13 @@ public class PandoraCommand implements CommandExecutor, TabCompleter
 			if(args[0].isEmpty())
 				return Arrays.asList("enable", "disable", "reload", "reloadformat");
 			if("enable".startsWith(args[0].toLowerCase()))
-				return Arrays.asList("enable");
+				return Collections.singletonList("enable");
 			if("disable".startsWith(args[0].toLowerCase()))
-				return Arrays.asList("disable");
+				return Collections.singletonList("disable");
 			if("reload".startsWith(args[0].toLowerCase()))
 				return Arrays.asList("reload", "reloadformat");
 			if("reloadformat".startsWith(args[0].toLowerCase()))
-				return Arrays.asList("reloadformat");
+				return Collections.singletonList("reloadformat");
 		}
 		else if(args.length == 2 && args[0].equalsIgnoreCase("reload"))
 			return matchModules(args[1]);

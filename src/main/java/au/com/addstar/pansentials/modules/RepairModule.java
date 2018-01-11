@@ -35,7 +35,7 @@ public class RepairModule implements Module, CommandExecutor{
 		if(command.getName().equalsIgnoreCase("repair") && sender instanceof Player){
 			Player ply = (Player) sender;
 			if (args.length == 0) {
-				ItemStack stack = ply.getItemInHand();
+                ItemStack stack = ply.getInventory().getItemInMainHand();
 				if (stack == null || stack.getType().isBlock() || stack.getDurability() == 0)
 					return true;
 				

@@ -1,18 +1,23 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.List;
-
+import au.com.addstar.pansentials.MasterPlugin;
+import au.com.addstar.pansentials.Module;
+import au.com.addstar.pansentials.Utilities;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
+<<<<<<< HEAD:src/au/com/addstar/pansentials/modules/HealModule.java
 import com.google.common.collect.Iterables;
 
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
+=======
+import java.util.List;
+>>>>>>> dev:src/main/java/au/com/addstar/pansentials/modules/HealModule.java
 
 public class HealModule implements Module, CommandExecutor{
 	
