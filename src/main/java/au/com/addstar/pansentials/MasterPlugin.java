@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -370,14 +369,8 @@ public class MasterPlugin extends JavaPlugin
 		f = new File(getDataFolder() + "/format.yml");
 
 		format = YamlConfiguration.loadConfiguration(f);
-<<<<<<< HEAD:src/au/com/addstar/pansentials/MasterPlugin.java
-        InputStreamReader reader = new InputStreamReader(getResource("format.yml"));
-        FileConfiguration inConf = YamlConfiguration.loadConfiguration(reader);
-        for(String key : inConf.getKeys(true)){
-=======
 		FileConfiguration inConf = YamlConfiguration.loadConfiguration(getTextResource("format.yml"));
 		for(String key : inConf.getKeys(true)){
->>>>>>> dev:src/main/java/au/com/addstar/pansentials/MasterPlugin.java
 			if(!format.contains(key)){
 				format.set(key, inConf.get(key));
 			}

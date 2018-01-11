@@ -1,11 +1,11 @@
 package au.com.addstar.pansentials.modules;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
-
+import au.com.addstar.monolith.MonoItemStack;
+import au.com.addstar.monolith.attributes.ItemAttributeModifier;
+import au.com.addstar.monolith.util.Attributes;
+import au.com.addstar.pansentials.CommandModule;
+import com.google.common.collect.Lists;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier.Operation;
@@ -15,13 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import com.google.common.collect.Lists;
-
-import au.com.addstar.monolith.attributes.ItemAttributeModifier;
-import au.com.addstar.monolith.MonoItemStack;
-import au.com.addstar.monolith.util.Attributes;
-import au.com.addstar.pansentials.CommandModule;
-import net.md_5.bungee.api.ChatColor;
+import java.util.*;
 
 public class ItemAttributeModule extends CommandModule {
 	public ItemAttributeModule() {
