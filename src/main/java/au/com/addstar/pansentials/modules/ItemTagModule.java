@@ -1,6 +1,6 @@
 package au.com.addstar.pansentials.modules;
 
-import au.com.addstar.monolith.util.NBTItemStack;
+import au.com.addstar.monolith.util.nbtapi.NBTItem;
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import org.apache.commons.lang.StringUtils;
@@ -43,12 +43,12 @@ public class ItemTagModule implements Module, CommandExecutor {
             Player player = (Player) sender;
             if (player.hasPermission("pansentials.showNBT")) {
                 ItemStack item = player.getInventory().getItemInMainHand();
-                NBTItemStack nItem = new NBTItemStack(item);
+                NBTItem nItem = new NBTItem(item);
                 if (args.length == 0) {
                     sender.sendMessage("Item: ");
                     sender.sendMessage(item.toString());
                     sender.sendMessage("NBT Data: ");
-                    sender.sendMessage(nItem.listNBT());
+                    sender.sendMessage(nItem.asNBTString());
                 }
                 if (args.length > 0) {
                     if (args[0].equals("get")) {
