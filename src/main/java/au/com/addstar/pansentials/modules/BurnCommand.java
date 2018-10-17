@@ -17,7 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import java.util.List;
 import java.util.Map;
 
-class BurnCommand extends CommandModule implements Listener {
+public class BurnCommand extends CommandModule implements Listener {
 	private final Map<Player, Long> immunePlayers;
 	
 	public BurnCommand() {

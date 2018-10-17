@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-class CalcModule extends CommandModule {
+public class CalcModule extends CommandModule {
 	public CalcModule() {
 		super("calc");
 	}

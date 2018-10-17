@@ -21,7 +21,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.List;
 import java.util.Map;
 
-class RecipeModule extends CommandModule implements Listener
+public class RecipeModule extends CommandModule implements Listener
 {
     private final Map<Player, RecipeDisplay> mOpenInventories;
 	

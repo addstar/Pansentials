@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class SpawnMobModule extends CommandModule {
+public class SpawnMobModule extends CommandModule {
 	public SpawnMobModule() {
 		super("spawnmob");
 	}
