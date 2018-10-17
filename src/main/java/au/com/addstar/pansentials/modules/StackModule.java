@@ -68,7 +68,7 @@ public class StackModule implements Module, CommandExecutor{
 			if(i != null && i.getAmount() < 64){
 				boolean add = true;
 				for (ItemStack d : new ArrayList<>(items)) {
-					if(i.getType() == d.getType() && i.getDurability() == d.getDurability()){
+					if (i.getType() == d.getType() && i.isSimilar(d)) {
 						int amt = i.getAmount() + d.getAmount();
 						int over = 0;
 						if(amt > 64){

@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,7 +23,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 
 import java.util.Map;
 import java.util.UUID;
@@ -30,7 +30,7 @@ import java.util.UUID;
 public class PowertoolModule implements Module, CommandExecutor, Listener {
 	private MasterPlugin plugin;
 	
-	private Map<Player, Map<MaterialData, PowerTool>> powertools;
+	private Map<Player, Map<Material, PowerTool>> powertools;
 	private static final long cooldownDelay = 100;
 	
 	@Override
@@ -71,7 +71,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		}
 		
 		if (args.length == 0) {
-			Map<MaterialData, PowerTool> tools = powertools.get(player);
+			Map<Material, PowerTool> tools = powertools.get(player);
 			if (tools != null) {
 				tools.remove(item.getData());
 			}
@@ -99,10 +99,10 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 			command = false;
 			message = message.substring(2).trim();
 		}
-
-		Map<MaterialData, PowerTool> tools = powertools.computeIfAbsent(player, k -> Maps.newHashMap());
-
-		tools.put(item.getData(), new PowerTool(message, caller, command));
+		
+		Map<Material, PowerTool> tools = powertools.computeIfAbsent(player, k -> Maps.newHashMap());
+		
+		tools.put(item.getType(), new PowerTool(message, caller, command));
 		
 		sender.sendMessage(ChatColor.GREEN + "That item is now a powertool");
 		
@@ -262,7 +262,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 			return null;
 		}
 		
-		Map<MaterialData, PowerTool> tools = powertools.get(player);
+		Map<Material, PowerTool> tools = powertools.get(player);
 		
 		if (tools != null) {
 			return tools.get(item.getData());

@@ -151,28 +151,32 @@ public class Utilities
 		Block ground = feet.getRelative(BlockFace.DOWN);
 		Block head = feet.getRelative(BlockFace.UP);
 		
-		return (isSafe(feet) && isSafe(head) && (head.getType() != Material.WATER && head.getType() != Material.STATIONARY_WATER) && ground.getType().isSolid());
+		return (isSafe(feet) && isSafe(head) && (head.getType() != Material.WATER) && ground.getType().isSolid());
 	}
 	
 	private static boolean isSafe(Block block)
 	{
 		switch(block.getType())
 		{
-		case AIR:
-		case SUGAR_CANE_BLOCK:
-		case WATER:
-		case STATIONARY_WATER:
-		case LONG_GRASS:
-		case CROPS:
-		case CARROT:
-		case POTATO:
-		case RED_MUSHROOM:
-		case RED_ROSE:
-		case BROWN_MUSHROOM:
-		case YELLOW_FLOWER:
-		case DEAD_BUSH:
-		case SIGN_POST:
-		case WALL_SIGN:
+			case AIR:
+			case SUGAR_CANE:
+			case WATER:
+			case GRASS:
+			case WHEAT:
+			case BEETROOT:
+			case SEAGRASS:
+			case CAVE_AIR:
+			case TORCH:
+			case WALL_TORCH:
+			case CARROT:
+			case POTATO:
+			case RED_MUSHROOM:
+			case ROSE_RED:
+			case BROWN_MUSHROOM:
+			case OXEYE_DAISY:
+			case DEAD_BUSH:
+			case SIGN:
+			case WALL_SIGN:
 			return true;
 		default:
 			return false;

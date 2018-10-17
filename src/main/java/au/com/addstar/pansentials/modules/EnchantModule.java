@@ -4,12 +4,12 @@ import au.com.addstar.monolith.lookup.Lookup;
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class EnchantModule implements Module, CommandExecutor{
 	
@@ -40,7 +40,8 @@ public class EnchantModule implements Module, CommandExecutor{
 				ench = Enchantment.getByName(args[0].toUpperCase());
 			}
 			if (ench != null) {
-				if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (item != null) {
 					boolean unsafe = false;
 					if(args.length == 3 && args[2].equalsIgnoreCase("unsafe")){
 						unsafe = true;
@@ -56,7 +57,7 @@ public class EnchantModule implements Module, CommandExecutor{
 						player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.illegalEnchant",
 								"%enchant%:" + ench.getName().toLowerCase(),
 								"%level%:" + level,
-								"%item%:" + player.getInventory().getItemInMainHand().getType().toString().toLowerCase()));
+                                "%item%:" + item.getType().toString().toLowerCase()));
 						return true;
 					}
 					if(level != 0){
@@ -64,7 +65,7 @@ public class EnchantModule implements Module, CommandExecutor{
 							try{
 								player.getInventory().getItemInMainHand().addEnchantment(ench, level);
 								player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.success",
-										"%item%:" + player.getInventory().getItemInMainHand().getType().toString().toLowerCase(),
+                                        "%item%:" + item.getType().toString().toLowerCase(),
 										"%enchant%:" + ench.getName().toLowerCase(),
 										"%level%:" + level));
 							}
@@ -72,13 +73,13 @@ public class EnchantModule implements Module, CommandExecutor{
 								player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.illegalEnchant", 
 										"%enchant%:" + ench.getName().toLowerCase(), 
 										"%level%:" + level,
-										"%item%:" + player.getInventory().getItemInMainHand().getType().toString().toLowerCase()));
+                                        "%item%:" + item.getType().toString().toLowerCase()));
 							}
 						}
 						else{
 							player.getInventory().getItemInMainHand().addUnsafeEnchantment(ench, level);
 							player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.success",
-									"%item%:" + player.getInventory().getItemInMainHand().getType().toString().toLowerCase(),
+                                    "%item%:" + item.getType().toString().toLowerCase(),
 									"%enchant%:" + ench.getName().toLowerCase(),
 									"%level%:" + level));
 						}
@@ -87,7 +88,7 @@ public class EnchantModule implements Module, CommandExecutor{
 						player.getInventory().getItemInMainHand().removeEnchantment(ench);
 						player.sendMessage(Utilities.format(plugin.getFormatConfig(), "enchant.removed", 
 								"%enchant%:" + ench.getName().toLowerCase(),
-								"%item%:" + player.getInventory().getItemInMainHand().getType().toString().toLowerCase()));
+                                "%item%:" + item.getType().toString().toLowerCase()));
 					}
 				}
 				else{

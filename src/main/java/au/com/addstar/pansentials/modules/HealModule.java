@@ -4,6 +4,7 @@ import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
 import au.com.addstar.pansentials.Utilities;
 import com.google.common.collect.Iterables;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,7 @@ public class HealModule implements Module, CommandExecutor{
 	}
 	
 	private void heal(Player player) {
-		player.setHealth(player.getMaxHealth());
+		player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getDefaultValue());
 		player.setRemainingAir(player.getMaximumAir());
 		player.setFoodLevel(20);
 		player.setSaturation(20f);

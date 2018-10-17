@@ -1,6 +1,6 @@
 name: Pansentials
 version: ${plugin.version}
-
+api-version: ${spigot.api.version}
 description: Pandora replacement for Essentials
 
 main: au.com.addstar.pansentials.MasterPlugin
@@ -111,12 +111,8 @@ permissions:
     default: op
   pansentials.burn:
     default: op
-<<<<<<< HEAD:plugin.yml
   pansentials.itemattribute:
     default: op
-
-=======
->>>>>>> dev:src/main/resources/plugin.yml
 commands:
   pansentials:
     usage: /<command>

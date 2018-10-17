@@ -1,7 +1,6 @@
 package au.com.addstar.pansentials.modules;
 
 import au.com.addstar.monolith.StringTranslator;
-import au.com.addstar.monolith.lookup.MaterialDefinition;
 import au.com.addstar.monolith.util.Parser;
 import au.com.addstar.pansentials.CommandModule;
 import com.google.common.collect.Maps;
@@ -24,7 +23,6 @@ import java.util.Map;
 
 class RecipeModule extends CommandModule implements Listener
 {
-	private static final short WILDCARD = 32767;
     private final Map<Player, RecipeDisplay> mOpenInventories;
 	
 	
@@ -43,7 +41,7 @@ class RecipeModule extends CommandModule implements Listener
 			return true;
 		}
 		
-		MaterialDefinition def;
+		Material mat;
 		// Try item in hand
 		if (args.length == 0)
 		{
@@ -54,8 +52,8 @@ class RecipeModule extends CommandModule implements Listener
 				sender.sendMessage(ChatColor.RED + "You are not holding an item, either hold one, or use /" + label + " <item>");
 				return true;
 			}
-
-			def = MaterialDefinition.from(player.getInventory().getItemInMainHand());
+			
+			mat = player.getInventory().getItemInMainHand().getType();
 
 		}
 		// One is specified
@@ -63,9 +61,9 @@ class RecipeModule extends CommandModule implements Listener
 		{
 			try
 			{
-				def = Parser.parseMaterialDefinition(args[0]);
+				mat = Parser.parseMaterialName(args[0]);
 				
-				if (def == null)
+				if (mat == null)
 				{
 					sender.sendMessage(ChatColor.RED + "Unknown item " + args[0]);
 					return true;
@@ -78,7 +76,7 @@ class RecipeModule extends CommandModule implements Listener
 			}
 		}
 		
-		ItemStack item = def.asItemStack(1);
+		ItemStack item = new ItemStack(mat);
 		List<Recipe> recipes = Bukkit.getRecipesFor(item);
 		
 		if (recipes.isEmpty())
@@ -193,11 +191,6 @@ class RecipeModule extends CommandModule implements Listener
 						ItemStack ingredient = recipe.getIngredientMap().get(ch);
 						if (ingredient != null)
 						{
-							if (ingredient.getDurability() == WILDCARD)
-							{
-								ingredient = ingredient.clone();
-								ingredient.setDurability((short)0);
-							}
 							
 							int slot = line * 3 + c + 1;
 							inv.setItem(slot, ingredient);
@@ -214,11 +207,6 @@ class RecipeModule extends CommandModule implements Listener
 				int slot = 1;
 				for (ItemStack ingredient : recipe.getIngredientList())
 				{
-					if (ingredient.getDurability() == WILDCARD)
-					{
-						ingredient = ingredient.clone();
-						ingredient.setDurability((short)0);
-					}
 					
 					inv.setItem(slot++, ingredient);
 				}
@@ -230,11 +218,6 @@ class RecipeModule extends CommandModule implements Listener
 				
 				FurnaceRecipe recipe = (FurnaceRecipe)raw;
 				ItemStack input = recipe.getInput();
-				if (input.getDurability() == WILDCARD)
-				{
-					input = input.clone();
-					input.setDurability((short)0);
-				}
 				
 				inv.setItem(0, input);
 				inv.setItem(2, recipe.getResult());
