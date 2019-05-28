@@ -1,6 +1,6 @@
 package au.com.addstar.pansentials;
 
-import com.google.common.base.Function;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,7 +14,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -171,12 +178,12 @@ public class Utilities
 			case CARROT:
 			case POTATO:
 			case RED_MUSHROOM:
-			case ROSE_RED:
+			case ROSE_BUSH:
 			case BROWN_MUSHROOM:
 			case OXEYE_DAISY:
 			case DEAD_BUSH:
-			case SIGN:
-			case WALL_SIGN:
+			case OAK_SIGN:
+			case OAK_WALL_SIGN:
 			return true;
 		default:
 			return false;

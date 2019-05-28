@@ -1,8 +1,10 @@
 package au.com.addstar.pansentials.modules;
 
+import com.google.common.collect.Maps;
+
 import au.com.addstar.pansentials.MasterPlugin;
 import au.com.addstar.pansentials.Module;
-import com.google.common.collect.Maps;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -60,7 +62,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		Player player = (Player)sender;
 
 		ItemStack item = player.getInventory().getItemInMainHand();
-		if (item == null) {
+        if (item.getType().equals(Material.AIR)) {
 			sender.sendMessage(ChatColor.RED + "You are not holding an item");
 			return true;
 		}
@@ -73,7 +75,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		if (args.length == 0) {
 			Map<Material, PowerTool> tools = powertools.get(player);
 			if (tools != null) {
-				tools.remove(item.getData());
+                tools.remove(item.getType());
 			}
 			
 			sender.sendMessage(ChatColor.GREEN + "That item is no longer a powertool");
@@ -265,7 +267,7 @@ public class PowertoolModule implements Module, CommandExecutor, Listener {
 		Map<Material, PowerTool> tools = powertools.get(player);
 		
 		if (tools != null) {
-			return tools.get(item.getData());
+            return tools.get(item.getType());
 		}
 		
 		return null;

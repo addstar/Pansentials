@@ -59,7 +59,6 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("StackModule", "au.com.addstar.pansentials.modules.StackModule");
 		registerModule("PowerTool", "au.com.addstar.pansentials.modules.PowertoolModule");
 		registerModule("SpawnMob", "au.com.addstar.pansentials.modules.SpawnMobModule");
-		registerModule("Recipe", "au.com.addstar.pansentials.modules.RecipeModule");
 		registerModule("Kill", "au.com.addstar.pansentials.modules.KillModule");
 		registerModule("Near", "au.com.addstar.pansentials.modules.NearModule");
 		registerModule("Calc", "au.com.addstar.pansentials.modules.CalcModule");
