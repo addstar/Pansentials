@@ -25,13 +25,17 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -43,11 +47,11 @@ import java.util.stream.Collectors;
  */
 public class HardMode implements Module, Listener, CommandExecutor, TabCompleter {
 
-    private Map<Player, Boolean> enabledPlayers;
-    private List<World> enabledWorlds;
+    private Map<Player, Boolean> enabledPlayers = new HashMap<>();
+    private List<World> enabledWorlds = new ArrayList<>();
     private int radius = 10;
     private MasterPlugin plugin;
-    private BukkitTask task = null;
+    private BukkitTask mainTask = null;
     private List<BukkitTask> tasks = new ArrayList<>();
 
     @Override
@@ -58,8 +62,8 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
 
     @Override
     public void onDisable() {
-        if (task != null && !task.isCancelled()) {
-            task.cancel();
+        if (mainTask != null && !mainTask.isCancelled()) {
+            mainTask.cancel();
         }
         tasks.forEach(bukkitTask -> {
             if (!bukkitTask.isCancelled()) bukkitTask.cancel();
@@ -69,24 +73,71 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
 
     @Override
     public void setPandoraInstance(MasterPlugin plugin) {
-
+        this.plugin = plugin;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    public void onPlayerJoin(PlayerChangedWorldEvent event) {
-        if (enabledWorlds.contains(event.getPlayer().getLocation().getWorld()))
+    public void onPlayerSwitchWorld(PlayerChangedWorldEvent event) {
+        if (enabledWorlds.contains(event.getPlayer().getLocation().getWorld())) {
             enabledPlayers.put(event.getPlayer(), true);
-        else
+            startMainTask();
+        } else {
             enabledPlayers.put(event.getPlayer(), false);
+        }
+        checkandStopTask();
     }
 
+    private void checkandStopTask() {
+        if (enabledWorlds.isEmpty()) {
+            if (mainTask != null) {
+                mainTask.cancel();
+                return;
+            }
+        }
+        if (!enabledPlayers.containsValue(true)) {
+            if (mainTask != null) {
+                mainTask.cancel();
+            }
+        }
+    }
+
+    private void startMainTask() {
+        if (mainTask == null || mainTask.isCancelled())
+            mainTask = createMainTask();
+    }
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        if (enabledWorlds.contains(event.getPlayer().getLocation().getWorld()))
+        if (enabledWorlds.contains(event.getPlayer().getLocation().getWorld())) {
             enabledPlayers.put(event.getPlayer(), true);
-        else
+            startMainTask();
+        } else {
             enabledPlayers.put(event.getPlayer(), false);
+        }
     }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDeath(EntityDeathEvent event) {
+        if (event.getEntity().getType().equals(EntityType.ZOMBIE)) {
+            if (event.getEntity().hasMetadata("fireworkTaskID")) {
+                event.getEntity().getMetadata("fireworkTaskID")
+                        .stream()
+                        .filter(metadataValue -> metadataValue.getOwningPlugin().getName().equals(plugin.getName()))
+                        .findFirst()
+                        .ifPresent(metadataValue -> tasks.forEach(bukkitTask -> {
+                                    if (bukkitTask.getTaskId() == metadataValue.asInt()) {
+                                        bukkitTask.cancel();
+                                    }
+                                })
+                        );
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        checkandStopTask();
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         World world = null;
@@ -104,17 +155,14 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
                 case "enabled":
                     enabledWorlds.add(world);
                     commandSender.sendMessage("Hardmode enabled for " + world.getName());
-                    task = Bukkit.getScheduler().runTaskTimer(plugin, () -> enabledPlayers.forEach((player, aBoolean) -> {
-                        if (aBoolean) {
-                            createEvents(player);
-                        }
-                    }), 200, 100);
+                    world.getPlayers().forEach(player -> enabledPlayers.put(player, true));
+                    mainTask = createMainTask();
                     return true;
                 case "disabled":
                     enabledWorlds.remove(world);
+                    world.getPlayers().forEach(player -> enabledPlayers.put(player, false));
                     commandSender.sendMessage("Hardmode disabled for " + world.getName());
-                    if (enabledWorlds.isEmpty())
-                        task.cancel();
+                    checkandStopTask();
                     return true;
             }
         }
@@ -122,11 +170,19 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
 
     }
 
+    private BukkitTask createMainTask() {
+        return Bukkit.getScheduler().runTaskTimer(plugin, () -> enabledPlayers.forEach((player, aBoolean) -> {
+            if (aBoolean) {
+                createEvents(player);
+            }
+        }), 200, 100);
+    }
+
     @Override
     public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
         List<String> result = new ArrayList<>();
         if (commandSender instanceof Player) {
-            if (args.length < 1) {
+            if (args.length == 0) {
                 result.add("enabled");
                 result.add("disabled");
                 return result;
@@ -192,20 +248,24 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
                     AttributeInstance armor = z.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
                     armor.setBaseValue(armor.getValue() * 3);
                     AttributeInstance attackSpeed = z.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
-                    attackSpeed.setBaseValue(attackSpeed.getDefaultValue() * 2);
+                    attackSpeed.setBaseValue(attackSpeed.getValue() * 2);
                     AttributeInstance attackForce = z.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-                    attackForce.setBaseValue(attackForce.getDefaultValue() * 3);
+                    attackForce.setBaseValue(attackForce.getValue() * 3);
                     z.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(300);
                     z.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(1D);
                     AttributeInstance health = z.getAttribute(Attribute.GENERIC_MAX_HEALTH);
                     health.setBaseValue(health.getBaseValue() * 3);
-                    tasks.add(Bukkit.getScheduler().runTaskTimer(plugin, () -> {
+                    BukkitTask task = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                         if (z.isDead())
                             return;
                         Firework firewrk = (Firework) z.getLocation().getWorld().spawnEntity(z.getLocation(), EntityType.FIREWORK);
                         firewrk.getFireworkMeta().addEffect(FireworkEffect.builder().withColor(Color.RED).with(FireworkEffect.Type.BALL).build());
 
-                    }, 20, 40));
+                    }, 20, 40);
+                    tasks.add(task);
+                    z.setCustomNameVisible(true);
+                    z.setMetadata("fireworkTaskID",
+                            new FixedMetadataValue(plugin, task.getTaskId()));
                     return;
                 case 4:
                     Monster vex = (Monster) loc.getWorld().spawnEntity(loc, EntityType.VEX);
