@@ -26,6 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
@@ -79,6 +80,13 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
             enabledPlayers.put(event.getPlayer(), false);
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (enabledWorlds.contains(event.getPlayer().getLocation().getWorld()))
+            enabledPlayers.put(event.getPlayer(), true);
+        else
+            enabledPlayers.put(event.getPlayer(), false);
+    }
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
         World world = null;
@@ -198,10 +206,13 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
                         firewrk.getFireworkMeta().addEffect(FireworkEffect.builder().withColor(Color.RED).with(FireworkEffect.Type.BALL).build());
 
                     }, 20, 40));
+                    return;
                 case 4:
                     Monster vex = (Monster) loc.getWorld().spawnEntity(loc, EntityType.VEX);
                     vex.setTarget(p);
+                    return;
                 case 5:
+                    loc.getWorld().strikeLightning(loc);
                     return;
             }
         }
