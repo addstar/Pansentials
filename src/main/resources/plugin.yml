@@ -220,3 +220,6 @@ commands:
   itemattribute:
     usage: /<command> <list|<attribute> [setbase|add|remove]>
     permission: pansentials.itemattribute
+  hardmode:
+    usage: /<command> <enable|disable>
+    permission: pansentials.hardmode
