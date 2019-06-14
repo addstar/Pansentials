@@ -1,5 +1,7 @@
 package au.com.addstar.pansentials.modules;
 
+import com.google.common.collect.Lists;
+
 import au.com.addstar.monolith.lookup.EntityDefinition;
 import au.com.addstar.monolith.lookup.Lookup;
 import au.com.addstar.monolith.template.EntitySettings;
@@ -10,7 +12,7 @@ import au.com.addstar.monolith.util.Raytrace;
 import au.com.addstar.monolith.util.Raytrace.Hit;
 import au.com.addstar.monolith.util.Stringifier;
 import au.com.addstar.pansentials.CommandModule;
-import com.google.common.collect.Lists;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,6 +25,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -101,6 +104,24 @@ public class SpawnMobModule extends CommandModule {
 
 	@SuppressWarnings("rawtypes")
 	private void doHelp(CommandSender sender, String entityType) {
+        if (entityType.equals("types")) {
+            Set<String> type = Lookup.getAllEntityNames();
+            List<String> rows = new ArrayList<>(10);
+            int num = type.size();
+            int cells = num / 10;
+            int curr = 0;
+            for (String s : type) {
+                if (rows.size() < curr + 1)
+                    rows.add(curr, "");
+                String currRow = rows.get(curr);
+                currRow = currRow + StringUtils.rightPad(s, 10)
+                if (curr == 9)
+                    curr = 0;
+                else
+                    curr++;
+            }
+
+        }
 		EntityDefinition def = Lookup.findEntityByName(entityType);
 		if (def == null) {
 			sender.sendMessage(ChatColor.RED + "Unknown entity type " + entityType);
