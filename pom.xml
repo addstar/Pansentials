@@ -12,7 +12,7 @@
         <buildnumber/>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spigot.api.version>1.14</spigot.api.version>
-        <spigot.version>1.14.2-R0.1-SNAPSHOT</spigot.version>
+        <spigot.version>1.14.4-R0.1-SNAPSHOT</spigot.version>
     </properties>
     <scm>
         <connection>scm:git:git@github.com:AddstarMC/pansentials.git</connection>
@@ -139,7 +139,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>2.3.2</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
@@ -148,7 +148,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -166,7 +166,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.7</version>
+                <version>2.5</version>
             </plugin>
         </plugins>
     </build>

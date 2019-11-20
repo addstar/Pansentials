@@ -1,7 +1,5 @@
 package au.com.addstar.pansentials.modules;
 
-import com.google.common.collect.Lists;
-
 import au.com.addstar.monolith.lookup.EntityDefinition;
 import au.com.addstar.monolith.lookup.Lookup;
 import au.com.addstar.monolith.template.EntitySettings;
@@ -12,7 +10,7 @@ import au.com.addstar.monolith.util.Raytrace;
 import au.com.addstar.monolith.util.Raytrace.Hit;
 import au.com.addstar.monolith.util.Stringifier;
 import au.com.addstar.pansentials.CommandModule;
-
+import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -102,25 +100,36 @@ public class SpawnMobModule extends CommandModule {
 		return template;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void doHelp(CommandSender sender, String entityType) {
         if (entityType.equals("types")) {
-            Set<String> type = Lookup.getAllEntityNames();
-            List<String> rows = new ArrayList<>(10);
-            int num = type.size();
-            int cells = num / 10;
+          Set<String> type = Lookup.getAllEntityNames();
+          int num = type.size();
+          int numRows = num / 10;
+          List<String> rows = new ArrayList<>(numRows);
             int curr = 0;
-            for (String s : type) {
-                if (rows.size() < curr + 1)
-                    rows.add(curr, "");
+          for (String s : type) {
+                if (rows.size() < curr + 1) {
+                  rows.add(curr, "");
+                }
                 String currRow = rows.get(curr);
-                currRow = currRow + StringUtils.rightPad(s, 10)
+              ChatColor color;
+                if(curr % 2 == 0)
+                  color = ChatColor.GRAY;
+                else
+                  color = ChatColor.WHITE;
+                currRow += color+StringUtils.rightPad(s, 10)+ChatColor.RESET;
+                rows.set(curr,currRow);
                 if (curr == 9)
                     curr = 0;
                 else
                     curr++;
             }
-
+            sender.sendMessage("----List of entities----");
+          for (String row :rows) {
+            sender.sendMessage(row);
+          }
+          sender.sendMessage("--------");
+          return;
         }
 		EntityDefinition def = Lookup.findEntityByName(entityType);
 		if (def == null) {
@@ -173,7 +182,8 @@ public class SpawnMobModule extends CommandModule {
 		if (args[0].equalsIgnoreCase("help")) {
 			if (args.length < 2) {
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " help <entity name>");
-				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " <entitySpec> [mob count]");
+        sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " help types");
+        sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " <entitySpec> [mob count]");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " [x,y,z] <entitySpec> [mob count]");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " PlayerName[~x,~y,~z] <entitySpec> [mob count]");
 				sender.sendMessage(ChatColor.WHITE + "Usage /" + label + " #world[x,y,z] <entitySpec> [mob count]");
