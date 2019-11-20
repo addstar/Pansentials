@@ -139,7 +139,7 @@ public class HardMode implements Module, Listener, CommandExecutor, TabCompleter
   @EventHandler(ignoreCancelled = true)
   public void onPlayerQuit(PlayerQuitEvent event) {
     checkandStopTask();
-    enabledPlayers.remove(event.getPlayer().getUniqueId())
+    enabledPlayers.remove(event.getPlayer().getUniqueId());
   }
 
   @Override
