@@ -5,7 +5,7 @@ description: Pandora replacement for Essentials
 
 main: au.com.addstar.pansentials.MasterPlugin
 
-softdepend: [Monolith]
+softdepend: [Monolith, Vault]
 
 permissions:
   pansentials.command:
