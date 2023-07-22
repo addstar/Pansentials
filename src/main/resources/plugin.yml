@@ -228,4 +228,4 @@ commands:
   mvw:
     usage: /<command>
     permission: pansentials.playerlist
-    aliases: [playerlist, who, list, mvwho]
+    aliases: [playerlist, who, mvwho]
