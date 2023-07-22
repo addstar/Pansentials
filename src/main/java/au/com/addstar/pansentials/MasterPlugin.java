@@ -66,6 +66,7 @@ public class MasterPlugin extends JavaPlugin
 		registerModule("ItemTag", "au.com.addstar.pansentials.modules.ItemTagModule");
 		registerModule("ItemAttribute", "au.com.addstar.pansentials.modules.ItemAttributeModule");
 		registerModule("hardmode", "au.com.addstar.pansentials.modules.HardMode");
+		registerModule("PlayerListModule", "au.com.addstar.pansentials.modules.PlayerListModule");
 		//TODO: Register additional modules here
 	}
 	

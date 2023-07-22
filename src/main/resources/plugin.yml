@@ -113,6 +113,8 @@ permissions:
     default: op
   pansentials.itemattribute:
     default: op
+  pansentials.playerlist:
+    default: true
 commands:
   pansentials:
     usage: /<command>
@@ -223,3 +225,7 @@ commands:
   hardmode:
     usage: /<command> <enable|disable>
     permission: pansentials.hardmode
+  mvw:
+    usage: /<command>
+    permission: pansentials.playerlist
+    aliases: [playerlist, who, list, mvwho]
